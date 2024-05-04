@@ -1,0 +1,11 @@
+{
+  "welcome": "Tervetuloa CynSeat!",
+  "pleaseSignIn": "Ole hyvä ja kirjaudu sisään jatkaaksesi.",
+  "signIn": "Kirjaudu sisään",
+  "email": "Sähköposti",
+  "password": "Salasana",
+  "ifYouDontHaveAccount": "Jos sinulla ei ole tiliä, ole hyvä ja rekisteröidy.",
+  "signUp": "Rekisteröidy",
+  "tickets": "Liput",
+  "signOut": "Kirjaudu ulos"
+}

@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome to CynSeat!",
+  "pleaseSignIn": "Please sign in to continue.",
+  "signIn": "Sign In",
+  "email": "Email",
+  "password": "Password",
+  "ifYouDontHaveAccount": "If you don't have an account, please sign up.",
+  "signUp": "Sign Up",
+  "tickets": "Tickets",
+  "signOut": "Sign Out"
+}

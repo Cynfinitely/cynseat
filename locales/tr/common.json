@@ -1,0 +1,11 @@
+{
+  "welcome": "CynSeat'e Hoş Geldiniz!",
+  "pleaseSignIn": "Devam etmek için lütfen giriş yapın.",
+  "signIn": "Giriş Yap",
+  "email": "E-posta",
+  "password": "Şifre",
+  "ifYouDontHaveAccount": "Eğer bir hesabınız yoksa, lütfen kaydolun.",
+  "signUp": "Kaydol",
+  "tickets": "Biletler",
+  "signOut": "Çıkış Yap"
+}

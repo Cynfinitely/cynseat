@@ -3,9 +3,11 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { logout } from "../API/auth";
+import { useTranslation } from "react-i18next";
 
 const Tickets: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleSignOut = async () => {
     try {
@@ -19,12 +21,12 @@ const Tickets: React.FC = () => {
   return (
     <div className="bg-red-100 w-screen h-screen">
       <div className="flex flex-col justify-center items-center w-full h-full">
-        <h1>Tickets</h1>
+        <h1>{t("tickets")}</h1>
         <button
           onClick={handleSignOut}
           className="p-2 bg-red-500 text-white rounded"
         >
-          Sign Out
+          {t("signOut")}
         </button>
       </div>
     </div>
