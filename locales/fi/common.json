@@ -7,5 +7,6 @@
   "ifYouDontHaveAccount": "Jos sinulla ei ole tiliä, ole hyvä ja rekisteröidy.",
   "signUp": "Rekisteröidy",
   "tickets": "Liput",
-  "signOut": "Kirjaudu ulos"
+  "signOut": "Kirjaudu ulos",
+  "buyTicket": "Osta lippu"
 }
