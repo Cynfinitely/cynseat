@@ -1,7 +1,6 @@
 // components/CheckoutButton.tsx
 
 import { loadStripe } from "@stripe/stripe-js";
-import { auth } from "../firebase/firebase"; // import Firebase auth
 import { useTranslation } from "react-i18next";
 
 const stripePromise = loadStripe(
@@ -21,21 +20,6 @@ export default function CheckoutButton() {
       });
       if (result.error) {
         alert(result.error.message);
-      } else {
-        // Call handlePurchase API after successful checkout
-        const userId = auth.currentUser?.uid; // get user ID from Firebase auth
-        const purchase = {
-          id: session.sessionId,
-          userId: userId, // use actual user ID
-        };
-        const purchaseRes = await fetch("/api/handlePurchase", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(purchase),
-        });
-        const purchaseData = await purchaseRes.json();
       }
     }
   };

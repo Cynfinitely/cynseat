@@ -13,5 +13,6 @@
   "backTickets": "Biletler sayfasına geri dön",
   "paymentSuccess": "Ödemeniz başarıyla alınmıştır.",
   "ticketCreated": "Biletiniz oluşturulmuştur. Biletler sayfasını kontrol edebilirsiniz.",
-  "redirect": "Biletler sayfasına yönlendiriliyorsunuz: "
+  "redirect": "Biletler sayfasına yönlendiriliyorsunuz: ",
+  "download": "Biletinizi indirin"
 }

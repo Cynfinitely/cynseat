@@ -13,5 +13,6 @@
   "backTickets": "Palaa lippusivulle.",
   "paymentSuccess": "Maksusi onnistui.",
   "ticketCreated": "Lippusi on luotu. Tarkista Liput-sivu.",
-  "redirect": "Ohjaus lippusivulle osoitteessa:"
+  "redirect": "Ohjaus lippusivulle osoitteessa:",
+  "download": "Lataa Lippusi"
 }

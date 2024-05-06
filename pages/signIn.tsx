@@ -61,7 +61,7 @@ const SignIn: React.FC = () => {
             {t("signIn")}
           </button>
         </form>
-        <Link href="/signUp"> {t("ifYouDontHaveAccount")} </Link>
+        <Link href="/signUp" className="underline mt-2"> {t("ifYouDontHaveAccount")} </Link>
       </div>
     </div>
   );

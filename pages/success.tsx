@@ -1,6 +1,6 @@
 // pages/success.tsx
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase"; // import Firebase auth
 import { useTranslation } from "react-i18next";
@@ -10,9 +10,11 @@ export default function SuccessPage() {
   const { session_id } = router.query;
   const [countdown, setCountdown] = useState(10);
   const { t } = useTranslation();
+  const hasHandledPurchase = useRef(false);
 
   useEffect(() => {
     const handlePurchase = async () => {
+      if (hasHandledPurchase.current) return;
       let userId = auth.currentUser?.uid; // get user ID from Firebase auth
 
       // Wait until userId is defined
@@ -23,7 +25,8 @@ export default function SuccessPage() {
 
       const purchase = {
         id: session_id,
-        userId: userId, // use actual user ID
+        userId: userId,
+        userEmail: auth.currentUser?.email, // use actual user ID
       };
       const res = await fetch("/api/handlePurchase", {
         method: "POST",
@@ -34,6 +37,7 @@ export default function SuccessPage() {
       });
       const data = await res.json();
       console.log("Purchase response", data);
+      hasHandledPurchase.current = true;
     };
 
     if (session_id) {
@@ -53,12 +57,14 @@ export default function SuccessPage() {
   }, [countdown, router]);
 
   return (
-    <div>
-      <h1>{t("paymentSuccess")}</h1>
-      <p>{t("ticketCreated")}</p>
-      <p>
-        {t("redirect")} {countdown}
-      </p>
+    <div className="bg-red-100 w-full h-full">
+      <div className="flex flex-col justify-center items-center w-full h-full gap-4">
+        <h1>{t("paymentSuccess")}</h1>
+        <p>{t("ticketCreated")}</p>
+        <p>
+          {t("redirect")} {countdown}
+        </p>
+      </div>
     </div>
   );
 }

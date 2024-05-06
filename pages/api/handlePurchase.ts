@@ -32,11 +32,10 @@ export default async function handlePurchase(
     number: ticketNumber,
     purchaseId: purchase.id,
     userId: purchase.userId,
+    userEmail: purchase.userEmail,
     imageUrl: "",
     // other ticket data...
   };
-
-  await admin.firestore().collection("tickets").add(ticket);
 
   // Load the ticket template
   const templateBytes = fs.readFileSync("ticketTemplate.pdf");
@@ -54,11 +53,21 @@ export default async function handlePurchase(
 
   // Add the ticket number
   firstPage.drawText(String(ticketNumber), {
-    x: width / 2,
-    y: height / 2,
-    size: 50,
+    x: width - 65,
+    y: height - 45,
+    size: 25,
     font: timesRomanFont,
     color: rgb(0, 0, 0),
+  });
+
+  const emailWithoutDomain = purchase.userEmail.split("@")[0];
+
+  firstPage.drawText(emailWithoutDomain, {
+    x: width - 85, // adjust as needed
+    y: height - 90, // adjust as needed
+    size: 10, // adjust as needed
+    font: timesRomanFont,
+    color: rgb(1, 0, 0),
   });
 
   // Serialize the PDFDocument to bytes (a Uint8Array)
@@ -76,6 +85,8 @@ export default async function handlePurchase(
   await bucket.upload(pdfPath, {
     destination: destination,
   });
+
+  fs.unlinkSync(pdfPath);
 
   // Generate a public URL for the uploaded PDF
   const file = bucket.file(destination);

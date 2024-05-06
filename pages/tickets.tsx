@@ -19,23 +19,31 @@ const Tickets: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      const userId = auth.currentUser?.uid;
-      if (userId) {
-        // check if userId is defined
-        const ticketsQuery = query(
-          collection(db, "tickets"),
-          where("userId", "==", userId)
-        );
-        const ticketsSnap = await getDocs(ticketsQuery);
-        const tickets = ticketsSnap.docs.map((doc) => doc.data() as Ticket);
-        setTickets(tickets);
-      }
-    };
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        const fetchTickets = async () => {
+          const userId = user.uid;
+          const ticketsQuery = query(
+            collection(db, "tickets"),
+            where("userId", "==", userId)
+          );
+          const ticketsSnap = await getDocs(ticketsQuery);
+          const tickets = ticketsSnap.docs.map((doc) => doc.data() as Ticket);
+          setTickets(tickets);
+          setLoading(false);
+        };
 
-    fetchTickets();
+        fetchTickets();
+      } else {
+        setLoading(false);
+      }
+    });
+
+    // Cleanup function
+    return () => unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
@@ -54,12 +62,30 @@ const Tickets: React.FC = () => {
           {t("tickets")}
         </h1>
         <div>
-          {tickets.map((ticket) => (
-            <div key={ticket.number} className="flex items-center">
-              <div className="text-4xl mr-5">{ticket.number}-</div>
-              <iframe src={ticket.imageUrl} className="overflow-hidden" />
-            </div>
-          ))}
+          {loading ? (
+            <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
+          ) : (
+            tickets.map((ticket) => (
+              <div key={ticket.number} className="flex items-center">
+                <div className=" px-4 ">
+                  <div className="bg-white shadow-lg rounded-lg  my-6 grid grid-cols-[auto,1fr]">
+                    <div className="bg-gray-100 px-5 py-2 flex items-center justify-center __col h-full">
+                      <a
+                        href={ticket.imageUrl}
+                        download
+                        className="text-blue-600 font-medium hover:text-blue-800"
+                      >
+                        {t("download")}
+                      </a>
+                    </div>
+                    <div className="p-6">
+                      <iframe src={ticket.imageUrl} className="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         <div className="flex gap-2">
           <CheckoutButton />
