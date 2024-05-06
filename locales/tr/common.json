@@ -8,5 +8,10 @@
   "signUp": "Kaydol",
   "tickets": "Biletler",
   "signOut": "Çıkış Yap",
-  "buyTicket": "Bilet Satın Al"
+  "buyTicket": "Bilet Satın Al",
+  "purchaseCancelled": "Satın alma işlemi başarısız.",
+  "backTickets": "Biletler sayfasına geri dön",
+  "paymentSuccess": "Ödemeniz başarıyla alınmıştır.",
+  "ticketCreated": "Biletiniz oluşturulmuştur. Biletler sayfasını kontrol edebilirsiniz.",
+  "redirect": "Biletler sayfasına yönlendiriliyorsunuz: "
 }

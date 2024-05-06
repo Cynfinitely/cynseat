@@ -8,5 +8,10 @@
   "signUp": "Rekisteröidy",
   "tickets": "Liput",
   "signOut": "Kirjaudu ulos",
-  "buyTicket": "Osta lippu"
+  "buyTicket": "Osta lippu",
+  "purchaseCancelled": "Ostoksesi peruutettiin.",
+  "backTickets": "Palaa lippusivulle.",
+  "paymentSuccess": "Maksusi onnistui.",
+  "ticketCreated": "Lippusi on luotu. Tarkista Liput-sivu.",
+  "redirect": "Ohjaus lippusivulle osoitteessa:"
 }

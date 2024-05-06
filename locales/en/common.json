@@ -8,5 +8,10 @@
   "signUp": "Sign Up",
   "tickets": "Tickets",
   "signOut": "Sign Out",
-  "buyTicket": "Buy Ticket"
+  "buyTicket": "Buy Ticket",
+  "purchaseCancelled": "Your purchase was cancelled.",
+  "backTickets": "Go back to tickets page.",
+  "paymentSuccess": "Your payment was successful.",
+  "ticketCreated": "Your ticket has been created. Check Tickets page.",
+  "redirect": "Redirecting to tickets page in: "
 }

@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../firebase/firebase"; // import Firebase auth
+import { useTranslation } from "react-i18next";
 
 export default function SuccessPage() {
   const router = useRouter();
   const { session_id } = router.query;
   const [countdown, setCountdown] = useState(10);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handlePurchase = async () => {
@@ -52,9 +54,11 @@ export default function SuccessPage() {
 
   return (
     <div>
-      <h1>Payment Successful</h1>
-      <p>Your ticket has been created. Check your email for details.</p>
-      <p>Redirecting to tickets page in {countdown} seconds...</p>
+      <h1>{t("paymentSuccess")}</h1>
+      <p>{t("ticketCreated")}</p>
+      <p>
+        {t("redirect")} {countdown}
+      </p>
     </div>
   );
 }
