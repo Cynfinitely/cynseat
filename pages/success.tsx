@@ -23,10 +23,20 @@ export default function SuccessPage() {
         userId = auth.currentUser?.uid;
       }
 
+      // Get the Checkout Session from Stripe
+      const sessionRes = await fetch(
+        `/api/retrieve-checkout-session?id=${session_id}`
+      );
+      const sessionData = await sessionRes.json();
+
+      // Get numTickets from the session metadata
+      const numTickets = parseInt(sessionData.session.metadata.numTickets);
+
       const purchase = {
         id: session_id,
         userId: userId,
         userEmail: auth.currentUser?.email, // use actual user ID
+        numTickets: numTickets, // get numTickets from the session metadata
       };
       const res = await fetch("/api/handlePurchase", {
         method: "POST",

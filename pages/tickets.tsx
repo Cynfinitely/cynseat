@@ -16,7 +16,6 @@ type Ticket = {
 };
 
 const Tickets: React.FC = () => {
-  const router = useRouter();
   const { t } = useTranslation();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,21 +45,15 @@ const Tickets: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleSignOut = async () => {
-    try {
-      await logout();
-      router.push("/signIn");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
   return (
     <div className="bg-red-100 w-full min-h-screen">
       <div className="flex flex-col justify-start items-center w-full px-4 md:px-0">
         <h1 className="text-2xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400  dark:text-gray-200">
           {t("tickets")}
         </h1>
+        <div className="flex gap-2 mt-4">
+          <CheckoutButton />
+        </div>
         <div className="w-full overflow-auto">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
@@ -92,15 +85,6 @@ const Tickets: React.FC = () => {
               </div>
             ))
           )}
-        </div>
-        <div className="flex gap-2">
-          <CheckoutButton />
-          <button
-            onClick={handleSignOut}
-            className="p-2 bg-red-500 text-white rounded"
-          >
-            {t("signOut")}
-          </button>
         </div>
       </div>
     </div>
