@@ -13,7 +13,6 @@ export default async function handlePurchase(
   const purchase = req.body;
   const numTickets = purchase.numTickets; // Get the number of tickets from the purchase
 
-  console.log("NUM OF :", numTickets);
   // Get the next ticket number
   const ticketNumberRef = admin.firestore().doc("tickets/nextNumber");
 
