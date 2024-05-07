@@ -56,19 +56,22 @@ const Tickets: React.FC = () => {
   };
 
   return (
-    <div className="bg-red-100 w-full h-full">
-      <div className="flex flex-col justify-evenly items-center w-full h-full">
+    <div className="bg-red-100 w-full min-h-screen">
+      <div className="flex flex-col justify-start items-center w-full px-4 md:px-0">
         <h1 className="text-2xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400  dark:text-gray-200">
           {t("tickets")}
         </h1>
-        <div>
+        <div className="w-full overflow-auto">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
           ) : (
             tickets.map((ticket) => (
-              <div key={ticket.number} className="flex items-center">
-                <div className=" px-4 ">
-                  <div className="bg-white shadow-lg rounded-lg  my-6 grid grid-cols-[auto,1fr]">
+              <div
+                key={ticket.number}
+                className="flex items-center justify-center"
+              >
+                <div className="w-full px-4">
+                  <div className="bg-white shadow-lg rounded-lg my-6 grid grid-cols-1 md:grid-cols-[auto,1fr]">
                     <div className="bg-gray-100 px-5 py-2 flex items-center justify-center __col h-full">
                       <a
                         href={ticket.imageUrl}
@@ -79,7 +82,10 @@ const Tickets: React.FC = () => {
                       </a>
                     </div>
                     <div className="p-6">
-                      <iframe src={ticket.imageUrl} className="" />
+                      <iframe
+                        src={ticket.imageUrl}
+                        className="w-full h-64 md:h-auto"
+                      />
                     </div>
                   </div>
                 </div>

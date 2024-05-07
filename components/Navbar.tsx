@@ -33,7 +33,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="p-4 text-white bg-red-100">
-      <nav className="flex justify-start items-center gap-9">
+      <nav className="flex flex-col sm:flex-row justify-start items-center gap-2 sm:gap-9">
         {user ? (
           <>
             <Link href="/tickets">

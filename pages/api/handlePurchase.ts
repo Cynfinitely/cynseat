@@ -5,6 +5,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Bucket } from "@google-cloud/storage";
+import crypto from "crypto";
 
 export default async function handlePurchase(
   req: NextApiRequest,
@@ -38,7 +39,7 @@ export default async function handlePurchase(
   };
 
   // Load the ticket template
-  const templateBytes = fs.readFileSync("ticketTemplate.pdf");
+  const templateBytes = await fs.promises.readFile("ticketTemplate.pdf");
   const pdfDoc = await PDFDocument.load(templateBytes);
 
   // Embed the fonts
@@ -73,33 +74,46 @@ export default async function handlePurchase(
   // Serialize the PDFDocument to bytes (a Uint8Array)
   const pdfBytes = await pdfDoc.save();
 
-  // This is a Buffer that can be written to a file
-  const pdfPath = `ticket_${uuidv4()}.pdf`;
-  fs.writeFileSync(pdfPath, pdfBytes);
-
   // Create a Google Cloud Storage client
   const bucket: Bucket = admin.storage().bucket();
 
-  // Upload the PDF to Firebase Storage
-  const destination = `tickets/${ticketNumber}.pdf`;
-  await bucket.upload(pdfPath, {
-    destination: destination,
+  const hash = crypto.createHash("sha256");
+  hash.update(String(ticketNumber));
+  const shortTicketNumber = hash.digest("hex");
+
+  // Define the destination
+  const destination = `tickets/${shortTicketNumber}.pdf`;
+  const file = bucket.file(destination);
+
+  // Create a write stream for the new file in your bucket
+  const stream = file.createWriteStream({
+    metadata: {
+      contentType: "application/pdf",
+    },
   });
 
-  fs.unlinkSync(pdfPath);
+  // Write the pdfBytes to the file and end the write stream
+  stream.write(pdfBytes);
+  stream.end();
 
-  // Generate a public URL for the uploaded PDF
-  const file = bucket.file(destination);
-  await file.makePublic();
+  stream.on("error", (err) => {
+    console.error(err);
+    res.status(500).json({ error: "Error during upload." });
+  });
 
-  const url = `https://storage.googleapis.com/${bucket.name}/${encodeURI(
-    destination
-  )}`;
+  stream.on("finish", async () => {
+    // The file upload is complete.
+    await file.makePublic();
 
-  // Add the URL to the ticket
-  ticket.imageUrl = url;
+    const url = `https://storage.googleapis.com/${bucket.name}/${encodeURI(
+      destination
+    )}`;
 
-  await admin.firestore().collection("tickets").add(ticket);
+    // Add the URL to the ticket
+    ticket.imageUrl = url;
 
-  res.status(200).json({ message: "Ticket created." });
+    await admin.firestore().collection("tickets").add(ticket);
+
+    res.status(200).json({ message: "Ticket created." });
+  });
 }
