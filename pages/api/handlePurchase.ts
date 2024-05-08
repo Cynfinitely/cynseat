@@ -17,17 +17,21 @@ export default async function handlePurchase(
   // Get the next ticket number
   const ticketNumberRef = admin.firestore().doc("tickets/nextNumber");
 
-  // Use a transaction to increment the ticket number
-  const ticketNumber = await admin
-    .firestore()
-    .runTransaction(async (transaction) => {
-      const ticketNumberSnap = await transaction.get(ticketNumberRef);
-      const currentNumber = ticketNumberSnap.data()?.number ?? 0; // Default to 0 if undefined
-      const numTicketsToPurchase = numTickets ?? 0; // Default to 0 if undefined
-      const nextNumber = currentNumber + numTicketsToPurchase;
-      transaction.set(ticketNumberRef, { number: nextNumber }, { merge: true });
-      return currentNumber + 1; // Return the first new ticket number
-    });
+  // Get the current ticket number
+  const ticketNumberSnap = await ticketNumberRef.get();
+  const currentNumber = ticketNumberSnap.data()?.number ?? 0; // Default to 0 if undefined
+  const numTicketsToPurchase = numTickets ?? 0; // Default to 0 if undefined
+
+  // Calculate the next ticket number
+  const nextNumber = currentNumber + numTicketsToPurchase;
+
+  // Use a batched write to increment the ticket number
+  const batch = admin.firestore().batch();
+  batch.set(ticketNumberRef, { number: nextNumber }, { merge: true });
+  await batch.commit();
+
+  // Use the first new ticket number
+  const ticketNumber = currentNumber + 1;
 
   // Create a new ticket for each purchased ticket
   for (let i = 0; i < numTickets; i++) {
