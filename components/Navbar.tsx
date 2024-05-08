@@ -36,6 +36,11 @@ const Header: React.FC = () => {
       <nav className="flex flex-col sm:flex-row justify-start items-center gap-2 sm:gap-9">
         {user ? (
           <>
+            <Link href="/about">
+              <button className="bg-teal-400 hover:bg-teal-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+                {t("aboutGame")}
+              </button>
+            </Link>
             <Link href="/tickets">
               <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                 {t("tickets")}

@@ -24,7 +24,7 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="bg-red-100 w-screen h-screen">
+    <div className="bg-red-100 w-full h-full">
       <div className="flex flex-col justify-center items-center w-full h-full">
         <h1>{t("signUp")}</h1>
         <form onSubmit={handleSignUp} className="flex flex-col">

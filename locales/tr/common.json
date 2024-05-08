@@ -14,5 +14,9 @@
   "paymentSuccess": "Ödemeniz başarıyla alınmıştır.",
   "ticketCreated": "Biletiniz oluşturulmuştur. Biletler sayfasını kontrol edebilirsiniz.",
   "redirect": "Biletler sayfasına yönlendiriliyorsunuz: ",
-  "download": "Biletinizi indirin"
+  "download": "Biletinizi indirin",
+  "ticketWarning": "En fazla 6 bilet alabilirsiniz, lütfen biletleri indirmeyi unutmayın!",
+  "aboutGame": "Oyun hakkında",
+  "aboutTitle": "Kör Terazi",
+  "organizers": "Tiyatro Maydanoz"
 }

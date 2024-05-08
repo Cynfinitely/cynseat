@@ -48,12 +48,13 @@ const Tickets: React.FC = () => {
   return (
     <div className="bg-red-100 w-full min-h-screen">
       <div className="flex flex-col justify-start items-center w-full px-4 md:px-0">
-        <h1 className="text-2xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400  dark:text-gray-200">
+        <h1 className="text-2xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400 ">
           {t("tickets")}
         </h1>
         <div className="flex gap-2 mt-4">
           <CheckoutButton />
         </div>
+        <p className="mt-5">{t("ticketWarning")}</p>
         <div className="w-full overflow-auto">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>

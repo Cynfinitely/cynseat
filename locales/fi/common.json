@@ -14,5 +14,9 @@
   "paymentSuccess": "Maksusi onnistui.",
   "ticketCreated": "Lippusi on luotu. Tarkista Liput-sivu.",
   "redirect": "Ohjaus lippusivulle osoitteessa:",
-  "download": "Lataa Lippusi"
+  "download": "Lataa Lippusi",
+  "ticketWarning": "Voit saada enintään 6 lippua ja muista ladata liput!",
+  "aboutGame": "Tietoja pelistä",
+  "aboutTitle": "Kör Terazi",
+  "organizers": "Tiyatro Maydanoz"
 }
