@@ -22,7 +22,7 @@ const SignIn: React.FC = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -61,7 +61,10 @@ const SignIn: React.FC = () => {
             {t("signIn")}
           </button>
         </form>
-        <Link href="/signUp" className="underline mt-2"> {t("ifYouDontHaveAccount")} </Link>
+        <Link href="/signUp" className="underline mt-2">
+          {" "}
+          {t("ifYouDontHaveAccount")}{" "}
+        </Link>
       </div>
     </div>
   );

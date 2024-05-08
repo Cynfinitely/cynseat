@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const about = () => {
+const About = () => {
   const { t } = useTranslation();
 
   return (
@@ -22,20 +22,20 @@ const about = () => {
           <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
             <p>
               Heyecan dolu bir gösteriye hazır mısınız? Karşınızda, sizi
-              güldürecek, hüzünlendirecek ve düşündürecek bir oyun: "Kör
-              Terazi!” Suçsuz yere hapishaneye atılmış öğretmen Cevahir'in ve
-              hırslı bir gazetecinin macerasını izlemeye hazır olun. Kara
-              mizahın eşliğinde, bu iki perdelik komedi-dramda, adalet arayışı
-              ve insan doğasının çelişkileriyle yüzleşeceksiniz. Adaletsizliğe
-              karşı sessiz kalanlar, bir gün adalete muhtaç kalır mı? "Kör
-              Terazi", beklenmedik bir yolculuğa davet ediyor sizi. Uzun süredir
-              titizlikle hazırlanan bu oyun, adaletsizliğin farklı yönleriyle
-              ele alındığı, düşündürücü ve eğlenceli bir deneyim sunuyor.
-              İzleyicilerini ağır bir konuyu eğlenceli bir biçimde izlemeye
-              davet ediyor. Gençlerin sahnede sergilediği enerji, bu oyunu
-              gerçekten özel kılıyor. Sıra dışı yeteneklerin sahnedeki
-              performansları, izleyicileri adeta büyülüyor. Hazır mısınız? "Kör
-              Terazi" sizleri bekliyor!
+              güldürecek, hüzünlendirecek ve düşündürecek bir oyun: &quot;Kör
+              Terazi!&rdquo; Suçsuz yere hapishaneye atılmış öğretmen
+              Cevahir&apos;in ve hırslı bir gazetecinin macerasını izlemeye
+              hazır olun. Kara mizahın eşliğinde, bu iki perdelik komedi-dramda,
+              adalet arayışı ve insan doğasının çelişkileriyle yüzleşeceksiniz.
+              Adaletsizliğe karşı sessiz kalanlar, bir gün adalete muhtaç kalır
+              mı? &quot;Kör Terazi&quot;, beklenmedik bir yolculuğa davet ediyor
+              sizi. Uzun süredir titizlikle hazırlanan bu oyun, adaletsizliğin
+              farklı yönleriyle ele alındığı, düşündürücü ve eğlenceli bir
+              deneyim sunuyor. İzleyicilerini ağır bir konuyu eğlenceli bir
+              biçimde izlemeye davet ediyor. Gençlerin sahnede sergilediği
+              enerji, bu oyunu gerçekten özel kılıyor. Sıra dışı yeteneklerin
+              sahnedeki performansları, izleyicileri adeta büyülüyor. Hazır
+              mısınız? &quot;Kör Terazi&quot; sizleri bekliyor!
             </p>
             <p>Oyunun künyesi Süre: 2 saat Dil: Türkçe Yaş: 7+</p>
             <p>
@@ -56,4 +56,4 @@ const about = () => {
   );
 };
 
-export default about;
+export default About;
