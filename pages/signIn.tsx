@@ -2,14 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { login } from "../API/auth";
 import Link from "next/link";
+import { AuthError } from "firebase/auth";
 import { useTranslation } from "react-i18next";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const router = useRouter();
   const { t } = useTranslation();
@@ -26,11 +29,25 @@ const SignIn: React.FC = () => {
 
   const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      await login({ email, password });
+      await signInWithEmailAndPassword(auth, email, password);
+      // User has been signed in successfully.
     } catch (error) {
-      console.error("Error signing in user:", error);
+      const { code } = error as AuthError;
+
+      // Handle error.
+      if (code === "auth/user-not-found") {
+        setError(t("No user found with this email."));
+      } else if (code === "auth/wrong-password") {
+        setError(t("Wrong password."));
+      } else {
+        setError(t("An unexpected error occurred."));
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,10 +74,15 @@ const SignIn: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="p-2 border rounded mb-2"
           />
-          <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+          <button
+            type="submit"
+            disabled={loading}
+            className="p-2 bg-blue-500 text-white rounded"
+          >
             {t("signIn")}
           </button>
         </form>
+        {error && <p className="text-red-500">{error}</p>}
         <Link href="/signUp" className="underline mt-2">
           {" "}
           {t("ifYouDontHaveAccount")}{" "}
