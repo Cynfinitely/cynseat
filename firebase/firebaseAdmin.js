@@ -1,4 +1,4 @@
-const admin = require("firebase-admin");
+import * as admin from "firebase-admin";
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -6,7 +6,7 @@ if (!admin.apps.length) {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey: Buffer.from(
-        process.env.FIREBASE_PRIVATE_KEY,
+        process.env.FIREBASE_PRIVATE_KEY || "",
         "base64"
       ).toString("utf-8"),
     }),
@@ -14,4 +14,4 @@ if (!admin.apps.length) {
   });
 }
 
-module.exports = admin;
+export default admin;
