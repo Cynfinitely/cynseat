@@ -5,6 +5,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import fs from "fs";
 import { Bucket } from "@google-cloud/storage";
 import crypto from "crypto";
+import path from "path";
 
 export default async function handlePurchase(
   req: NextApiRequest,
@@ -40,7 +41,12 @@ export default async function handlePurchase(
     };
 
     // Load the ticket template
-    const templateBytes = await fs.promises.readFile("ticketTemplate.pdf");
+    const templatePath = path.join(
+      process.cwd(),
+      "assets",
+      "ticketTemplate.pdf"
+    );
+    const templateBytes = await fs.promises.readFile(templatePath);
     const pdfDoc = await PDFDocument.load(templateBytes);
 
     // Embed the fonts
