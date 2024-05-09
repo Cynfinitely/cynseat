@@ -19,5 +19,9 @@
   "aboutGame": "Tietoja Esityksestä",
   "aboutTitle": "Kör Terazi",
   "organizers": "Tiyatro Maydanoz",
+  "time": "Kesto",
+  "age": "Ikä",
+  "hours": "tuntia",
+  "language": "Kieli",
   "ticketWarning2": "Meillä ei ole mahdollisuutta valita paikkoja, joten jos ostat lippusi kerralla, istut todennäköisemmin vierekkäin."
 }

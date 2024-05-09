@@ -55,7 +55,7 @@ const About = () => {
               Sahne Amiri: İnci Sueda Koca Selman Mektup Seslendirme: Mahir
               Ergin Final Sahnesi Koreografi Müziği: Grifon Fotoğraf: Ahmet
               Karayel Logo Tasarım: Özer Hekimoğlu Afiş Tasarım: Muhammed
-              Bahadır Broşür Tasarım: Selmoly
+              Bahadır Broşür Tasarım: Filika
             </p>
           </div>
         </div>
