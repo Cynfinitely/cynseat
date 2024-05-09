@@ -19,7 +19,10 @@ const About = () => {
             className="w-full h-auto mb-8"
           />
 
-          <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
+          <div className=" flex flex-col gap-5 prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
+            <p>Yaş: 7+</p>
+            <p>Süre: 2 saat</p>
+            <p>Dil: Türkçe</p>
             <p>
               Heyecan dolu bir gösteriye hazır mısınız? Karşınızda, sizi
               güldürecek, hüzünlendirecek ve düşündürecek bir oyun: &quot;Kör
@@ -41,13 +44,18 @@ const About = () => {
             <p>
               Yazan-Yöneten: Filiz Aksu Yapımcı: M.Mahir Aksu Yönetmen Asistanı:
               Melike Demirci Ses-Işık: Yusuf Enes, Adem Buchan Dekor ve Işık
-              Tasarım: Filiz Aksu Oyuncular: Yavuz Okan Özbayıs, Kemal Buchan,
-              Muhammed Emin Aksu, M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda
-              Koca, Berre Betül Araman, Melike Demirci, Berivan Yabalak Sahne
-              Amiri: İnci Sueda Koca Selman Mektup Seslendirme: Mahir Ergin
-              Final Sahnesi Koreografi Müziği: Grifon Fotoğraf: Ahmet Karayel
-              Logo Tasarım: Özer Hekimoğlu Afiş Tasarım: Muhammed Bahadır Broşür
-              Tasarım: Selmoly
+              Tasarım: Filiz Aksu
+            </p>
+            <p>
+              Oyuncular: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu,
+              M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül
+              Araman, Melike Demirci, Berivan Yabalak
+            </p>
+            <p>
+              Sahne Amiri: İnci Sueda Koca Selman Mektup Seslendirme: Mahir
+              Ergin Final Sahnesi Koreografi Müziği: Grifon Fotoğraf: Ahmet
+              Karayel Logo Tasarım: Özer Hekimoğlu Afiş Tasarım: Muhammed
+              Bahadır Broşür Tasarım: Selmoly
             </p>
           </div>
         </div>

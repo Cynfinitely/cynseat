@@ -15,8 +15,9 @@
   "ticketCreated": "Biletiniz oluşturulmuştur. Biletler sayfasını kontrol edebilirsiniz.",
   "redirect": "Biletler sayfasına yönlendiriliyorsunuz: ",
   "download": "Biletinizi indirin",
-  "ticketWarning": "En fazla 6 bilet alabilirsiniz, lütfen biletleri indirmeyi unutmayın!",
+  "ticketWarning": "En fazla 5 bilet alabilirsiniz, lütfen biletleri indirmeyi unutmayın!",
   "aboutGame": "Oyun hakkında",
   "aboutTitle": "Kör Terazi",
-  "organizers": "Tiyatro Maydanoz"
+  "organizers": "Tiyatro Maydanoz",
+  "ticketWarning2": "Koltuk seçme imkanimiz yok o yuzden biletleri tek seferde alırsanız yan yana oturma ihtimaliniz daha yüksek olur."
 }

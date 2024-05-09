@@ -15,8 +15,9 @@
   "ticketCreated": "Lippusi on luotu. Tarkista Liput-sivu.",
   "redirect": "Ohjaus lippusivulle osoitteessa:",
   "download": "Lataa Lippusi",
-  "ticketWarning": "Voit saada enintään 6 lippua ja muista ladata liput!",
-  "aboutGame": "Tietoja pelistä",
+  "ticketWarning": "Voit saada enintään 5 lippua ja muista ladata liput!",
+  "aboutGame": "Tietoja Esityksestä",
   "aboutTitle": "Kör Terazi",
-  "organizers": "Tiyatro Maydanoz"
+  "organizers": "Tiyatro Maydanoz",
+  "ticketWarning2": "Meillä ei ole mahdollisuutta valita paikkoja, joten jos ostat lippusi kerralla, istut todennäköisemmin vierekkäin."
 }

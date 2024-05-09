@@ -55,6 +55,7 @@ const Tickets: React.FC = () => {
           <CheckoutButton />
         </div>
         <p className="mt-5">{t("ticketWarning")}</p>
+        <p className="mt-5">{t("ticketWarning2")}</p>
         <div className="w-full overflow-auto">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
