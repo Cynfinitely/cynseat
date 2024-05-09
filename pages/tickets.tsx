@@ -56,9 +56,15 @@ const Tickets: React.FC = () => {
         </div>
         <p className="mt-5">{t("ticketWarning")}</p>
         <p className="mt-5">{t("ticketWarning2")}</p>
-        <p className="mt-2">{t("age")}: 7+</p>
-        <p>{t("time")}: 2 {t("hours")}</p>
-        <p>{t("language")}: Türkçe</p>
+        <p className="mt-2">
+          {t("age")}: <b>7+</b>
+        </p>
+        <p>
+          {t("time")}: <b>2 {t("hours")} </b>
+        </p>
+        <p>
+          {t("language")}: <b>Türkçe</b>
+        </p>
         <div className="w-full overflow-auto">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
