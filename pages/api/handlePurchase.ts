@@ -16,6 +16,19 @@ export default async function handlePurchase(
 
   // Get the next ticket number
   const ticketNumberRef = admin.firestore().doc("tickets/nextNumber");
+  // Check if the user has reached the maximum ticket limit
+  const userTicketsCount = await admin
+    .firestore()
+    .collection("tickets")
+    .where("userEmail", "==", purchase.userEmail)
+    .get()
+    .then((snapshot) => snapshot.size);
+  if (userTicketsCount + purchase.numTickets > 5) {
+    // If the user is trying to purchase more than the maximum limit, return an error
+    return res
+      .status(400)
+      .json({ message: "User has reached the maximum ticket limit." });
+  }
 
   // Get the current ticket number
   const ticketNumberSnap = await ticketNumberRef.get();
