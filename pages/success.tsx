@@ -11,9 +11,12 @@ export default function SuccessPage() {
   const [countdown, setCountdown] = useState(10);
   const { t } = useTranslation();
   const hasHandledPurchase = useRef(false);
+  const isHandlingPurchase = useRef(false); 
 
   useEffect(() => {
     const handlePurchase = async () => {
+      if (hasHandledPurchase.current || isHandlingPurchase.current) return; // Add this line
+      isHandlingPurchase.current = true; // Add this line
       if (hasHandledPurchase.current) return;
       let userId = auth.currentUser?.uid; // get user ID from Firebase auth
 
@@ -48,6 +51,7 @@ export default function SuccessPage() {
       const data = await res.json();
       console.log("Purchase response", data);
       hasHandledPurchase.current = true;
+      isHandlingPurchase.current = false; 
     };
 
     if (session_id) {
