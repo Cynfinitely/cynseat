@@ -11,6 +11,7 @@ const stripePromise = loadStripe(
 export default function CheckoutButton() {
   const { t } = useTranslation();
   const [numTickets, setNumTickets] = useState(1);
+  const [loading, setLoading] = useState(false);
   const ticketPrice = 15;
 
   const calculateTotalCost = (numTickets: number) => {
@@ -26,6 +27,7 @@ export default function CheckoutButton() {
   };
 
   const handleClick = async () => {
+    setLoading(true);
     const stripe = await stripePromise;
     const res = await fetch("/api/create-checkout-session", {
       method: "POST",
@@ -47,6 +49,7 @@ export default function CheckoutButton() {
         alert(result.error.message);
       }
     }
+    setLoading(false);
   };
 
   // Add a button to increment the number of tickets
@@ -84,9 +87,14 @@ export default function CheckoutButton() {
       <button
         role="link"
         onClick={handleClick}
+        disabled={loading}
         className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400 ml-4"
       >
-        {t("buyTicket")}
+        {loading ? (
+          <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div> // Tailwind CSS spinner
+        ) : (
+          t("buyTicket")
+        )}
       </button>
     </div>
   );

@@ -30,21 +30,28 @@ export default async function handlePurchase(
       .json({ message: "User has reached the maximum ticket limit." });
   }
 
-  // Get the current ticket number
-  const ticketNumberSnap = await ticketNumberRef.get();
-  const currentNumber = ticketNumberSnap.data()?.number ?? 0; // Default to 0 if undefined
-  const numTicketsToPurchase = numTickets ?? 0; // Default to 0 if undefined
+  // Start a transaction
+  const transaction = admin.firestore().runTransaction(async (t) => {
+    const ticketNumberSnap = await t.get(ticketNumberRef);
+    const currentNumber = ticketNumberSnap.data()?.number ?? 0; // Default to 0 if undefined
+    const numTicketsToPurchase = numTickets ?? 0; // Default to 0 if undefined
 
-  // Calculate the next ticket number
-  const nextNumber = currentNumber + numTicketsToPurchase;
+    // Calculate the next ticket number
+    const nextNumber = currentNumber + numTicketsToPurchase;
+    // Check if the next ticket number exceeds the maximum ticket number
+    const maxTicketNumber = 304;
+    if (nextNumber > maxTicketNumber) {
+      throw new Error("Maximum ticket number exceeded.");
+    }
+    t.set(ticketNumberRef, { number: nextNumber }, { merge: true });
+    return nextNumber;
+  });
 
-  // Use a batched write to increment the ticket number
-  const batch = admin.firestore().batch();
-  batch.set(ticketNumberRef, { number: nextNumber }, { merge: true });
-  await batch.commit();
+  // Wait for the transaction to complete
+  const nextNumber = await transaction;
 
   // Use the first new ticket number
-  const ticketNumber = currentNumber + 1;
+  const ticketNumber = nextNumber - numTickets + 1;
 
   // Create a new ticket for each purchased ticket
   const ticketPromises = Array(numTickets)
