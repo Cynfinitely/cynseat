@@ -23,5 +23,18 @@
   "age": "Age",
   "language": "Language",
   "hours": "Hours",
-  "ticketWarning2": "We do not have the opportunity to choose seats, so if you buy your tickets at once, you will be more likely to sit next to each other."
+  "ticketWarning2": "We do not have the opportunity to choose seats, so if you buy your tickets at once, you will be more likely to sit next to each other.",
+  "about": {
+    "title": "Kör Terazi",
+    "contact": "tiyatromaydanoz@gmail.com<br/>Facebook, Instagram: tiyatromaydanoz",
+    "age": "Age: 7+",
+    "duration": "Duration: 2 hours",
+    "language": "Language: Turkish",
+    "creditsTitle": "Play's Credits",
+    "paragraph1": "Are you ready for an exciting show? Here is a play that will make you laugh, feel sad, and think: \"Kör Terazi!\" Get ready to watch the adventure of Cevahir, a teacher who was imprisoned for no reason, and an ambitious journalist. In this two-act comedy-drama accompanied by black humor, you will face the search for justice and the contradictions of human nature. Will those who remain silent against injustice one day be left in need of justice? \"Kör Terazi\" invites you to an unexpected journey. This play, which has been meticulously prepared for a long time, offers a thought-provoking and entertaining experience where injustice is addressed from different aspects. It invites its audience to watch a heavy subject in an entertaining way. The energy displayed by the young people on stage makes this play truly special. The performances of extraordinary talents enchant the audience. Are you ready? \"Kör Terazi\" is waiting for you!",
+    "paragraph2": "Duration: 2 hours\nLanguage: Turkish\nAge: 7+",
+    "paragraph3": "Written and Directed by: Filiz Aksu<br>Producer: M.Mahir Aksu<br>Assistant Director: Melike Demirci<br>Sound and Lighting: Yusuf Enes, Adem Buchan<br>Subtitles Application: Ahmed Ali İslamoğlu<br>Set and Lighting Design: Filiz Aksu",
+    "paragraph4": "Cast: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu, M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül Araman, Melike Demirci, Pelin Karataş",
+    "paragraph5": "Stage Manager: İnci Sueda Koca<br>Selman Mektup Voiceover: Mahir Ergin<br>Final Scene Choreography Music: Grifon<br>Photo: Ahmet Karayel<br>Logo Design: Özer Hekimoğlu<br>Poster Design: Muhammed Bahadır<br>Brochure Design: Kardelen Tasarım<br>Translation: Nermin Karaoğlan"
+  }
 }

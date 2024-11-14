@@ -72,15 +72,13 @@ export default function CheckoutButton() {
     <div className="flex items-center">
       <button
         onClick={handleAddTicket}
-        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400"
-      >
+        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400">
         +
       </button>
       <span className="mx-4 text-lg">{numTickets}</span>
       <button
         onClick={handleRemoveTicket}
-        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-red-600 bg-red-500 hover:bg-red-400"
-      >
+        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-red-600 bg-red-500 hover:bg-red-400">
         -
       </button>
       <span className="mx-4 text-lg">€{totalCost}</span>
@@ -88,8 +86,7 @@ export default function CheckoutButton() {
         role="link"
         onClick={handleClick}
         disabled={loading}
-        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400 ml-4"
-      >
+        className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400 ml-4">
         {loading ? (
           <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div> // Tailwind CSS spinner
         ) : (

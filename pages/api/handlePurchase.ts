@@ -88,8 +88,8 @@ export default async function handlePurchase(
       // Add the ticket number
       firstPage.drawText(String(ticket.number), {
         x: width - 65,
-        y: height - 45,
-        size: 25,
+        y: height - 65,
+        size: 15,
         font: timesRomanFont,
         color: rgb(0, 0, 0),
       });

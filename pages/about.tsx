@@ -1,61 +1,71 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 const About = () => {
   const { t } = useTranslation();
 
   return (
     <div className="bg-red-100 w-full min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="py-8">
-            <h1 className="text-3xl font-bold mb-2">{t("aboutTitle")}</h1>
-            <p className="text-gray-500 text-sm">{t("organizers")}</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold mb-4">
+              <Trans i18nKey="about.title" />
+            </h1>
+            <p className="text-gray-600 text-base">
+              <Trans i18nKey="about.contact" />
+            </p>
           </div>
 
           <img
             src="/gameImage.jpg"
-            alt="Featured image"
-            className="w-full h-auto mb-8"
+            alt="Featured"
+            className="w-full h-auto mb-8 rounded-lg shadow-md"
           />
 
-          <div className=" flex flex-col gap-5 prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
-            <p>Yaş: 7+</p>
-            <p>Süre: 2 saat</p>
-            <p>Dil: Türkçe</p>
+          <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto text-gray-800">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <p className="text-xl font-semibold">
+                <Trans i18nKey="about.age" />
+              </p>
+              <p className="text-xl font-semibold">
+                <Trans i18nKey="about.duration" />
+              </p>
+              <p className="text-xl font-semibold">
+                <Trans i18nKey="about.language" />
+              </p>
+            </div>
+
             <p>
-              Heyecan dolu bir gösteriye hazır mısınız? Karşınızda, sizi
-              güldürecek, hüzünlendirecek ve düşündürecek bir oyun: &quot;Kör
-              Terazi!&rdquo; Suçsuz yere hapishaneye atılmış öğretmen
-              Cevahir&apos;in ve hırslı bir gazetecinin macerasını izlemeye
-              hazır olun. Kara mizahın eşliğinde, bu iki perdelik komedi-dramda,
-              adalet arayışı ve insan doğasının çelişkileriyle yüzleşeceksiniz.
-              Adaletsizliğe karşı sessiz kalanlar, bir gün adalete muhtaç kalır
-              mı? &quot;Kör Terazi&quot;, beklenmedik bir yolculuğa davet ediyor
-              sizi. Uzun süredir titizlikle hazırlanan bu oyun, adaletsizliğin
-              farklı yönleriyle ele alındığı, düşündürücü ve eğlenceli bir
-              deneyim sunuyor. İzleyicilerini ağır bir konuyu eğlenceli bir
-              biçimde izlemeye davet ediyor. Gençlerin sahnede sergilediği
-              enerji, bu oyunu gerçekten özel kılıyor. Sıra dışı yeteneklerin
-              sahnedeki performansları, izleyicileri adeta büyülüyor. Hazır
-              mısınız? &quot;Kör Terazi&quot; sizleri bekliyor!
+              <Trans i18nKey="about.paragraph1" />
             </p>
-            <p>Oyunun künyesi Süre: 2 saat Dil: Türkçe Yaş: 7+</p>
-            <p>
-              Yazan-Yöneten: Filiz Aksu Yapımcı: M.Mahir Aksu Yönetmen Asistanı:
-              Melike Demirci Ses-Işık: Yusuf Enes, Adem Buchan Dekor ve Işık
-              Tasarım: Filiz Aksu
+
+            <img
+              src="/gameImage3.jpg"
+              alt="Featured"
+              className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
+            />
+
+            <img
+              src="/gameImage2.jpg"
+              alt="Featured"
+              className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
+            />
+
+            <h2 className="my-8 text-xl font-semibold">
+              <Trans i18nKey="about.creditsTitle" />
+            </h2>
+            <p className="text-l font-semibold my-4">
+              <Trans i18nKey="about.paragraph2" />
             </p>
             <p>
-              Oyuncular: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu,
-              M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül
-              Araman, Melike Demirci, Berivan Yabalak
+              <Trans i18nKey="about.paragraph3" />
             </p>
             <p>
-              Sahne Amiri: İnci Sueda Koca Selman Mektup Seslendirme: Mahir
-              Ergin Final Sahnesi Koreografi Müziği: Grifon Fotoğraf: Ahmet
-              Karayel Logo Tasarım: Özer Hekimoğlu Afiş Tasarım: Muhammed
-              Bahadır Broşür Tasarım: Filika
+              <Trans i18nKey="about.paragraph4" />
+            </p>
+            <p>
+              <Trans i18nKey="about.paragraph5" />
             </p>
           </div>
         </div>
