@@ -13,8 +13,9 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { numTickets, totalCost } = req.body;
+      const { numTickets, totalCost, metadata } = req.body;
 
+      // Include userId and userEmail in metadata
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
@@ -31,8 +32,9 @@ export default async function handler(
         ],
         mode: "payment",
         metadata: {
-          ...req.body.metadata,
-          numTickets: numTickets.toString(), 
+          numTickets: numTickets.toString(),
+          userId: metadata.userId,
+          userEmail: metadata.userEmail,
         },
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/cancel`,
@@ -40,6 +42,7 @@ export default async function handler(
 
       res.status(200).json({ sessionId: session.id });
     } catch (error) {
+      console.error("Error creating Checkout Session:", error);
       res.status(500).json({ error: "Error creating Checkout Session" });
     }
   } else {

@@ -2,7 +2,8 @@
 
 import { loadStripe } from "@stripe/stripe-js";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { auth } from "../firebase/firebase";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -13,6 +14,22 @@ export default function CheckoutButton() {
   const [numTickets, setNumTickets] = useState(1);
   const [loading, setLoading] = useState(false);
   const ticketPrice = 15;
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+        setUserEmail(user.email);
+      } else {
+        setUserId(null);
+        setUserEmail(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const calculateTotalCost = (numTickets: number) => {
     if (numTickets < 4) {
@@ -27,6 +44,11 @@ export default function CheckoutButton() {
   };
 
   const handleClick = async () => {
+    if (!userId || !userEmail) {
+      alert(t("pleaseSignIn"));
+      return;
+    }
+
     setLoading(true);
     const stripe = await stripePromise;
     const res = await fetch("/api/create-checkout-session", {
@@ -34,7 +56,11 @@ export default function CheckoutButton() {
       body: JSON.stringify({
         numTickets,
         totalCost,
-        metadata: { numTickets: numTickets.toString() }, // Include numTickets in metadata
+        metadata: {
+          numTickets: numTickets.toString(),
+          userId,
+          userEmail,
+        },
       }),
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +114,7 @@ export default function CheckoutButton() {
         disabled={loading}
         className="focus:outline-black text-white text-sm py-2.5 px-4 border-b-4 border-green-600 bg-green-500 hover:bg-green-400 ml-4">
         {loading ? (
-          <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div> // Tailwind CSS spinner
+          <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
         ) : (
           t("buyTicket")
         )}
