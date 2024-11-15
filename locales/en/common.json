@@ -41,5 +41,6 @@
   "needEmailDescription": "Please provide an email address. Note: The email will not be verified, so you can enter any address.",
   "passwordsDoNotMatch": "Passwords do not match.",
   "confirmPassword": "Confirm Password",
-  "showPassword": "Show Password"
+  "showPassword": "Show Password",
+  "totalTicketsSold": "Current number of tickets sold for the play: "
 }

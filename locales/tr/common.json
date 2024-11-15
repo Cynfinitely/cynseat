@@ -41,5 +41,6 @@
   "needEmailDescription": "Lütfen bir e-posta adresi girin. Not: E-posta doğrulaması yapılmayacaktır, bu yüzden herhangi bir adresi girebilirsiniz.",
   "passwordsDoNotMatch": "Şifreler eşleşmiyor.",
   "confirmPassword": "Şifreyi Onayla",
-  "showPassword": "Şifreyi Göster"
+  "showPassword": "Şifreyi Göster",
+  "totalTicketsSold": "Oyun için güncel satılmış bilet sayısı: "
 }

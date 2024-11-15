@@ -41,5 +41,6 @@
   "needEmailDescription": "Anna sähköpostiosoite. Huom: Sähköpostiosoitetta ei tarkisteta, joten voit antaa minkä tahansa osoitteen.",
   "passwordsDoNotMatch": "Salasanat eivät täsmää.",
   "confirmPassword": "Vahvista salasana",
-  "showPassword": "Näytä salasana"
+  "showPassword": "Näytä salasana",
+  "totalTicketsSold": "Näytöksen nykyinen myytyjen lippujen määrä: "
 }
