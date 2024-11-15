@@ -11,13 +11,12 @@ export default function SuccessPage() {
   const [countdown, setCountdown] = useState(10);
   const { t } = useTranslation();
   const hasHandledPurchase = useRef(false);
-  const isHandlingPurchase = useRef(false); 
+  const isHandlingPurchase = useRef(false);
 
   useEffect(() => {
     const handlePurchase = async () => {
-      if (hasHandledPurchase.current || isHandlingPurchase.current) return; // Add this line
-      isHandlingPurchase.current = true; // Add this line
-      if (hasHandledPurchase.current) return;
+      if (hasHandledPurchase.current || isHandlingPurchase.current) return;
+      isHandlingPurchase.current = true;
       let userId = auth.currentUser?.uid; // get user ID from Firebase auth
 
       // Wait until userId is defined
@@ -51,7 +50,7 @@ export default function SuccessPage() {
       const data = await res.json();
       console.log("Purchase response", data);
       hasHandledPurchase.current = true;
-      isHandlingPurchase.current = false; 
+      isHandlingPurchase.current = false;
     };
 
     if (session_id) {
@@ -71,12 +70,12 @@ export default function SuccessPage() {
   }, [countdown, router]);
 
   return (
-    <div className="bg-red-100 w-full h-full">
-      <div className="flex flex-col justify-center items-center w-full h-full gap-4">
-        <h1>{t("paymentSuccess")}</h1>
-        <p>{t("ticketCreated")}</p>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg p-6 text-center mx-4 sm:mx-0">
+        <h1 className="text-2xl font-bold mb-4">{t("paymentSuccess")}</h1>
+        <p className="mb-4">{t("ticketCreated")}</p>
         <p>
-          {t("redirect")} {countdown}
+          {t("redirect")} {countdown}...
         </p>
       </div>
     </div>

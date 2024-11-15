@@ -18,9 +18,9 @@ const About = () => {
           </div>
 
           <img
-            src="/gameImage.jpg"
+            src="/gameImage3.jpg"
             alt="Featured"
-            className="w-full h-auto mb-8 rounded-lg shadow-md"
+            className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
           />
 
           <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto text-gray-800">
@@ -40,11 +40,18 @@ const About = () => {
               <Trans i18nKey="about.paragraph1" />
             </p>
 
-            <img
-              src="/gameImage3.jpg"
-              alt="Featured"
-              className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
-            />
+            <p className="text-gray-800 mt-6">
+              <Trans i18nKey="about.subtitlesInfo" />
+              <br />
+              <br />
+              <a
+                href="https://m.subtitles.cloud"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline">
+                https://m.subtitles.cloud
+              </a>
+            </p>
 
             <img
               src="/gameImage2.jpg"
@@ -67,6 +74,12 @@ const About = () => {
             <p>
               <Trans i18nKey="about.paragraph5" />
             </p>
+
+            <img
+              src="/gameImage.jpg"
+              alt="Featured"
+              className="w-full h-auto mb-8 rounded-lg shadow-md"
+            />
           </div>
         </div>
       </div>

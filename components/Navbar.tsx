@@ -33,16 +33,16 @@ const Header: React.FC = () => {
 
   return (
     <header className="p-4 text-white bg-red-100">
-      <nav className="flex flex-col sm:flex-row justify-start items-center gap-2 sm:gap-9">
+      <nav className="flex flex-row sm:flex-col justify-center items-center gap-2 sm:gap-9">
         {user ? (
-          <>
+          <div className="flex flex-row gap-4 justify-center items-stretch">
             <Link href="/about">
               <button className="bg-teal-400 hover:bg-teal-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
                 {t("aboutGame")}
               </button>
             </Link>
             <Link href="/tickets">
-              <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded h-full">
                 {t("tickets")}
               </button>
             </Link>
@@ -52,9 +52,9 @@ const Header: React.FC = () => {
               className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               {t("signOut")}
             </button>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="flex flex-row gap-4 justify-center items-stretch">
             <Link href="/signIn">
               {" "}
               <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
                 {t("signUp")}
               </button>
             </Link>
-          </>
+          </div>
         )}
       </nav>
     </header>

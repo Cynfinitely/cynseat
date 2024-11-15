@@ -35,6 +35,11 @@
     "paragraph2": "Süre: 2 saat\nDil: Türkçe\nYaş: 7+",
     "paragraph3": "Yazan-Yöneten: Filiz Aksu<br>Yapımcı: M.Mahir Aksu<br>Yönetmen Asistanı: Melike Demirci<br>Ses-Işık: Yusuf Enes, Adem Buchan<br>Altyazı Uygulaması: Ahmed Ali İslamoğlu<br>Dekor ve Işık Tasarım: Filiz Aksu",
     "paragraph4": "Oyuncular: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu, M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül Araman, Melike Demirci, Pelin Karataş",
-    "paragraph5": "Sahne Amiri: İnci Sueda Koca<br>Selman Mektup Seslendirme: Mahir Ergin<br>Final Sahnesi Koreografi Müziği: Grifon<br>Fotoğraf: Ahmet Karayel<br>Logo Tasarım: Özer Hekimoğlu<br>Afiş Tasarım: Muhammed Bahadır<br>Broşür Tasarım: Kardelen Tasarım<br>Çeviri: Nermin Karaoğlan"
-  }
+    "paragraph5": "Sahne Amiri: İnci Sueda Koca<br>Selman Mektup Seslendirme: Mahir Ergin<br>Final Sahnesi Koreografi Müziği: Grifon<br>Fotoğraf: Ahmet Karayel<br>Logo Tasarım: Özer Hekimoğlu<br>Afiş Tasarım: Muhammed Bahadır<br>Broşür Tasarım: Kardelen Tasarım<br>Çeviri: Nermin Karaoğlan",
+    "subtitlesInfo": "Performans İngilizce altyazılı olacaktır. Altyazılar, Altyazı uygulaması önceden yüklenmiş olan kendi akıllı telefonunuzdan okunur. Uygulamayı Apple Store ve Google Play Store'da bulabilirsiniz.Bu adresi ziyaret ederek mobil istemciyi kolayca indirebilirsiniz."
+  },
+  "needEmailDescription": "Lütfen bir e-posta adresi girin. Not: E-posta doğrulaması yapılmayacaktır, bu yüzden herhangi bir adresi girebilirsiniz.",
+  "passwordsDoNotMatch": "Şifreler eşleşmiyor.",
+  "confirmPassword": "Şifreyi Onayla",
+  "showPassword": "Şifreyi Göster"
 }

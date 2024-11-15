@@ -35,6 +35,11 @@
     "paragraph2": "Kesto: 2 tuntia\nKieli: Turkki\nIkä: 7+",
     "paragraph3": "Kirjoittaja ja ohjaaja: Filiz Aksu<br>Tuottaja: M.Mahir Aksu<br>Ohjaajan assistentti: Melike Demirci<br>Ääni ja valaistus: Yusuf Enes, Adem Buchan<br>Tekstityksen sovellus: Ahmed Ali İslamoğlu<br>Lavastus ja valosuunnittelu: Filiz Aksu",
     "paragraph4": "Näyttelijät: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu, M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül Araman, Melike Demirci, Pelin Karataş",
-    "paragraph5": "Lavamanageri: İnci Sueda Koca<br>Selman Mektup ääninäyttely: Mahir Ergin<br>Loppukohtauksen koreografiamusiikki: Grifon<br>Valokuva: Ahmet Karayel<br>Logon suunnittelu: Özer Hekimoğlu<br>Julisteen suunnittelu: Muhammed Bahadır<br>Esitteen suunnittelu: Kardelen Tasarım<br>Käännös: Nermin Karaoğlan"
-  }
+    "paragraph5": "Lavamanageri: İnci Sueda Koca<br>Selman Mektup ääninäyttely: Mahir Ergin<br>Loppukohtauksen koreografiamusiikki: Grifon<br>Valokuva: Ahmet Karayel<br>Logon suunnittelu: Özer Hekimoğlu<br>Julisteen suunnittelu: Muhammed Bahadır<br>Esitteen suunnittelu: Kardelen Tasarım<br>Käännös: Nermin Karaoğlan",
+    "subtitlesInfo": "Esityksessä on englanninkieliset tekstitykset. Tekstitykset luetaan omalta älypuhelimeltasi, johon on asennettu Subtitles-sovellus etukäteen. Löydät sovelluksen Apple Storesta ja Google Play Storesta. Vieraile osoitteessa  ladataksesi mobiiliklientin helposti."
+  },
+  "needEmailDescription": "Anna sähköpostiosoite. Huom: Sähköpostiosoitetta ei tarkisteta, joten voit antaa minkä tahansa osoitteen.",
+  "passwordsDoNotMatch": "Salasanat eivät täsmää.",
+  "confirmPassword": "Vahvista salasana",
+  "showPassword": "Näytä salasana"
 }

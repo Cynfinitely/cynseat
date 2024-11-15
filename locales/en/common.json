@@ -35,6 +35,11 @@
     "paragraph2": "Duration: 2 hours\nLanguage: Turkish\nAge: 7+",
     "paragraph3": "Written and Directed by: Filiz Aksu<br>Producer: M.Mahir Aksu<br>Assistant Director: Melike Demirci<br>Sound and Lighting: Yusuf Enes, Adem Buchan<br>Subtitles Application: Ahmed Ali İslamoğlu<br>Set and Lighting Design: Filiz Aksu",
     "paragraph4": "Cast: Yavuz Okan Özbayıs, Kemal Buchan, Muhammed Emin Aksu, M.Mahir Aksu, Nurefşan Kocagöz, İnci Sueda Koca, Berre Betül Araman, Melike Demirci, Pelin Karataş",
-    "paragraph5": "Stage Manager: İnci Sueda Koca<br>Selman Mektup Voiceover: Mahir Ergin<br>Final Scene Choreography Music: Grifon<br>Photo: Ahmet Karayel<br>Logo Design: Özer Hekimoğlu<br>Poster Design: Muhammed Bahadır<br>Brochure Design: Kardelen Tasarım<br>Translation: Nermin Karaoğlan"
-  }
+    "paragraph5": "Stage Manager: İnci Sueda Koca<br>Selman Mektup Voiceover: Mahir Ergin<br>Final Scene Choreography Music: Grifon<br>Photo: Ahmet Karayel<br>Logo Design: Özer Hekimoğlu<br>Poster Design: Muhammed Bahadır<br>Brochure Design: Kardelen Tasarım<br>Translation: Nermin Karaoğlan",
+    "subtitlesInfo": "The performance will have English subtitles. Subtitles are read from your own smartphone with the Subtitles app pre-installed. You can find the app on the Apple Store and Google Play Store. Visit this page to easily download the mobile client."
+  },
+  "needEmailDescription": "Please provide an email address. Note: The email will not be verified, so you can enter any address.",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "confirmPassword": "Confirm Password",
+  "showPassword": "Show Password"
 }
