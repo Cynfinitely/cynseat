@@ -1,4 +1,5 @@
 // pages/api/handlePurchase.ts
+
 import { NextApiRequest, NextApiResponse } from "next";
 import admin from "../../firebase/firebaseAdmin";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
@@ -7,66 +8,72 @@ import { Bucket } from "@google-cloud/storage";
 import crypto from "crypto";
 import path from "path";
 
+// Import the seatCodes array
+const seatRows = ["A", "B", "C", "D", "E", "F", "G"];
+const seatsPerRow = 22;
+const seatCodes = seatRows.flatMap((row) =>
+  Array.from({ length: seatsPerRow }, (_, i) => `${row}${i + 1}`)
+);
+
 export default async function handlePurchase(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const purchase = req.body;
-  const numTickets = purchase.numTickets; // Get the number of tickets from the purchase
+  try {
+    const purchase = req.body;
+    const numTickets = purchase.numTickets;
 
-  // Get the next ticket number
-  const ticketNumberRef = admin.firestore().doc("tickets/nextNumber");
-  // Check if the user has reached the maximum ticket limit
-  const userTicketsCount = await admin
-    .firestore()
-    .collection("tickets")
-    .where("userEmail", "==", purchase.userEmail)
-    .get()
-    .then((snapshot) => snapshot.size);
-  if (userTicketsCount + purchase.numTickets > 5) {
-    // If the user is trying to purchase more than the maximum limit, return an error
-    return res
-      .status(400)
-      .json({ message: "User has reached the maximum ticket limit." });
-  }
+    // Firestore doc to keep track of the next seat index
+    const seatIndexRef = admin.firestore().doc("tickets/seatIndex");
 
-  // Start a transaction
-  const transaction = admin.firestore().runTransaction(async (t) => {
-    const ticketNumberSnap = await t.get(ticketNumberRef);
-    const currentNumber = ticketNumberSnap.data()?.number ?? 0; // Default to 0 if undefined
-    const numTicketsToPurchase = numTickets ?? 0; // Default to 0 if undefined
+    // Check if user is over limit (5 tickets)
+    const userTicketsCount = await admin
+      .firestore()
+      .collection("tickets")
+      .where("userEmail", "==", purchase.userEmail)
+      .get()
+      .then((snapshot) => snapshot.size);
 
-    // Calculate the next ticket number
-    const nextNumber = currentNumber + numTicketsToPurchase;
-    // Check if the next ticket number exceeds the maximum ticket number
-    const maxTicketNumber = 304;
-    if (nextNumber > maxTicketNumber) {
-      throw new Error("Maximum ticket number exceeded.");
+    if (userTicketsCount + numTickets > 5) {
+      return res.status(400).json({
+        message: "User has reached the maximum ticket limit (5).",
+      });
     }
-    t.set(ticketNumberRef, { number: nextNumber }, { merge: true });
-    return nextNumber;
-  });
 
-  // Wait for the transaction to complete
-  const nextNumber = await transaction;
+    // Transaction to reserve seats
+    const startingIndex = await admin
+      .firestore()
+      .runTransaction(async (transaction) => {
+        const seatIndexSnap = await transaction.get(seatIndexRef);
+        const currentIndex = seatIndexSnap.data()?.index ?? 0;
+        const nextIndex = currentIndex + numTickets;
 
-  // Use the first new ticket number
-  const ticketNumber = nextNumber - numTickets + 1;
+        // Ensure we don't exceed total seats
+        if (nextIndex > seatCodes.length) {
+          throw new Error("Not enough seats available.");
+        }
 
-  // Create a new ticket for each purchased ticket
-  const ticketPromises = Array(numTickets)
-    .fill(null)
-    .map(async (_, i) => {
-      const ticket = {
-        number: ticketNumber + i, // Assign a unique number to each ticket
+        transaction.set(seatIndexRef, { index: nextIndex }, { merge: true });
+
+        // Return the old index (the first seat for the new purchase)
+        return currentIndex;
+      });
+
+    // Now generate and upload PDFs for each seat
+    const ticketPromises = Array.from({ length: numTickets }, async (_, i) => {
+      const seatIndex = startingIndex + i;
+      const seatCode = seatCodes[seatIndex];
+
+      // Build ticket record
+      const ticketData = {
+        seatCode,
         purchaseId: purchase.id,
         userId: purchase.userId,
         userEmail: purchase.userEmail,
         imageUrl: "",
-        // other ticket data...
       };
 
-      // Load the ticket template
+      // Load PDF Template
       const templatePath = path.join(
         process.cwd(),
         "assets",
@@ -75,87 +82,60 @@ export default async function handlePurchase(
       const templateBytes = await fs.promises.readFile(templatePath);
       const pdfDoc = await PDFDocument.load(templateBytes);
 
-      // Embed the fonts
-      const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+      // Write seatCode onto PDF
+      const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+      const [page] = pdfDoc.getPages();
+      const { width, height } = page.getSize();
 
-      // Get the first page
-      const pages = pdfDoc.getPages();
-      const firstPage = pages[0];
-
-      // Get the width and height
-      const { width, height } = firstPage.getSize();
-
-      // Add the ticket number
-      firstPage.drawText(String(ticket.number), {
-        x: width - 65,
+      page.drawText(seatCode, {
+        x: width - 100,
         y: height - 65,
-        size: 15,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-
-      const emailWithoutDomain = purchase.userEmail.split("@")[0];
-
-      firstPage.drawText(emailWithoutDomain, {
-        x: width - 85, // adjust as needed
-        y: height - 90, // adjust as needed
-        size: 10, // adjust as needed
-        font: timesRomanFont,
+        size: 50,
+        font,
         color: rgb(1, 0, 0),
       });
 
-      // Serialize the PDFDocument to bytes (a Uint8Array)
-      const pdfBytes = await pdfDoc.save();
-
-      // Create a Google Cloud Storage client
-      const bucket: Bucket = admin.storage().bucket();
-
-      const hash = crypto.createHash("sha256");
-      hash.update(String(ticket.number));
-      const shortTicketNumber = hash.digest("hex");
-
-      // Define the destination
-      const destination = `tickets/${shortTicketNumber}.pdf`;
-      const file = bucket.file(destination);
-
-      // Create a write stream for the new file in your bucket
-      const stream = file.createWriteStream({
-        metadata: {
-          contentType: "application/pdf",
-        },
+      const emailPrefix = purchase.userEmail.split("@")[0];
+      page.drawText(emailPrefix, {
+        x: width - 100,
+        y: height - 85,
+        size: 12,
+        font,
+        color: rgb(1, 0, 0),
       });
 
-      // Write the pdfBytes to the file and end the write stream
+      // Save PDF to bytes
+      const pdfBytes = await pdfDoc.save();
+
+      // Upload PDF to GCS
+      const bucket: Bucket = admin.storage().bucket();
+      const hash = crypto.createHash("sha256").update(seatCode).digest("hex");
+      const filePath = `tickets/${hash}.pdf`;
+      const file = bucket.file(filePath);
+
+      const stream = file.createWriteStream({
+        metadata: { contentType: "application/pdf" },
+      });
       stream.write(pdfBytes);
       stream.end();
 
       return new Promise<void>((resolve, reject) => {
-        stream.on("error", (err) => {
-          console.error(err);
-          reject(new Error("Error during upload."));
-        });
-
+        stream.on("error", (err) => reject(err));
         stream.on("finish", async () => {
-          // The file upload is complete.
           await file.makePublic();
-
-          const url = `https://storage.googleapis.com/${
+          ticketData.imageUrl = `https://storage.googleapis.com/${
             bucket.name
-          }/${encodeURI(destination)}`;
-
-          // Add the URL to the ticket
-          ticket.imageUrl = url;
-
-          await admin.firestore().collection("tickets").add(ticket);
+          }/${encodeURI(filePath)}`;
+          // Write ticket document
+          await admin.firestore().collection("tickets").add(ticketData);
           resolve();
         });
       });
     });
 
-  try {
     await Promise.all(ticketPromises);
-    res.status(200).json({ message: "Ticket created." });
+    return res.status(200).json({ message: "Tickets purchased successfully." });
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 }

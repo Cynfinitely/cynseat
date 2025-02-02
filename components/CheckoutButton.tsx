@@ -12,19 +12,19 @@ export default function CheckoutButton() {
   const { t } = useTranslation();
   const [numTickets, setNumTickets] = useState(1);
   const [loading, setLoading] = useState(false);
-  const ticketPrice = 15;
+  const ticketPrice = 5;
 
-  const calculateTotalCost = (numTickets: number) => {
-    if (numTickets < 4) {
-      return numTickets * ticketPrice;
-    } else if (numTickets === 4) {
-      return 50;
-    } else if (numTickets === 5) {
-      return 60;
-    } else if (numTickets >= 6) {
-      return 70;
-    }
-  };
+  // const calculateTotalCost = (numTickets: number) => {
+  //   if (numTickets < 4) {
+  //     return numTickets * ticketPrice;
+  //   } else if (numTickets === 4) {
+  //     return 50;
+  //   } else if (numTickets === 5) {
+  //     return 60;
+  //   } else if (numTickets >= 6) {
+  //     return 70;
+  //   }
+  // };
 
   const handleClick = async () => {
     setLoading(true);
@@ -66,7 +66,8 @@ export default function CheckoutButton() {
     }
   };
 
-  const totalCost = calculateTotalCost(numTickets);
+  // const totalCost = calculateTotalCost(numTickets);
+  const totalCost = numTickets * ticketPrice;
 
   return (
     <div className="flex items-center">
