@@ -7,8 +7,8 @@ import { auth, db } from "../firebase/firebase";
 import {
   collection,
   query,
-  where,
   getDocs,
+  orderBy, // Import orderBy
   doc,
   getDoc,
 } from "firebase/firestore";
@@ -17,6 +17,7 @@ type Ticket = {
   number: number;
   purchaseId: string;
   userId: string;
+  userEmail: string;
   imageUrl: string;
 };
 
@@ -30,32 +31,37 @@ const Tickets: React.FC = () => {
   const startingTicketNumber = 77;
 
   useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        // Create a query with orderBy to sort tickets by number in ascending order
+        const ticketsRef = collection(db, "tickets");
+        const ticketsQuery = query(ticketsRef, orderBy("number", "asc"));
+        const ticketsSnap = await getDocs(ticketsQuery);
+        const fetchedTickets = ticketsSnap.docs.map(
+          (doc) => doc.data() as Ticket
+        );
+        setTickets(fetchedTickets);
+
+        // Fetch total tickets sold
+        const ticketNumberDoc = await getDoc(doc(db, "tickets", "nextNumber"));
+        const currentTicketNumber = ticketNumberDoc.exists()
+          ? ticketNumberDoc.data()?.number ?? startingTicketNumber
+          : startingTicketNumber - 1;
+
+        // Adjust the total tickets sold calculation
+        const totalTickets = currentTicketNumber - startingTicketNumber;
+        setTotalTicketsSold(totalTickets);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+        // Optionally, set an error state here to inform the user
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Optional: Check if the user is authenticated or has the right permissions
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        const fetchTickets = async () => {
-          const userId = user.uid;
-          const ticketsQuery = query(
-            collection(db, "tickets"),
-            where("userId", "==", userId)
-          );
-          const ticketsSnap = await getDocs(ticketsQuery);
-          const tickets = ticketsSnap.docs.map((doc) => doc.data() as Ticket);
-          setTickets(tickets);
-
-          // Fetch total tickets sold
-          const ticketNumberDoc = await getDoc(
-            doc(db, "tickets", "nextNumber")
-          );
-          const currentTicketNumber = ticketNumberDoc.exists()
-            ? ticketNumberDoc.data()?.number ?? startingTicketNumber
-            : startingTicketNumber - 1;
-
-          // Adjust the total tickets sold calculation
-          const totalTickets = currentTicketNumber - startingTicketNumber;
-          setTotalTicketsSold(totalTickets);
-          setLoading(false);
-        };
-
         fetchTickets();
       } else {
         setLoading(false);
@@ -95,34 +101,34 @@ const Tickets: React.FC = () => {
           {t("language")}: <b>Türkçe</b>
         </p>
 
-        <div className="w-full overflow-auto">
+        <div className="w-full overflow-auto mt-8">
           {loading ? (
             <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
+          ) : tickets.length > 0 ? (
+            <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 bg-gray-200 font-semibold text-left">
+                    {t("ticketNumber")}
+                  </th>
+                  <th className="py-2 px-4 bg-gray-200 font-semibold text-left">
+                    {t("userEmail")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {tickets.map((ticket) => (
+                  <tr
+                    key={ticket.number}
+                    className="border-b">
+                    <td className="py-2 px-4">{ticket.number}</td>
+                    <td className="py-2 px-4">{ticket.userEmail}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
-            tickets.map((ticket) => (
-              <div
-                key={ticket.number}
-                className="flex items-center justify-center">
-                <div className="w-full px-4">
-                  <div className="bg-white shadow-lg rounded-lg my-6 grid grid-cols-1 md:grid-cols-[auto,1fr]">
-                    <div className="bg-gray-100 px-5 py-2 flex items-center justify-center __col h-full">
-                      <a
-                        href={ticket.imageUrl}
-                        download
-                        className="text-blue-600 font-medium hover:text-blue-800">
-                        {t("download")}
-                      </a>
-                    </div>
-                    <div className="p-6">
-                      <iframe
-                        src={ticket.imageUrl}
-                        className="w-full h-64 md:h-auto"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
+            <p className="text-center text-gray-700">{t("noTicketsFound")}</p>
           )}
         </div>
       </div>

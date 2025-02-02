@@ -12,19 +12,19 @@ const About = () => {
             <h1 className="text-4xl font-bold mb-4">
               <Trans i18nKey="about.title" />
             </h1>
-            <p className="text-gray-600 text-base">
+            {/* <p className="text-gray-600 text-base">
               <Trans i18nKey="about.contact" />
-            </p>
+            </p> */}
           </div>
 
           <img
-            src="/gameImage3.jpg"
+            src="./movieImage.jpeg"
             alt="Featured"
             className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
           />
 
           <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto text-gray-800">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <p className="text-xl font-semibold">
                 <Trans i18nKey="about.age" />
               </p>
@@ -34,13 +34,13 @@ const About = () => {
               <p className="text-xl font-semibold">
                 <Trans i18nKey="about.language" />
               </p>
-            </div>
+            </div> */}
 
             <p>
               <Trans i18nKey="about.paragraph1" />
             </p>
 
-            <p className="text-gray-800 mt-6">
+            {/* <p className="text-gray-800 mt-6">
               <Trans i18nKey="about.subtitlesInfo" />
               <br />
               <br />
@@ -57,9 +57,9 @@ const About = () => {
               src="/gameImage2.jpg"
               alt="Featured"
               className="w-full h-auto mb-8 rounded-lg shadow-md mt-8"
-            />
+            /> */}
 
-            <h2 className="my-8 text-xl font-semibold">
+            {/* <h2 className="my-8 text-xl font-semibold">
               <Trans i18nKey="about.creditsTitle" />
             </h2>
             <p className="text-l font-semibold my-4">
@@ -73,13 +73,13 @@ const About = () => {
             </p>
             <p>
               <Trans i18nKey="about.paragraph5" />
-            </p>
+            </p> */}
 
-            <img
+            {/* <img
               src="/gameImage.jpg"
               alt="Featured"
               className="w-full h-auto mb-8 rounded-lg shadow-md"
-            />
+            /> */}
           </div>
         </div>
       </div>
