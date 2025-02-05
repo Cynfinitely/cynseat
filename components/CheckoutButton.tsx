@@ -54,9 +54,7 @@ export default function CheckoutButton() {
 
   // Add a button to increment the number of tickets
   const handleAddTicket = () => {
-    if (numTickets < 5) {
-      setNumTickets(numTickets + 1);
-    }
+    setNumTickets(numTickets + 1);
   };
 
   // Add a button to decrement the number of tickets

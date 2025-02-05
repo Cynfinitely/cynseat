@@ -25,19 +25,16 @@ const Tickets: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalTicketsSold, setTotalTicketsSold] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        // Sort by seatCode if you prefer.
-        // (But lexicographical sort may lead to "A10" appearing before "A2".)
         const ticketsRef = collection(db, "tickets");
         const q = query(ticketsRef, orderBy("seatCode", "asc"));
         const snap = await getDocs(q);
-        const fetched = snap.docs.map((doc) => doc.data() as Ticket);
-        setTickets(fetched);
+        setTickets(snap.docs.map((d) => d.data() as Ticket));
 
-        // Read how many seats are sold from seatIndex
         const seatIndexDoc = await getDoc(doc(db, "tickets", "seatIndex"));
         const currentIndex = seatIndexDoc.exists()
           ? seatIndexDoc.data()?.index ?? 0
@@ -54,9 +51,14 @@ const Tickets: React.FC = () => {
       if (user) fetchTickets();
       else setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
+
+  const filteredTickets = tickets.filter(
+    (ticket) =>
+      ticket.seatCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ticket.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="bg-red-100 w-full min-h-screen">
@@ -74,17 +76,26 @@ const Tickets: React.FC = () => {
           <CheckoutButton />
         </div>
 
-        {/* ... more content ... */}
+        <div className="mt-4 font-bold">{t("under12")}</div>
 
-        <div className="w-full overflow-auto mt-8">
+        {/* Search Input */}
+        <input
+          type="text"
+          className="border p-2 mt-6 mb-4 rounded w-60"
+          placeholder="Search emails or tickets"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+        <div className="w-full overflow-auto">
           {loading ? (
-            <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
-          ) : tickets.length > 0 ? (
+            <div className="w-16 h-16 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin" />
+          ) : filteredTickets.length > 0 ? (
             <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
               <thead>
                 <tr>
                   <th className="py-2 px-4 bg-gray-200 font-semibold text-left">
-                    {t("ticketNumber")} {/* Actually seatCode */}
+                    {t("ticketNumber")}
                   </th>
                   <th className="py-2 px-4 bg-gray-200 font-semibold text-left">
                     {t("userEmail")}
@@ -92,7 +103,7 @@ const Tickets: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {tickets.map((ticket, idx) => (
+                {filteredTickets.map((ticket, idx) => (
                   <tr
                     key={idx}
                     className="border-b">
