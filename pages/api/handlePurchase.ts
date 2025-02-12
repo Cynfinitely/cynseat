@@ -26,20 +26,6 @@ export default async function handlePurchase(
     // Firestore doc to keep track of the next seat index
     const seatIndexRef = admin.firestore().doc("tickets/seatIndex");
 
-    // Check if user is over limit (5 tickets)
-    const userTicketsCount = await admin
-      .firestore()
-      .collection("tickets")
-      .where("userEmail", "==", purchase.userEmail)
-      .get()
-      .then((snapshot) => snapshot.size);
-
-    if (userTicketsCount + numTickets > 5) {
-      return res.status(400).json({
-        message: "User has reached the maximum ticket limit (5).",
-      });
-    }
-
     // Transaction to reserve seats
     const startingIndex = await admin
       .firestore()
