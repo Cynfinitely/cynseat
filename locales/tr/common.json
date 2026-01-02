@@ -84,6 +84,9 @@
   "userNotFound": "Kullanıcı bulunamadı.",
   "userNotFoundCreateAccount": "Kullanıcı bulunamadı. Lütfen bir hesap oluşturun.",
   "wrongPassword": "Yanlış şifre.",
+  "invalidCredentials": "Geçersiz e-posta veya şifre. Lütfen bilgilerinizi kontrol edin.",
+  "invalidEmail": "Geçersiz e-posta adresi.",
+  "userDisabled": "Bu hesap devre dışı bırakıldı.",
   "authError": "Kimlik doğrulama hatası. Lütfen tekrar deneyin.",
   "tooManyRequests": "Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.",
   "unexpectedError": "Beklenmeyen bir hata oluştu.",
@@ -91,5 +94,8 @@
   "eventTime": "18:30",
   "eventVenue": "Martinlaakson Auditorio",
   "viewEventDetails": "Etkinlik Detaylarını Görüntüle",
-  "signInToBuyTickets": "Bilet satın almak için lütfen giriş yapın"
+  "signInToBuyTickets": "Bilet satın almak için lütfen giriş yapın",
+  "downloadPDF": "PDF İndir",
+  "noImage": "Resim Yok",
+  "notAvailable": "Mevcut Değil"
 }

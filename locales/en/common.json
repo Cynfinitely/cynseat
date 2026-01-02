@@ -84,6 +84,9 @@
   "userNotFound": "User not found.",
   "userNotFoundCreateAccount": "User not found. Please create an account.",
   "wrongPassword": "Wrong password.",
+  "invalidCredentials": "Invalid email or password. Please check your credentials.",
+  "invalidEmail": "Invalid email address.",
+  "userDisabled": "This account has been disabled.",
   "authError": "Authentication error. Please try again.",
   "tooManyRequests": "Too many failed attempts. Please try again later.",
   "unexpectedError": "An unexpected error occurred.",
@@ -91,5 +94,8 @@
   "eventTime": "18:30",
   "eventVenue": "Martinlaakson Auditorio",
   "viewEventDetails": "View Event Details",
-  "signInToBuyTickets": "Please sign in to purchase tickets"
+  "signInToBuyTickets": "Please sign in to purchase tickets",
+  "downloadPDF": "Download PDF",
+  "noImage": "No Image",
+  "notAvailable": "Not Available"
 }

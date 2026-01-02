@@ -88,6 +88,45 @@ export default async function handlePurchase(
       const textColor = rgb(0.2, 0.2, 0.2); // Dark gray
       const lightGray = rgb(0.9, 0.9, 0.9);
 
+      // Constants for layout
+      const leftMargin = 50;
+      const lineHeight = 35;
+
+      // Helper function to convert Turkish characters to ASCII-safe equivalents
+      const toSafeText = (text: string): string => {
+        return text
+          .replace(/ğ/g, 'g')
+          .replace(/Ğ/g, 'G')
+          .replace(/ü/g, 'u')
+          .replace(/Ü/g, 'U')
+          .replace(/ş/g, 's')
+          .replace(/Ş/g, 'S')
+          .replace(/ı/g, 'i')
+          .replace(/İ/g, 'I')
+          .replace(/ö/g, 'o')
+          .replace(/Ö/g, 'O')
+          .replace(/ç/g, 'c')
+          .replace(/Ç/g, 'C');
+      };
+
+      // Helper function to draw a detail line
+      const drawDetailLine = (label: string, value: string, yPos: number) => {
+        page.drawText(toSafeText(label), {
+          x: leftMargin,
+          y: yPos,
+          size: 14,
+          font: boldFont,
+          color: secondaryColor,
+        });
+        page.drawText(toSafeText(value), {
+          x: leftMargin + 150,
+          y: yPos,
+          size: 14,
+          font: regularFont,
+          color: textColor,
+        });
+      };
+
       // Draw header background
       page.drawRectangle({
         x: 0,
@@ -108,19 +147,19 @@ export default async function handlePurchase(
       });
 
       // Event Title
-      page.drawText('Bir Masal Gibi Anlat', {
+      page.drawText(toSafeText('Bir Masal Gibi Anlat'), {
         x: 50,
         y: height - 80,
-        size: 32,
+        size: 38,
         font: boldFont,
         color: rgb(1, 1, 1),
       });
 
       // "Event Ticket" label
-      page.drawText('ETKINLIK BILETI', {
+      page.drawText(toSafeText('ETKINLIK BILETI'), {
         x: 50,
         y: height - 110,
-        size: 14,
+        size: 16,
         font: regularFont,
         color: rgb(1, 1, 1),
         opacity: 0.9,
@@ -137,44 +176,26 @@ export default async function handlePurchase(
         borderWidth: 2,
       });
 
-      page.drawText('BILET NO:', {
+      page.drawText(toSafeText('BILET NO:'), {
         x: width - 170,
         y: height - 75,
-        size: 10,
+        size: 12,
         font: regularFont,
         color: textColor,
       });
 
-      page.drawText(seatCode, {
+      // Display just the number without "SEAT-" prefix
+      const ticketNumber = seatCode.replace('SEAT-', '');
+      page.drawText(ticketNumber, {
         x: width - 170,
         y: height - 100,
-        size: 20,
+        size: 24,
         font: boldFont,
         color: primaryColor,
       });
 
       // Event details section
       let currentY = height - 200;
-      const leftMargin = 50;
-      const lineHeight = 35;
-
-      // Helper function to draw a detail line
-      const drawDetailLine = (label: string, value: string, yPos: number) => {
-        page.drawText(label, {
-          x: leftMargin,
-          y: yPos,
-          size: 11,
-          font: boldFont,
-          color: secondaryColor,
-        });
-        page.drawText(value, {
-          x: leftMargin + 150,
-          y: yPos,
-          size: 11,
-          font: regularFont,
-          color: textColor,
-        });
-      };
 
       // Draw divider line
       page.drawLine({
@@ -196,7 +217,7 @@ export default async function handlePurchase(
       drawDetailLine('Yer:', 'Martinlaakson Auditorio', currentY);
       currentY -= lineHeight;
 
-      drawDetailLine('Yaş Sınırı:', '10 yaş ve üzeri', currentY);
+      drawDetailLine('Yas Siniri:', '10 yas ve uzeri', currentY);
       currentY -= lineHeight;
 
       // Draw divider line
@@ -210,32 +231,32 @@ export default async function handlePurchase(
       currentY -= 40;
 
       // Artist and performance details
-      drawDetailLine('Sanatçı:', 'Metin Haboğlu', currentY);
+      drawDetailLine('Sanatci:', 'Metin Haboglu', currentY);
       currentY -= lineHeight;
 
-      drawDetailLine('Süre:', '100 dakika', currentY);
+      drawDetailLine('Sure:', '100 dakika', currentY);
       currentY -= lineHeight;
 
       // Concept (wrapped text)
-      page.drawText('Konsept:', {
+      page.drawText(toSafeText('Konsept:'), {
         x: leftMargin,
         y: currentY,
-        size: 11,
+        size: 14,
         font: boldFont,
         color: secondaryColor,
       });
-      page.drawText('Müzik ve Söyleşi /', {
+      page.drawText(toSafeText('Muzik ve Soylesi /'), {
         x: leftMargin + 150,
         y: currentY,
-        size: 11,
+        size: 14,
         font: regularFont,
         color: textColor,
       });
       currentY -= 20;
-      page.drawText('Tek kişilik sahne performansı', {
+      page.drawText(toSafeText('Tek kisilik sahne performansi'), {
         x: leftMargin + 150,
         y: currentY,
-        size: 11,
+        size: 14,
         font: regularFont,
         color: textColor,
       });
@@ -253,10 +274,10 @@ export default async function handlePurchase(
       currentY -= 40;
 
       // Buyer information
-      page.drawText('Satın Alan:', {
+      page.drawText(toSafeText('Satin Alan:'), {
         x: leftMargin,
         y: currentY,
-        size: 11,
+        size: 14,
         font: boldFont,
         color: secondaryColor,
       });
@@ -265,65 +286,9 @@ export default async function handlePurchase(
       page.drawText(emailPrefix, {
         x: leftMargin + 150,
         y: currentY,
-        size: 11,
+        size: 14,
         font: regularFont,
         color: textColor,
-      });
-
-      // Footer section
-      const footerY = 100;
-      
-      // Draw footer background
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width: width,
-        height: footerY,
-        color: rgb(0.95, 0.95, 0.95),
-      });
-
-      // Footer text
-      page.drawText('CynSeat - Etkinlik Bilet Sistemi', {
-        x: 50,
-        y: 60,
-        size: 10,
-        font: boldFont,
-        color: textColor,
-      });
-
-      page.drawText('Bu bilet geçerli bir satın alma işlemini temsil eder.', {
-        x: 50,
-        y: 40,
-        size: 8,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-
-      page.drawText('Lütfen etkinliğe gelirken bu bileti yanınızda bulundurun.', {
-        x: 50,
-        y: 25,
-        size: 8,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-
-      // QR Code placeholder (decorative box)
-      page.drawRectangle({
-        x: width - 120,
-        y: 20,
-        width: 70,
-        height: 70,
-        color: rgb(1, 1, 1),
-        borderColor: lightGray,
-        borderWidth: 1,
-      });
-
-      page.drawText('QR', {
-        x: width - 100,
-        y: 48,
-        size: 16,
-        font: boldFont,
-        color: lightGray,
       });
 
       // Save PDF to bytes

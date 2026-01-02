@@ -84,6 +84,9 @@
   "userNotFound": "Käyttäjää ei löydy.",
   "userNotFoundCreateAccount": "Käyttäjää ei löydy. Luo tili.",
   "wrongPassword": "Väärä salasana.",
+  "invalidCredentials": "Virheellinen sähköposti tai salasana. Tarkista tietosi.",
+  "invalidEmail": "Virheellinen sähköpostiosoite.",
+  "userDisabled": "Tämä tili on poistettu käytöstä.",
   "authError": "Todennusvirhe. Yritä uudelleen.",
   "tooManyRequests": "Liian monta epäonnistunutta yritystä. Yritä myöhemmin uudelleen.",
   "unexpectedError": "Tapahtui odottamaton virhe.",
@@ -91,5 +94,8 @@
   "eventTime": "18:30",
   "eventVenue": "Martinlaakson Auditorio",
   "viewEventDetails": "Näytä tapahtuman tiedot",
-  "signInToBuyTickets": "Kirjaudu sisään ostaaksesi lippuja"
+  "signInToBuyTickets": "Kirjaudu sisään ostaaksesi lippuja",
+  "downloadPDF": "Lataa PDF",
+  "noImage": "Ei kuvaa",
+  "notAvailable": "Ei saatavilla"
 }

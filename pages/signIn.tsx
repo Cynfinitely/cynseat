@@ -34,29 +34,36 @@ const SignIn: React.FC = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // User has been signed in successfully.
+      // User has been signed in successfully - router will redirect automatically
     } catch (error) {
-      const { code, message } = error as AuthError;
+      const authError = error as AuthError;
+      const { code, message } = authError;
+      
+      console.log("Sign-in error:", { code, message });
 
-      // Handle error codes
+      // Handle specific error codes
       if (code === "auth/user-not-found") {
+        // Old Firebase - user doesn't exist
         setError(t("userNotFoundCreateAccount"));
       } else if (code === "auth/wrong-password") {
+        // Old Firebase - wrong password
         setError(t("wrongPassword"));
-      } else if (code === "auth/invalid-email") {
-        setError(t("userNotFoundCreateAccount"));
       } else if (code === "auth/invalid-credential") {
-        // This error can mean either wrong password OR user doesn't exist
-        // Check the error message for more details
-        if (message.toLowerCase().includes("user") || message.toLowerCase().includes("not found")) {
-          setError(t("userNotFoundCreateAccount"));
-        } else {
-          setError(t("wrongPassword"));
-        }
+        // New Firebase - could be either
+        // For better UX, we'll just say wrong credentials
+        setError(t("invalidCredentials"));
+      } else if (code === "auth/invalid-email") {
+        // Malformed email
+        setError(t("invalidEmail"));
+      } else if (code === "auth/user-disabled") {
+        // Account disabled
+        setError(t("userDisabled"));
       } else if (code === "auth/too-many-requests") {
+        // Rate limited
         setError(t("tooManyRequests"));
       } else {
-        console.error("Auth error code:", code);
+        // Unknown error
+        console.error("Unknown auth error:", authError);
         setError(t("authError"));
       }
     } finally {

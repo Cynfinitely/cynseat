@@ -26,26 +26,47 @@ const Tickets: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [totalTicketsSold, setTotalTicketsSold] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          setLoading(false);
+          return;
+        }
+
+        const adminStatus = currentUser.email === "celalyasinnari@gmail.com";
+        setIsAdmin(adminStatus);
+        
+        // Fetch all tickets from the main collection
         const ticketsRef = collection(db, "tickets");
         const q = query(ticketsRef, orderBy("seatCode", "asc"));
         const snap = await getDocs(q);
         
         // Filter out the seatIndex document and map to Ticket objects
-        const ticketDocs = snap.docs
-          .filter((doc) => doc.id !== "seatIndex") // Exclude seatIndex document
+        let ticketDocs = snap.docs
+          .filter((doc) => doc.id !== "seatIndex")
           .map((d) => d.data() as Ticket);
+        
+        // If not admin, filter to show only current user's tickets
+        if (!adminStatus) {
+          ticketDocs = ticketDocs.filter((ticket) => ticket.userId === currentUser.uid);
+        }
         
         setTickets(ticketDocs);
 
-        const seatIndexDoc = await getDoc(doc(db, "tickets", "seatIndex"));
-        const currentIndex = seatIndexDoc.exists()
-          ? seatIndexDoc.data()?.index ?? 0
-          : 0;
-        setTotalTicketsSold(currentIndex);
+        // Only show total tickets sold for admin
+        if (adminStatus) {
+          const seatIndexDoc = await getDoc(doc(db, "tickets", "seatIndex"));
+          const currentIndex = seatIndexDoc.exists()
+            ? seatIndexDoc.data()?.index ?? 0
+            : 0;
+          setTotalTicketsSold(currentIndex);
+        } else {
+          setTotalTicketsSold(ticketDocs.length);
+        }
       } catch (error) {
         console.error("Error fetching tickets:", error);
       } finally {
@@ -136,8 +157,13 @@ const Tickets: React.FC = () => {
                       <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
                         {t("ticketNumber")}
                       </th>
-                      <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                        {t("userEmail")}
+                      {isAdmin && (
+                        <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                          {t("userEmail")}
+                        </th>
+                      )}
+                      <th className="py-4 px-6 text-center text-sm font-semibold text-white uppercase tracking-wider">
+                        {t("download")}
                       </th>
                     </tr>
                   </thead>
@@ -150,12 +176,27 @@ const Tickets: React.FC = () => {
                           <div className="flex items-center">
                             <span className="text-2xl mr-3">🎫</span>
                             <span className="text-sm font-semibold text-gray-900">
-                              {ticket.seatCode}
+                              {ticket.seatCode.replace('SEAT-', '')}
                             </span>
                           </div>
                         </td>
-                        <td className="py-4 px-6 whitespace-nowrap">
-                          <span className="text-sm text-gray-700">{ticket.userEmail}</span>
+                        {isAdmin && (
+                          <td className="py-4 px-6 whitespace-nowrap">
+                            <span className="text-sm text-gray-700">{ticket.userEmail}</span>
+                          </td>
+                        )}
+                        <td className="py-4 px-6 text-center">
+                          {ticket.imageUrl ? (
+                            <a
+                              href={ticket.imageUrl}
+                              download={`ticket-${ticket.seatCode}.pdf`}
+                              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 font-medium text-sm shadow-md hover:shadow-lg">
+                              <span>⬇️</span>
+                              {t("downloadPDF")}
+                            </a>
+                          ) : (
+                            <span className="text-gray-400 text-sm">{t("notAvailable")}</span>
+                          )}
                         </td>
                       </tr>
                     ))}
