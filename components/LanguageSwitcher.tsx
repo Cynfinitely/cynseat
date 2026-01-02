@@ -8,22 +8,36 @@ function LanguageSwitcher() {
     i18n.changeLanguage(language);
   };
 
+  const currentLanguage = i18n.language;
+
   return (
-    <div className="flex flex-row  justify-end gap-5 px-5 py-3">
+    <div className="flex flex-row justify-end gap-2 sm:gap-3 px-3 py-2">
       <button
-        className="px-4 py-2 border-b-4 border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all duration-200"
+        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
+          currentLanguage === "en"
+            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
+            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
+        }`}
         onClick={() => changeLanguage("en")}>
-        English
+        EN
       </button>
       <button
-        className="px-4 py-2 border-b-4 border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all duration-200"
+        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
+          currentLanguage === "fi"
+            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
+            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
+        }`}
         onClick={() => changeLanguage("fi")}>
-        Suomi
+        FI
       </button>
       <button
-        className="px-4 py-2 border-b-4 border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all duration-200"
+        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
+          currentLanguage === "tr"
+            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
+            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
+        }`}
         onClick={() => changeLanguage("tr")}>
-        Türkçe
+        TR
       </button>
     </div>
   );
