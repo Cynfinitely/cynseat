@@ -167,10 +167,6 @@ const Tickets: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4">{t("purchaseTickets")}</h2>
             <div className="flex flex-col md:flex-row items-center gap-6">
               <CheckoutButton />
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg flex items-center gap-3">
-                <span className="text-2xl">ℹ️</span>
-                <p className="text-sm text-gray-700 font-medium">{t("under12")}</p>
-              </div>
             </div>
           </div>
 
