@@ -97,5 +97,8 @@
   "signInToBuyTickets": "Bilet satın almak için lütfen giriş yapın",
   "downloadPDF": "PDF İndir",
   "noImage": "Resim Yok",
-  "notAvailable": "Mevcut Değil"
+  "notAvailable": "Mevcut Değil",
+  "downloadList": "Listeyi İndir",
+  "adminDownloadList": "Yönetici: Tüm Biletleri İndir",
+  "adminDownloadListDesc": "Tüm bilet bilgilerini içeren biçimlendirilmiş metin dosyası indir"
 }

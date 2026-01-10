@@ -37,7 +37,8 @@ const Tickets: React.FC = () => {
           return;
         }
 
-        const adminStatus = currentUser.email === "celalyasinnari@gmail.com";
+        const adminEmails = ["celalyasinnari@gmail.com", "aksu@gmail.com"];
+        const adminStatus = adminEmails.includes(currentUser.email || "");
         setIsAdmin(adminStatus);
         
         // Fetch all tickets from the main collection
@@ -87,6 +88,38 @@ const Tickets: React.FC = () => {
       ticket.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const downloadTicketsList = () => {
+    // Create a nicely formatted text list
+    let content = "═══════════════════════════════════════════════\n";
+    content += "          CYNSEAT - TICKETS LIST\n";
+    content += "═══════════════════════════════════════════════\n\n";
+    content += `Total Tickets Sold: ${tickets.length}\n`;
+    content += `Generated: ${new Date().toLocaleString()}\n\n`;
+    content += "═══════════════════════════════════════════════\n\n";
+
+    tickets.forEach((ticket, index) => {
+      const seatNumber = ticket.seatCode.replace('SEAT-', '');
+      content += `${index + 1}. Seat ${seatNumber}\n`;
+      content += `   User: ${ticket.userEmail}\n`;
+      content += "   ───────────────────────────────────────\n\n";
+    });
+
+    content += "═══════════════════════════════════════════════\n";
+    content += "            End of Tickets List\n";
+    content += "═══════════════════════════════════════════════\n";
+
+    // Create and download the file
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cynseat-tickets-list-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 w-full min-h-screen">
       <div className="flex flex-col justify-start items-center w-full px-4 md:px-8 py-8">
@@ -107,6 +140,27 @@ const Tickets: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Admin Download List Button */}
+          {isAdmin && tickets.length > 0 && (
+            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl shadow-lg p-6 mb-8 border-2 border-green-200">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">📋</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800">{t("adminDownloadList")}</h3>
+                    <p className="text-sm text-gray-600">{t("adminDownloadListDesc")}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={downloadTicketsList}
+                  className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-105">
+                  <span className="text-xl">⬇️</span>
+                  {t("downloadList")}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Purchase Section */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">

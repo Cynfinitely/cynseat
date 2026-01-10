@@ -97,5 +97,8 @@
   "signInToBuyTickets": "Kirjaudu sisään ostaaksesi lippuja",
   "downloadPDF": "Lataa PDF",
   "noImage": "Ei kuvaa",
-  "notAvailable": "Ei saatavilla"
+  "notAvailable": "Ei saatavilla",
+  "downloadList": "Lataa Lista",
+  "adminDownloadList": "Ylläpitäjä: Lataa Kaikki Liput",
+  "adminDownloadListDesc": "Lataa muotoiltu tekstitiedosto, jossa on kaikki lipputiedot"
 }

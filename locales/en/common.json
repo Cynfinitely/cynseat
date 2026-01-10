@@ -97,5 +97,8 @@
   "signInToBuyTickets": "Please sign in to purchase tickets",
   "downloadPDF": "Download PDF",
   "noImage": "No Image",
-  "notAvailable": "Not Available"
+  "notAvailable": "Not Available",
+  "downloadList": "Download List",
+  "adminDownloadList": "Admin: Download All Tickets",
+  "adminDownloadListDesc": "Download a formatted text file with all ticket information"
 }
