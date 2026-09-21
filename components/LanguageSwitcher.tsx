@@ -1,46 +1,41 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
+import { LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES } from "../lib/constants";
 
-function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+export default function LanguageSwitcher() {
+  const { i18n, t } = useTranslation();
+  const currentLanguage = (i18n.language || "en").split("-")[0];
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    }
   };
 
-  const currentLanguage = i18n.language;
-
   return (
-    <div className="flex flex-row justify-end gap-2 sm:gap-3 px-3 py-2">
-      <button
-        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
-          currentLanguage === "en"
-            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
-            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
-        }`}
-        onClick={() => changeLanguage("en")}>
-        EN
-      </button>
-      <button
-        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
-          currentLanguage === "fi"
-            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
-            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
-        }`}
-        onClick={() => changeLanguage("fi")}>
-        FI
-      </button>
-      <button
-        className={`px-3 sm:px-4 py-2 font-semibold rounded-lg border-2 transition-all duration-200 ${
-          currentLanguage === "tr"
-            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg"
-            : "bg-white text-purple-600 border-purple-300 hover:border-purple-500 hover:bg-purple-50"
-        }`}
-        onClick={() => changeLanguage("tr")}>
-        TR
-      </button>
+    <div
+      className="inline-flex rounded-md border border-gray-200 p-0.5"
+      role="group"
+      aria-label={t("language")}
+    >
+      {SUPPORTED_LANGUAGES.map((code) => {
+        const active = currentLanguage === code;
+        return (
+          <button
+            key={code}
+            type="button"
+            onClick={() => changeLanguage(code)}
+            aria-pressed={active}
+            className={`min-w-[2.25rem] rounded px-2 py-1 text-xs font-semibold uppercase ${
+              active
+                ? "bg-purple-600 text-white"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            {code}
+          </button>
+        );
+      })}
     </div>
   );
 }
-
-export default LanguageSwitcher;

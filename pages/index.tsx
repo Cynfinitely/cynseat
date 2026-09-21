@@ -1,95 +1,63 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/firebase";
-import { User } from "firebase/auth";
+import BuyTicketsLink from "../components/BuyTicketsLink";
+import PageMeta from "../components/PageMeta";
+import { EVENT_POSTER_SRC } from "../lib/constants";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 w-full min-h-full">
-      <div className="flex flex-col justify-center items-center w-full min-h-full px-4 py-12">
-        <div className="max-w-4xl w-full text-center space-y-8">
-          {/* Hero Section */}
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 leading-tight">
-              {t("welcome")}
-            </h1>
-            
-            {/* Event Highlight Card */}
-            <div className="mt-12 bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Event Image */}
-              <div className="relative bg-gray-900 overflow-hidden">
-                <img
-                  src="./masal.jpeg"
-                  alt={t("about.title")}
-                  className="w-full h-auto object-contain max-h-[400px]"
-                />
-              </div>
-              
-              {/* Event Info */}
-              <div className="p-8 space-y-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-                  {t("about.title")}
-                </h2>
-                
-                <div className="flex flex-wrap gap-4 justify-center text-gray-700">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">📅</span>
-                    <span className="font-semibold">{t("eventDate")}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">🕐</span>
-                    <span className="font-semibold">{t("eventTime")}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">📍</span>
-                    <span className="font-semibold">{t("eventVenue")}</span>
-                  </div>
-                </div>
-
-                <p className="text-lg text-gray-600 italic">
-                  {t("about.paragraph1")}
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <Link href="/about">
-                    <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl w-full sm:w-auto">
-                      {t("viewEventDetails")}
-                    </button>
-                  </Link>
-                  
-                  {user && (
-                    <Link href="/tickets">
-                      <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-full border-2 border-purple-600 hover:bg-purple-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl w-full sm:w-auto">
-                        {t("buyTicket")}
-                      </button>
-                    </Link>
-                  )}
-                </div>
-
-                {/* Sign in prompt for non-authenticated users */}
-                {!user && (
-                  <p className="text-gray-600 text-sm">
-                    {t("signInToBuyTickets")}
-                  </p>
-                )}
-              </div>
+    <div className="page">
+      <PageMeta title={t("about.title")} description={t("about.paragraph1")} />
+      <div className="page-wide">
+        <article className="card overflow-hidden md:grid md:grid-cols-2">
+          <img
+            src={EVENT_POSTER_SRC}
+            alt={t("featuredEventAlt")}
+            className="h-full max-h-[520px] w-full object-cover object-top"
+          />
+          <div className="flex flex-col justify-center gap-6 p-6 sm:p-8">
+            <div>
+              <p className="text-sm font-medium text-purple-700">CynSeat</p>
+              <h1 className="page-title mt-1">{t("about.title")}</h1>
+              <p className="mt-3 text-lg text-gray-600">{t("about.paragraph1")}</p>
             </div>
+
+            <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-gray-500">{t("dateLabel")}</dt>
+                <dd className="font-medium">{t("eventDate")}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">{t("timeLabel")}</dt>
+                <dd className="font-medium">{t("eventTime")}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">{t("venueLabel")}</dt>
+                <dd className="font-medium">{t("eventVenue")}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">{t("ticketPriceLabel")}</dt>
+                <dd className="font-medium">{t("ticketPrice")}</dd>
+              </div>
+            </dl>
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <BuyTicketsLink />
+              <Link href="/about" className="btn-secondary">
+                {t("viewEventDetails")}
+              </Link>
+            </div>
+
+            <ul className="grid gap-2 text-sm text-gray-600 sm:grid-cols-2">
+              <li>{t("digitalTicketsDesc")}</li>
+              <li>{t("securePaymentDesc")}</li>
+              <li>{t("under12")}</li>
+              <li>{t("ticketWarning2")}</li>
+            </ul>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   );

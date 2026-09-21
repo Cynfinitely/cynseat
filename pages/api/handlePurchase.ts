@@ -5,9 +5,12 @@ import admin from "../../firebase/firebaseAdmin";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Bucket } from "@google-cloud/storage";
 import crypto from "crypto";
+import {
+  MAX_EVENT_TICKETS,
+  MAX_TICKETS_PER_PURCHASE,
+} from "../../lib/constants";
 
-// Maximum tickets allowed for this event
-const MAX_TICKETS = 300;
+const MAX_TICKETS = MAX_EVENT_TICKETS;
 
 // Generate seat codes for 300 tickets
 const seatCodes = Array.from({ length: MAX_TICKETS }, (_, i) => `SEAT-${String(i + 1).padStart(3, '0')}`);
@@ -26,8 +29,14 @@ export default async function handlePurchase(
     console.log(`Processing purchase for ${numTickets} ticket(s)`);
 
     // Validate number of tickets
-    if (!numTickets || numTickets < 1 || numTickets > 10) {
-      return res.status(400).json({ error: "Invalid number of tickets. Must be between 1 and 10." });
+    if (
+      !numTickets ||
+      numTickets < 1 ||
+      numTickets > MAX_TICKETS_PER_PURCHASE
+    ) {
+      return res.status(400).json({
+        error: `Invalid number of tickets. Must be between 1 and ${MAX_TICKETS_PER_PURCHASE}.`,
+      });
     }
 
     // Firestore doc to keep track of the next seat index
@@ -306,7 +315,7 @@ export default async function handlePurchase(
       stream.write(pdfBytes);
       stream.end();
 
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<{ seatCode: string; imageUrl: string }>((resolve, reject) => {
         stream.on("error", (err) => {
           console.error("Error uploading PDF to Storage:", err);
           reject(err);
@@ -325,7 +334,10 @@ export default async function handlePurchase(
             const docRef = await admin.firestore().collection("tickets").add(ticketData);
             console.log(`Ticket document created with ID: ${docRef.id}`);
             
-            resolve();
+            resolve({
+              seatCode,
+              imageUrl: ticketData.imageUrl,
+            });
           } catch (error) {
             console.error("Error in finish handler:", error);
             reject(error);
@@ -334,8 +346,11 @@ export default async function handlePurchase(
       });
     });
 
-    await Promise.all(ticketPromises);
-    return res.status(200).json({ message: "Tickets purchased successfully." });
+    const tickets = await Promise.all(ticketPromises);
+    return res.status(200).json({
+      message: "Tickets purchased successfully.",
+      tickets,
+    });
   } catch (error) {
     console.error("Error in handlePurchase:", error);
     return res.status(500).json({ error: (error as Error).message });

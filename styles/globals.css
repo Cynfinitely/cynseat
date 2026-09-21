@@ -3,42 +3,84 @@
 @tailwind utilities;
 
 @layer base {
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    @apply w-2 h-2;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gradient-to-b from-purple-400 to-blue-400 rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply from-purple-600 to-blue-600;
-  }
-
-  /* Smooth scrolling */
   html {
     @apply scroll-smooth;
   }
 
-  /* Better font rendering */
   body {
-    @apply antialiased;
+    @apply antialiased text-gray-800 bg-white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+  }
+}
+
+@layer components {
+  .page {
+    @apply w-full px-4 py-10 sm:px-6;
+  }
+
+  .page-wide {
+    @apply mx-auto w-full max-w-6xl;
+  }
+
+  .page-narrow {
+    @apply mx-auto w-full max-w-md;
+  }
+
+  .page-title {
+    @apply text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl;
+  }
+
+  .section-title {
+    @apply text-xl font-semibold text-gray-900;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-purple-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-purple-600 bg-white px-4 py-2.5 text-sm font-semibold text-purple-700 transition-colors hover:bg-purple-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2;
+  }
+
+  .input-field {
+    @apply w-full rounded-md border border-gray-300 px-3 py-2.5 text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500;
+  }
+
+  .card {
+    @apply rounded-xl border border-gray-200 bg-white;
+  }
+
+  .nav-link {
+    @apply text-sm font-medium text-gray-600 transition-colors hover:text-purple-700;
+  }
+
+  .nav-link-active {
+    @apply text-sm font-semibold text-purple-700 underline decoration-2 underline-offset-8;
   }
 }
 
 @layer utilities {
-  /* Custom animations */
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(8px);
     }
     to {
       opacity: 1;
@@ -47,25 +89,6 @@
   }
 
   .animate-fadeIn {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  /* Focus styles for better accessibility */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
-  }
-
-  /* Custom gradient text */
-  .gradient-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600;
-  }
-
-  /* Custom button styles */
-  .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl;
-  }
-
-  .btn-secondary {
-    @apply px-6 py-3 bg-white text-purple-600 font-semibold rounded-lg border-2 border-purple-600 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl;
+    animation: fadeIn 0.2s ease-out;
   }
 }

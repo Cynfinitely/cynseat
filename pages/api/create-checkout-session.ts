@@ -2,6 +2,10 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
+import {
+  MAX_TICKETS_PER_PURCHASE,
+  TICKET_PRICE_EUR,
+} from "../../lib/constants";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_TEST_KEY!, {
   apiVersion: "2024-04-10",
@@ -13,7 +17,21 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { numTickets, totalCost } = req.body;
+      const numTickets = Number(req.body.numTickets);
+      const eventName =
+        typeof req.body.eventName === "string" && req.body.eventName.trim()
+          ? req.body.eventName.trim()
+          : "Event ticket";
+
+      if (
+        !Number.isInteger(numTickets) ||
+        numTickets < 1 ||
+        numTickets > MAX_TICKETS_PER_PURCHASE
+      ) {
+        return res.status(400).json({
+          error: `Invalid number of tickets. Must be between 1 and ${MAX_TICKETS_PER_PURCHASE}.`,
+        });
+      }
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -22,17 +40,16 @@ export default async function handler(
             price_data: {
               currency: "eur",
               product_data: {
-                name: "Ticket",
+                name: eventName,
               },
-              unit_amount: totalCost * 100, // Stripe expects the amount in cents
+              unit_amount: TICKET_PRICE_EUR * 100,
             },
-            quantity: 1,
+            quantity: numTickets,
           },
         ],
         mode: "payment",
         metadata: {
-          ...req.body.metadata,
-          numTickets: numTickets.toString(), 
+          numTickets: numTickets.toString(),
         },
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/cancel`,

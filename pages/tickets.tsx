@@ -1,73 +1,52 @@
-// pages/tickets.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
 import CheckoutButton from "@/components/CheckoutButton";
-import { auth, db } from "../firebase/firebase";
+import PageMeta from "../components/PageMeta";
+import TicketCard, { TicketCardTicket } from "../components/TicketCard";
+import { useAuth } from "../contexts/AuthContext";
+import { db } from "../firebase/firebase";
 import {
-  collection,
-  query,
-  getDocs,
-  orderBy,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-
-interface Ticket {
-  seatCode: string;
-  purchaseId: string;
-  userId: string;
-  userEmail: string;
-  imageUrl: string;
-}
+  LOW_REMAINING_THRESHOLD,
+  MAX_EVENT_TICKETS,
+} from "../lib/constants";
 
 const Tickets: React.FC = () => {
   const { t } = useTranslation();
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+  const [tickets, setTickets] = useState<TicketCardTicket[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalTicketsSold, setTotalTicketsSold] = useState<number>(0);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [remainingSeats, setRemainingSeats] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-          setLoading(false);
-          return;
-        }
+    if (authLoading) return;
+    if (!user) {
+      router.replace("/signIn?returnUrl=/tickets");
+      return;
+    }
 
-        const adminEmails = ["celalyasinnari@gmail.com", "aksu@gmail.com"];
-        const adminStatus = adminEmails.includes(currentUser.email || "");
-        setIsAdmin(adminStatus);
-        
-        // Fetch all tickets from the main collection
+    const fetchTickets = async () => {
+      if (!db) {
+        setLoading(false);
+        return;
+      }
+      try {
         const ticketsRef = collection(db, "tickets");
-        const q = query(ticketsRef, orderBy("seatCode", "asc"));
-        const snap = await getDocs(q);
-        
-        // Filter out the seatIndex document and map to Ticket objects
-        let ticketDocs = snap.docs
-          .filter((doc) => doc.id !== "seatIndex")
-          .map((d) => d.data() as Ticket);
-        
-        // If not admin, filter to show only current user's tickets
-        if (!adminStatus) {
-          ticketDocs = ticketDocs.filter((ticket) => ticket.userId === currentUser.uid);
-        }
-        
+        const snap = await getDocs(query(ticketsRef, orderBy("seatCode", "asc")));
+        const ticketDocs = snap.docs
+          .filter((ticketDoc) => ticketDoc.id !== "seatIndex")
+          .map((ticketDoc) => ticketDoc.data() as TicketCardTicket & { userId?: string })
+          .filter((ticket) => ticket.userId === user.uid);
+
         setTickets(ticketDocs);
 
-        // Only show total tickets sold for admin
-        if (adminStatus) {
-          const seatIndexDoc = await getDoc(doc(db, "tickets", "seatIndex"));
-          const currentIndex = seatIndexDoc.exists()
-            ? seatIndexDoc.data()?.index ?? 0
-            : 0;
-          setTotalTicketsSold(currentIndex);
-        } else {
-          setTotalTicketsSold(ticketDocs.length);
-        }
+        const seatIndexDoc = await getDoc(doc(db, "tickets", "seatIndex"));
+        const currentIndex = seatIndexDoc.exists()
+          ? seatIndexDoc.data()?.index ?? 0
+          : 0;
+        setRemainingSeats(Math.max(0, MAX_EVENT_TICKETS - currentIndex));
       } catch (error) {
         console.error("Error fetching tickets:", error);
       } finally {
@@ -75,193 +54,60 @@ const Tickets: React.FC = () => {
       }
     };
 
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) fetchTickets();
-      else setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    fetchTickets();
+  }, [authLoading, user, router]);
 
-  const filteredTickets = tickets.filter(
-    (ticket) =>
-      ticket.seatCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  if (authLoading || !user) {
+    return (
+      <div className="page">
+        <PageMeta title={t("myTickets")} />
+        <p className="page-wide text-gray-600">{t("loadingTickets")}</p>
+      </div>
+    );
+  }
 
-  const downloadTicketsList = () => {
-    // Create a nicely formatted text list
-    let content = "═══════════════════════════════════════════════\n";
-    content += "          CYNSEAT - TICKETS LIST\n";
-    content += "═══════════════════════════════════════════════\n\n";
-    content += `Total Tickets Sold: ${tickets.length}\n`;
-    content += `Generated: ${new Date().toLocaleString()}\n\n`;
-    content += "═══════════════════════════════════════════════\n\n";
-
-    tickets.forEach((ticket, index) => {
-      const seatNumber = ticket.seatCode.replace('SEAT-', '');
-      content += `${index + 1}. Seat ${seatNumber}\n`;
-      content += `   User: ${ticket.userEmail}\n`;
-      content += "   ───────────────────────────────────────\n\n";
-    });
-
-    content += "═══════════════════════════════════════════════\n";
-    content += "            End of Tickets List\n";
-    content += "═══════════════════════════════════════════════\n";
-
-    // Create and download the file
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `cynseat-tickets-list-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+  const showRemaining =
+    remainingSeats !== null && remainingSeats <= LOW_REMAINING_THRESHOLD;
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 w-full min-h-screen">
-      <div className="flex flex-col justify-start items-center w-full px-4 md:px-8 py-8">
-        {/* Header Section */}
-        <div className="w-full max-w-7xl">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-8 bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4 md:mb-0">
-              <div className="w-1 h-12 bg-gradient-to-b from-purple-600 to-blue-600 rounded-full mr-4"></div>
-              <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-                {t("tickets")}
-              </h1>
-            </div>
-            <div className="flex items-center gap-2 bg-gradient-to-r from-purple-100 to-blue-100 px-6 py-3 rounded-full">
-              <span className="text-2xl">🎫</span>
-              <div className="text-left">
-                <p className="text-sm text-gray-600 font-medium">{t("totalTicketsSold")}</p>
-                <p className="text-2xl font-bold text-purple-600">{totalTicketsSold}</p>
-              </div>
-            </div>
-          </div>
+    <div className="page">
+      <PageMeta title={t("myTickets")} />
+      <div className="page-wide space-y-8">
+        <div>
+          <h1 className="page-title">{t("myTickets")}</h1>
+          <p className="mt-2 text-gray-600">{t("about.title")}</p>
+        </div>
 
-          {/* Admin Download List Button */}
-          {isAdmin && tickets.length > 0 && (
-            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl shadow-lg p-6 mb-8 border-2 border-green-200">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">📋</span>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-800">{t("adminDownloadList")}</h3>
-                    <p className="text-sm text-gray-600">{t("adminDownloadListDesc")}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={downloadTicketsList}
-                  className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-105">
-                  <span className="text-xl">⬇️</span>
-                  {t("downloadList")}
-                </button>
-              </div>
+        <section className="card p-6">
+          <h2 className="section-title mb-2">{t("purchaseTickets")}</h2>
+          <p className="mb-2 text-sm text-gray-600">{t("ticketWarning")}</p>
+          <p className="mb-4 text-sm text-gray-600">{t("ticketWarning2")}</p>
+          <p className="mb-4 text-sm text-gray-600">{t("under12")}</p>
+          {showRemaining ? (
+            <p className="mb-4 text-sm font-medium text-purple-700">
+              {t("remainingSeats", { count: remainingSeats })}
+            </p>
+          ) : null}
+          <CheckoutButton remainingSeats={remainingSeats} />
+        </section>
+
+        <section>
+          <h2 className="section-title mb-4">{t("eventTicket")}</h2>
+          {loading ? (
+            <p className="text-gray-600">{t("loadingTickets")}</p>
+          ) : tickets.length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {tickets.map((ticket) => (
+                <TicketCard key={ticket.seatCode} ticket={ticket} />
+              ))}
+            </div>
+          ) : (
+            <div className="card px-6 py-12 text-center">
+              <p className="text-lg font-semibold text-gray-900">{t("noTicketsYet")}</p>
+              <p className="mt-2 text-gray-600">{t("noTicketsYetDesc")}</p>
             </div>
           )}
-
-          {/* Purchase Section */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">{t("purchaseTickets")}</h2>
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <CheckoutButton />
-            </div>
-          </div>
-
-          {/* Search Section */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <div className="max-w-md mx-auto">
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
-                {t("searchTickets")}
-              </label>
-              <div className="relative">
-                <input
-                  id="search"
-                  type="text"
-                  className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
-                  placeholder={t("searchPlaceholder")}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">
-                  🔍
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Tickets Table Section */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-20">
-                <div className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mb-4"></div>
-                <p className="text-gray-600 font-medium">{t("loadingTickets")}</p>
-              </div>
-            ) : filteredTickets.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gradient-to-r from-purple-600 to-blue-600">
-                    <tr>
-                      <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                        {t("ticketNumber")}
-                      </th>
-                      {isAdmin && (
-                        <th className="py-4 px-6 text-left text-sm font-semibold text-white uppercase tracking-wider">
-                          {t("userEmail")}
-                        </th>
-                      )}
-                      <th className="py-4 px-6 text-center text-sm font-semibold text-white uppercase tracking-wider">
-                        {t("download")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredTickets.map((ticket, idx) => (
-                      <tr
-                        key={idx}
-                        className="hover:bg-purple-50 transition-colors duration-150">
-                        <td className="py-4 px-6 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <span className="text-2xl mr-3">🎫</span>
-                            <span className="text-sm font-semibold text-gray-900">
-                              {ticket.seatCode.replace('SEAT-', '')}
-                            </span>
-                          </div>
-                        </td>
-                        {isAdmin && (
-                          <td className="py-4 px-6 whitespace-nowrap">
-                            <span className="text-sm text-gray-700">{ticket.userEmail}</span>
-                          </td>
-                        )}
-                        <td className="py-4 px-6 text-center">
-                          {ticket.imageUrl ? (
-                            <a
-                              href={ticket.imageUrl}
-                              download={`ticket-${ticket.seatCode}.pdf`}
-                              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 font-medium text-sm shadow-md hover:shadow-lg">
-                              <span>⬇️</span>
-                              {t("downloadPDF")}
-                            </a>
-                          ) : (
-                            <span className="text-gray-400 text-sm">{t("notAvailable")}</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-20 px-4">
-                <span className="text-6xl mb-4">🎫</span>
-                <p className="text-xl text-gray-700 font-semibold mb-2">{t("noTicketsFound")}</p>
-                <p className="text-gray-500">{t("noTicketsFoundDesc")}</p>
-              </div>
-            )}
-          </div>
-        </div>
+        </section>
       </div>
     </div>
   );

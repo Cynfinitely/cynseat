@@ -1,109 +1,114 @@
-// components/CheckoutButton.tsx
-
 import { loadStripe } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { MAX_TICKETS_PER_PURCHASE, TICKET_PRICE_EUR } from "../lib/constants";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-export default function CheckoutButton() {
+type CheckoutButtonProps = {
+  remainingSeats?: number | null;
+};
+
+export default function CheckoutButton({ remainingSeats }: CheckoutButtonProps) {
   const { t } = useTranslation();
   const [numTickets, setNumTickets] = useState(1);
   const [loading, setLoading] = useState(false);
-  const ticketPrice = 5;
+  const [error, setError] = useState<string | null>(null);
+
+  const maxAllowed = Math.max(
+    1,
+    Math.min(MAX_TICKETS_PER_PURCHASE, remainingSeats ?? MAX_TICKETS_PER_PURCHASE)
+  );
+  const totalCost = numTickets * TICKET_PRICE_EUR;
+  const soldOut = remainingSeats === 0;
+
+  useEffect(() => {
+    setNumTickets((count) => Math.min(count, maxAllowed));
+  }, [maxAllowed]);
 
   const handleClick = async () => {
     setLoading(true);
-    const stripe = await stripePromise;
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      body: JSON.stringify({
-        numTickets,
-        totalCost,
-        metadata: { numTickets: numTickets.toString() },
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const session = await res.json();
-    if (stripe) {
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.sessionId,
+    setError(null);
+    try {
+      const stripe = await stripePromise;
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        body: JSON.stringify({
+          numTickets,
+          eventName: t("about.title"),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      if (result.error) {
-        alert(result.error.message);
+      const session = await res.json();
+      if (!res.ok || !session.sessionId) {
+        setError(session.error || t("checkoutError"));
+        return;
       }
+      if (stripe) {
+        const result = await stripe.redirectToCheckout({
+          sessionId: session.sessionId,
+        });
+        if (result.error) {
+          setError(result.error.message || t("checkoutError"));
+        }
+      }
+    } catch {
+      setError(t("checkoutError"));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-
-  const handleAddTicket = () => {
-    setNumTickets(numTickets + 1);
-  };
-
-  const handleRemoveTicket = () => {
-    if (numTickets > 1) {
-      setNumTickets(numTickets - 1);
-    }
-  };
-
-  const totalCost = numTickets * ticketPrice;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-      {/* Ticket Counter */}
-      <div className="flex items-center bg-white rounded-lg shadow-md border-2 border-gray-200 p-2">
-        <button
-          onClick={handleRemoveTicket}
-          disabled={numTickets <= 1}
-          className="w-10 h-10 flex items-center justify-center text-white text-xl font-bold bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-red-500">
-          −
-        </button>
-        <div className="mx-4 min-w-[80px] text-center">
-          <div className="text-2xl font-bold text-gray-800">{numTickets}</div>
-          <div className="text-xs text-gray-500">
-            {numTickets === 1 ? t("ticket") : t("tickets")}
+    <div className="flex w-full flex-col gap-4">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center rounded-md border border-gray-200">
+          <button
+            type="button"
+            onClick={() => setNumTickets((count) => Math.max(1, count - 1))}
+            disabled={numTickets <= 1 || soldOut}
+            className="btn-ghost h-11 w-11"
+            aria-label="-"
+          >
+            −
+          </button>
+          <div className="min-w-[4.5rem] px-2 text-center">
+            <div className="text-lg font-semibold">{numTickets}</div>
+            <div className="text-xs text-gray-500">
+              {numTickets === 1 ? t("ticket") : t("tickets")}
+            </div>
           </div>
+          <button
+            type="button"
+            onClick={() => setNumTickets((count) => Math.min(maxAllowed, count + 1))}
+            disabled={numTickets >= maxAllowed || soldOut}
+            className="btn-ghost h-11 w-11"
+            aria-label="+"
+          >
+            +
+          </button>
         </div>
-        <button
-          onClick={handleAddTicket}
-          className="w-10 h-10 flex items-center justify-center text-white text-xl font-bold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
-          +
-        </button>
+
+        <div>
+          <p className="text-sm text-gray-500">{t("unitPrice", { price: TICKET_PRICE_EUR })}</p>
+          <p className="text-xl font-semibold text-gray-900">
+            {t("total")}: €{totalCost}
+          </p>
+        </div>
       </div>
 
-      {/* Price Display */}
-      <div className="flex items-center bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg px-6 py-3 border-2 border-purple-200">
-        <span className="text-xl mr-2">💰</span>
-        <div className="text-left">
-          <div className="text-xs text-gray-600 font-medium">{t("total")}</div>
-          <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-            €{totalCost}
-          </div>
-        </div>
-      </div>
-
-      {/* Buy Button */}
       <button
-        role="link"
+        type="button"
         onClick={handleClick}
-        disabled={loading}
-        className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-lg hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-        {loading ? (
-          <div className="flex items-center justify-center gap-2">
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-            <span>{t("processing")}</span>
-          </div>
-        ) : (
-          <span className="flex items-center justify-center gap-2">
-            <span>🎫</span>
-            <span>{t("buyTicket")}</span>
-          </span>
-        )}
+        disabled={loading || soldOut}
+        className="btn-primary w-full sm:w-auto"
+      >
+        {loading ? t("processing") : soldOut ? t("noTicketsFound") : t("buyTickets")}
       </button>
+
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </div>
   );
 }

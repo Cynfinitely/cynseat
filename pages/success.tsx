@@ -1,14 +1,19 @@
-// pages/success.tsx
-
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { auth } from "../firebase/firebase"; // import Firebase auth
 import { useTranslation } from "react-i18next";
+import { auth } from "../firebase/firebase";
+import PageMeta from "../components/PageMeta";
+import TicketCard, { TicketCardTicket } from "../components/TicketCard";
+
+type PurchaseState = "processing" | "ready" | "error";
 
 export default function SuccessPage() {
   const router = useRouter();
   const { session_id } = router.query;
   const [countdown, setCountdown] = useState(10);
+  const [status, setStatus] = useState<PurchaseState>("processing");
+  const [tickets, setTickets] = useState<TicketCardTicket[]>([]);
   const { t } = useTranslation();
   const hasHandledPurchase = useRef(false);
   const isHandlingPurchase = useRef(false);
@@ -17,96 +22,113 @@ export default function SuccessPage() {
     const handlePurchase = async () => {
       if (hasHandledPurchase.current || isHandlingPurchase.current) return;
       isHandlingPurchase.current = true;
-      let userId = auth.currentUser?.uid; // get user ID from Firebase auth
 
-      // Wait until userId is defined
-      while (!userId) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for 1 second
-        userId = auth.currentUser?.uid;
+      try {
+        let userId = auth?.currentUser?.uid;
+        let attempts = 0;
+        while (!userId && attempts < 10) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          userId = auth?.currentUser?.uid;
+          attempts += 1;
+        }
+
+        if (!userId) {
+          setStatus("error");
+          return;
+        }
+
+        const sessionRes = await fetch(
+          `/api/retrieve-checkout-session?id=${session_id}`
+        );
+        const sessionData = await sessionRes.json();
+        const numTickets = parseInt(sessionData.session.metadata.numTickets, 10);
+
+        const res = await fetch("/api/handlePurchase", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: session_id,
+            userId,
+            userEmail: auth?.currentUser?.email,
+            numTickets,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Purchase failed");
+        }
+        setTickets(data.tickets || []);
+        setStatus("ready");
+        hasHandledPurchase.current = true;
+      } catch (error) {
+        console.error("Purchase response error", error);
+        setStatus("error");
+      } finally {
+        isHandlingPurchase.current = false;
       }
-
-      // Get the Checkout Session from Stripe
-      const sessionRes = await fetch(
-        `/api/retrieve-checkout-session?id=${session_id}`
-      );
-      const sessionData = await sessionRes.json();
-
-      // Get numTickets from the session metadata
-      const numTickets = parseInt(sessionData.session.metadata.numTickets);
-
-      const purchase = {
-        id: session_id,
-        userId: userId,
-        userEmail: auth.currentUser?.email, // use actual user ID
-        numTickets: numTickets, // get numTickets from the session metadata
-      };
-      const res = await fetch("/api/handlePurchase", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(purchase),
-      });
-      const data = await res.json();
-      console.log("Purchase response", data);
-      hasHandledPurchase.current = true;
-      isHandlingPurchase.current = false;
     };
 
-    if (session_id) {
-      handlePurchase();
+    if (!router.isReady) return;
+    if (!session_id) {
+      setStatus("error");
+      return;
     }
-  }, [session_id]);
+    handlePurchase();
+  }, [session_id, router.isReady]);
 
   useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else {
+    if (status !== "ready") return;
+    if (countdown <= 0) {
       router.push("/tickets");
+      return;
     }
-  }, [countdown, router]);
+    const timer = setTimeout(() => setCountdown((value) => value - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown, router, status]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900/50 via-blue-900/50 to-purple-900/50 backdrop-blur-sm z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center mx-4 max-w-md w-full transform animate-[fadeIn_0.3s_ease-in-out]">
-        {/* Success Icon */}
-        <div className="mb-6 relative">
-          <div className="w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-lg">
-            <span className="text-5xl">✓</span>
-          </div>
-          <div className="absolute inset-0 w-20 h-20 bg-green-400 rounded-full mx-auto animate-ping opacity-20"></div>
-        </div>
-
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-gray-800 mb-3">
-          {t("paymentSuccess")}
-        </h1>
-
-        {/* Message */}
-        <p className="text-lg text-gray-600 mb-6">
-          {t("ticketCreated")}
-        </p>
-
-        {/* Countdown */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 mb-4">
-          <p className="text-gray-700 font-medium">
-            {t("redirect")}
+    <div className="page">
+      <PageMeta title={t("paymentSuccess")} />
+      <div className="page-narrow">
+        <div className="card p-8 text-center">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            {status === "error" ? t("purchaseFailed") : t("paymentSuccess")}
+          </h1>
+          <p className="mt-3 text-gray-600">
+            {status === "processing"
+              ? t("preparingTickets")
+              : status === "ready"
+                ? t("ticketsReady")
+                : t("purchaseFailed")}
           </p>
-          <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 mt-2">
-            {countdown}
+
+          {status === "ready" ? (
+            <p className="mt-4 text-sm text-gray-500">
+              {t("redirect")} {countdown}
+            </p>
+          ) : null}
+
+          <div className="mt-6 flex flex-col gap-3">
+            <Link href="/tickets" className="btn-primary">
+              {t("viewMyTickets")}
+            </Link>
+            {status === "error" ? (
+              <Link href="/tickets" className="btn-secondary">
+                {t("tryAgain")}
+              </Link>
+            ) : null}
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-purple-600 to-blue-600 rounded-full transition-all duration-1000 ease-linear"
-            style={{ width: `${((10 - countdown) / 10) * 100}%` }}
-          ></div>
-        </div>
+        {status === "ready" && tickets.length > 0 ? (
+          <div className="mt-6 grid gap-4">
+            {tickets.map((ticket) => (
+              <TicketCard key={ticket.seatCode} ticket={ticket} />
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );

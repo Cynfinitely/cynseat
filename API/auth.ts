@@ -5,6 +5,13 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 
+function requireAuth() {
+  if (!auth) {
+    throw new Error("Firebase auth is not configured.");
+  }
+  return auth;
+}
+
 export const register = async ({
   email,
   password,
@@ -12,7 +19,7 @@ export const register = async ({
   email: string;
   password: string;
 }) => {
-  return await createUserWithEmailAndPassword(auth, email, password);
+  return await createUserWithEmailAndPassword(requireAuth(), email, password);
 };
 
 export const login = async ({
@@ -22,9 +29,9 @@ export const login = async ({
   email: string;
   password: string;
 }) => {
-  return await signInWithEmailAndPassword(auth, email, password);
+  return await signInWithEmailAndPassword(requireAuth(), email, password);
 };
 
 export const logout = async () => {
-  return await signOutFromFirebase(auth);
+  return await signOutFromFirebase(requireAuth());
 };

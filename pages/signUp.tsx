@@ -1,158 +1,153 @@
-// app/signup.tsx
-
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { register } from "../API/auth";
-import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
+import { AuthError } from "firebase/auth";
+import { useTranslation } from "react-i18next";
+import { register } from "../API/auth";
+import { useAuth } from "../contexts/AuthContext";
+import { mapAuthError } from "../lib/authErrors";
+import { getSafeReturnUrl } from "../lib/returnUrl";
+import PageMeta from "../components/PageMeta";
 
 const SignUp: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+  const returnUrl = getSafeReturnUrl(router.query.returnUrl);
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace(returnUrl);
+    }
+  }, [authLoading, user, returnUrl, router]);
 
   const handleSignUp = async (event: FormEvent) => {
     event.preventDefault();
+    setError(null);
 
     if (password !== confirmPassword) {
       setError(t("passwordsDoNotMatch"));
       return;
     }
 
+    setLoading(true);
     try {
       await register({ email, password });
-      router.push("/tickets");
-    } catch (error: any) {
-      setError(error.message);
+      router.push(returnUrl);
+    } catch (signUpError) {
+      const authError = signUpError as AuthError;
+      setError(mapAuthError(authError.code, t));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-white to-blue-50 w-full min-h-full">
-      <div className="flex flex-col justify-center items-center w-full min-h-full px-4 py-12">
-        <div className="w-full max-w-md">
-          {/* Card Container */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold text-gray-800">{t("signUp")}</h1>
-              <p className="text-gray-600">{t("signUpSubtitle")}</p>
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
-
-            {/* Form */}
-            <form onSubmit={handleSignUp} className="space-y-4">
-              {/* Email Input */}
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  {t("email")}
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder={t("emailPlaceholder")}
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  {t("password")}
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder={t("passwordPlaceholder")}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    aria-label={t("togglePassword")}
-                  >
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password Input */}
-              <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  {t("confirmPassword")}
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showPassword ? "text" : "password"}
-                    placeholder={t("passwordPlaceholder")}
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Show Password Checkbox */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="showPassword"
-                  checked={showPassword}
-                  onChange={() => setShowPassword(!showPassword)}
-                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                />
-                <label htmlFor="showPassword" className="ml-2 text-sm text-gray-700">
-                  {t("showPassword")}
-                </label>
-              </div>
-
-              {/* Info Note */}
-              <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm">
-                <p>{t("needEmailDescription")}</p>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                {t("signUp")}
-              </button>
-            </form>
-
-            {/* Sign In Link */}
-            <div className="text-center pt-4 border-t border-gray-200">
-              <p className="text-gray-600">
-                {t("alreadyHaveAccount")}{" "}
-                <Link href="/signIn" className="text-purple-600 font-semibold hover:text-purple-700 transition-colors">
-                  {t("signIn")}
-                </Link>
-              </p>
-            </div>
+    <div className="page">
+      <PageMeta title={t("signUp")} />
+      <div className="page-narrow">
+        <div className="card p-8">
+          <div className="mb-6 space-y-1">
+            <h1 className="text-2xl font-semibold text-gray-900">{t("signUp")}</h1>
+            <p className="text-gray-600">{t("signUpSubtitle")}</p>
           </div>
+
+          {error ? (
+            <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {error}
+            </div>
+          ) : null}
+
+          <form onSubmit={handleSignUp} className="space-y-4">
+            <div className="space-y-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                {t("email")}
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder={t("emailPlaceholder")}
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                {t("password")}
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  placeholder={t("passwordPlaceholder")}
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="input-field pr-20"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-medium text-purple-700"
+                >
+                  {showPassword ? t("hidePassword") : t("showPassword")}
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
+                {t("confirmPassword")}
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder={t("passwordPlaceholder")}
+                required
+                minLength={6}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="input-field"
+              />
+            </div>
+
+            <p className="rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-600">
+              {t("emailForTicketsNote")}
+            </p>
+
+            <button type="submit" disabled={loading} className="btn-primary w-full">
+              {loading ? t("signingUp") : t("signUp")}
+            </button>
+          </form>
+
+          <p className="mt-6 border-t border-gray-200 pt-4 text-center text-gray-600">
+            {t("alreadyHaveAccount")}{" "}
+            <Link
+              href={`/signIn?returnUrl=${encodeURIComponent(returnUrl)}`}
+              className="font-semibold text-purple-700 hover:text-purple-800"
+            >
+              {t("signIn")}
+            </Link>
+          </p>
         </div>
       </div>
     </div>
