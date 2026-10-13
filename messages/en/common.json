@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "CynSeat",
+    "description": "Free ticketing for NGOs and event organizers."
+  },
+  "nav": {
+    "home": "CynSeat home",
+    "language": "Language",
+    "skipToContent": "Skip to content"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "tr": "Türkçe"
+  },
+  "home": {
+    "title": "Free ticketing for NGOs and event organizers",
+    "subtitle": "Create events, choose a venue and sell tickets. Your organization is paid directly.",
+    "features": {
+      "organizations": {
+        "title": "Built for organizations",
+        "description": "Invite your team and give admins, members and door staff the access they need."
+      },
+      "seating": {
+        "title": "Any event, any venue",
+        "description": "Sell general admission or let buyers pick their own seats on your seat map."
+      },
+      "tickets": {
+        "title": "Digital tickets",
+        "description": "Buyers get QR-coded tickets by email, ready to scan at the door."
+      }
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "That page does not exist.",
+    "home": "Back to home"
+  }
+}

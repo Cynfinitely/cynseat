@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "CynSeat",
+    "description": "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille."
+  },
+  "nav": {
+    "home": "CynSeat-etusivu",
+    "language": "Kieli",
+    "skipToContent": "Siirry sisältöön"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "tr": "Türkçe"
+  },
+  "home": {
+    "title": "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille",
+    "subtitle": "Luo tapahtumia, valitse tapahtumapaikka ja myy lippuja. Maksut tilitetään suoraan organisaatiollesi.",
+    "features": {
+      "organizations": {
+        "title": "Tehty organisaatioille",
+        "description": "Kutsu tiimisi ja anna ylläpitäjille, jäsenille ja ovihenkilökunnalle heidän tarvitsemansa oikeudet."
+      },
+      "seating": {
+        "title": "Mikä tahansa tapahtuma ja paikka",
+        "description": "Myy numeroimattomia lippuja tai anna ostajien valita paikkansa salikartalta."
+      },
+      "tickets": {
+        "title": "Digitaaliset liput",
+        "description": "Ostajat saavat QR-koodilliset liput sähköpostiin, valmiina skannattaviksi ovella."
+      }
+    }
+  },
+  "footer": {
+    "rights": "Kaikki oikeudet pidätetään."
+  },
+  "notFound": {
+    "title": "Sivua ei löytynyt",
+    "description": "Tätä sivua ei ole olemassa.",
+    "home": "Takaisin etusivulle"
+  }
+}

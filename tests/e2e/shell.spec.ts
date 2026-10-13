@@ -1,0 +1,43 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test } from "@playwright/test";
+
+const titles = {
+  en: "Free ticketing for NGOs and event organizers",
+  fi: "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille",
+  tr: "STK'lar ve etkinlik düzenleyicileri için ücretsiz biletleme",
+} as const;
+
+test("root redirects to the default locale", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/en$/);
+});
+
+for (const [locale, title] of Object.entries(titles)) {
+  test(`home renders in ${locale} with no accessibility violations`, async ({ page }) => {
+    await page.goto(`/${locale}`);
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+}
+
+test("language switcher keeps the current path", async ({ page }) => {
+  await page.goto("/en/does-not-exist");
+  await page.getByRole("link", { name: "Suomi" }).click();
+  await expect(page).toHaveURL(/\/fi\/does-not-exist$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sivua ei löytynyt");
+});
+
+test("unknown pages answer 404 in the visitor's language", async ({ page }) => {
+  const response = await page.goto("/tr/nope");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sayfa bulunamadı");
+});
+
+test("health endpoint reports the database", async ({ request }) => {
+  const response = await request.get("/api/health");
+  expect(response.status()).toBe(200);
+  expect(await response.json()).toEqual({ status: "ok", database: true });
+});

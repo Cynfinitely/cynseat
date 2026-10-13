@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: var(--color-purple-50);
+  --color-brand-100: var(--color-purple-100);
+  --color-brand-500: var(--color-purple-500);
+  --color-brand-600: var(--color-purple-600);
+  --color-brand-700: var(--color-purple-700);
+
+  --color-ink: var(--color-gray-900);
+  --color-body: var(--color-gray-800);
+  --color-muted: var(--color-gray-600);
+  --color-line: var(--color-gray-200);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-gray-50);
+  --color-danger: var(--color-red-700);
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-body antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-brand-500 outline-2 outline-offset-2;
+  }
+}
