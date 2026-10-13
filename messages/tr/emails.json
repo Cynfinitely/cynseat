@@ -56,5 +56,11 @@
     "heading": "İadeniz yolda",
     "body": "Merhaba {name}, {reference} numaralı siparişiniz ({event}) için {amount} iade ettik. Tutarın hesabınıza ulaşması birkaç iş günü sürebilir. İade edilen biletler artık geçerli değildir.",
     "action": "Siparişi görüntüle"
+  },
+  "orderLink": {
+    "subject": "{event} biletleriniz",
+    "heading": "Biletleriniz burada",
+    "body": "{event} etkinliği için {reference} numaralı siparişinizin bağlantısını istediniz. Biletlerinizi görmek için açın.",
+    "action": "Biletlerimi aç"
   }
 }

@@ -9,8 +9,8 @@ export type E2EUser = { name: string; email: string; page: Page };
 export const uniqueId = (): string => randomBytes(4).toString("hex");
 
 /** Signs a new user up through the UI in their own browser context and confirms their email. */
-export async function signUp(browser: Browser, name: string): Promise<E2EUser> {
-  const email = `${name.toLowerCase().replace(/\W+/g, "-")}-${uniqueId()}@example.com`;
+export async function signUp(browser: Browser, name: string, withEmail?: string): Promise<E2EUser> {
+  const email = withEmail ?? `${name.toLowerCase().replace(/\W+/g, "-")}-${uniqueId()}@example.com`;
   const context = await browser.newContext();
   const page = await context.newPage();
 

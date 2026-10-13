@@ -6,6 +6,8 @@ import { authorizeOrg } from "../../authz/authorize";
 import { transactionWithRetry } from "../../db/retry";
 import {
   events,
+  eventSeats,
+  eventSections,
   holds,
   orderItems,
   orders,
@@ -569,4 +571,68 @@ export async function listEventOrders(
         createdAt,
       })),
   }));
+}
+
+// ---- Attendee export ---------------------------------------------------------------------
+
+export type AttendeeRow = {
+  reference: string;
+  buyerName: string;
+  email: string;
+  ticketType: string;
+  section: string | null;
+  row: string | null;
+  seat: string | null;
+  status: "valid" | "void";
+  checkedInAt: Date | null;
+  purchasedAt: Date | null;
+};
+
+/**
+ * Every ticket of an event with its buyer, for the organizer's records. Contains personal
+ * data, so it is limited to admins and each export is written to the audit log.
+ */
+export async function exportAttendees(
+  deps: Pick<Deps, "db">,
+  ctx: OrgContext,
+  eventId: string,
+): Promise<AttendeeRow[]> {
+  authorizeOrg(ctx, "attendee.export");
+  if (!UUID.test(eventId)) throw notFound("event");
+  const [event] = await deps.db
+    .select({ id: events.id })
+    .from(events)
+    .where(and(eq(events.organizationId, ctx.organization.id), eq(events.id, eventId)));
+  if (!event) throw notFound("event");
+
+  const rows = await deps.db
+    .select({
+      reference: orders.publicId,
+      buyerName: orders.buyerName,
+      email: orders.email,
+      ticketType: orderItems.description,
+      section: eventSections.name,
+      row: eventSeats.rowLabel,
+      seat: eventSeats.seatLabel,
+      status: tickets.status,
+      checkedInAt: tickets.checkedInAt,
+      purchasedAt: orders.paidAt,
+    })
+    .from(tickets)
+    .innerJoin(orders, eq(orders.id, tickets.orderId))
+    .innerJoin(orderItems, eq(orderItems.id, tickets.orderItemId))
+    .leftJoin(eventSeats, eq(eventSeats.id, tickets.eventSeatId))
+    .leftJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
+    .where(and(eq(tickets.organizationId, ctx.organization.id), eq(tickets.eventId, eventId)))
+    .orderBy(asc(orders.createdAt), asc(tickets.orderItemId), asc(tickets.seq));
+
+  await recordAudit(deps.db, {
+    organizationId: ctx.organization.id,
+    actorUserId: ctx.actor.userId,
+    action: "attendees.exported",
+    entityType: "event",
+    entityId: eventId,
+    data: { tickets: rows.length },
+  });
+  return rows;
 }

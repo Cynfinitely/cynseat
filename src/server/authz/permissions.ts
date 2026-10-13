@@ -18,6 +18,7 @@ export const orgPermissions = {
   "seatmap.manage": ["admin", "member"],
   "order.view": ["admin", "member"],
   "order.refund": ["admin"],
+  "attendee.export": ["admin"],
   "checkin.scan": ["admin", "member", "door_staff"],
   "checkin.undo": ["admin"],
 } as const satisfies Record<string, readonly OrgRole[]>;

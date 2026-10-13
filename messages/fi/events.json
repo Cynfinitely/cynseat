@@ -190,6 +190,8 @@
     "retry": "Lähetä hyvitys uudelleen",
     "unfulfillable": "Maksettu liian myöhään: lippuja ei toimitettu, ja maksu hyvitetään automaattisesti.",
     "adminOnly": "Vain organisaation ylläpitäjä voi hyvittää.",
-    "selectFirst": "Valitse vähintään yksi lippu."
+    "selectFirst": "Valitse vähintään yksi lippu.",
+    "export": "Lataa osallistujaluettelo (CSV)",
+    "exportHint": "Sisältää ostajien nimet ja sähköpostiosoitteet. Jokainen lataus kirjataan."
   }
 }

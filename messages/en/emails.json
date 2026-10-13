@@ -56,5 +56,11 @@
     "heading": "Your refund is on its way",
     "body": "Hi {name}, we have refunded {amount} for your order {reference} ({event}). It can take a few working days to reach your account. Refunded tickets are no longer valid.",
     "action": "View order"
+  },
+  "orderLink": {
+    "subject": "Your tickets for {event}",
+    "heading": "Here are your tickets",
+    "body": "You asked for the link to your order {reference} for {event}. Open it to see your tickets.",
+    "action": "Open my tickets"
   }
 }

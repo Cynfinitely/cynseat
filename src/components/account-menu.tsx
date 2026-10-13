@@ -8,6 +8,7 @@ import { Button, buttonVariants } from "./ui/button";
 /** Client-side so that public pages stay cacheable: the session is read in the browser. */
 export function AccountMenu() {
   const t = useTranslations("common.nav");
+  const tAccount = useTranslations("account");
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
@@ -29,6 +30,9 @@ export function AccountMenu() {
 
   return (
     <nav aria-label={t("account")} className="flex items-center gap-1">
+      <Link href="/account/orders" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+        {tAccount("orders.nav")}
+      </Link>
       <Link href="/dashboard" className={buttonVariants({ variant: "ghost", size: "sm" })}>
         {t("dashboard")}
       </Link>

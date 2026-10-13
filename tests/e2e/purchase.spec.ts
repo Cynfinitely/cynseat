@@ -72,6 +72,48 @@ test.describe("buying tickets", () => {
     // The organizer sees the sale.
     await owner.goto(`/en/dashboard/${orgSlug}/events`);
     await expect(owner.getByRole("row").filter({ hasText: title })).toContainText("2 / 50");
+
+    // Lost the email? The link can be asked for again, without revealing who has orders.
+    const forgetful = await guest(browser);
+    await forgetful.goto("/en");
+    await forgetful.getByRole("link", { name: "Find my tickets" }).click();
+    await forgetful.getByLabel("Email").fill(email);
+    await forgetful.getByRole("button", { name: "Send me my tickets" }).click();
+    await expect(forgetful.getByText(`If there are orders for ${email}`)).toBeVisible();
+    expect(new URL(await emailLink(email, "orderLink")).pathname).toBe(new URL(link).pathname);
+
+    // Creating an account with the same address later brings the guest order along.
+    const account = await signUp(browser, "Gus Guest", email);
+    await account.page.getByRole("link", { name: "My tickets", exact: true }).click();
+    await expect(account.page.getByRole("heading", { name: title })).toBeVisible();
+    await expect(account.page.getByText("2 tickets")).toBeVisible();
+    await noViolations(account.page);
+    await account.page.getByRole("link", { name: /Open tickets/ }).click();
+    await expect(account.page.getByRole("img", { name: "QR code for ticket 1" })).toBeVisible();
+
+    // The organizer downloads the attendee list.
+    const eventId = (await owner.getByRole("link", { name: title }).getAttribute("href"))!
+      .split("/")
+      .pop();
+    const csv = await owner.request.get(
+      `/api/dashboard/${orgSlug}/events/${eventId}/attendees.csv`,
+    );
+    expect(csv.status()).toBe(200);
+    expect(csv.headers()["content-disposition"]).toContain("attachment");
+    const text = await csv.text();
+    expect(text.split("\r\n")[0]).toContain("Order,Name,Email,Ticket");
+    expect(text).toContain(`Gus Guest,${email},Standard`);
+    // Nobody else can.
+    expect(
+      (
+        await forgetful.request.get(`/api/dashboard/${orgSlug}/events/${eventId}/attendees.csv`)
+      ).status(),
+    ).toBe(404);
+    expect(
+      (
+        await account.page.request.get(`/api/dashboard/${orgSlug}/events/${eventId}/attendees.csv`)
+      ).status(),
+    ).toBe(404);
   });
 
   test("a guest pays for tickets, after first backing out of the payment page", async ({

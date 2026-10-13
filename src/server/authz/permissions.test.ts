@@ -20,6 +20,7 @@ const expected: Record<OrgAction, Record<OrgRole, boolean>> = {
   "seatmap.manage": { admin: true, member: true, door_staff: false },
   "order.view": { admin: true, member: true, door_staff: false },
   "order.refund": { admin: true, member: false, door_staff: false },
+  "attendee.export": { admin: true, member: false, door_staff: false },
   "checkin.scan": { admin: true, member: true, door_staff: true },
   "checkin.undo": { admin: true, member: false, door_staff: false },
 };

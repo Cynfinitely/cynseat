@@ -32,6 +32,10 @@ export type EmailTemplate =
       };
     }
   | {
+      template: "orderLink";
+      data: { event: string; reference: string; url: string };
+    }
+  | {
       template: "orderRefunded";
       data: { name: string; event: string; reference: string; amount: string; url: string };
     }

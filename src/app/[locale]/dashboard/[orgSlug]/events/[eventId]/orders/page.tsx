@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { requireOrgEvent } from "@/app/_lib/event";
 import { pageResult } from "@/app/_lib/session";
 import { formatMoney } from "@/domain/money/money";
+import { buttonVariants } from "@/components/ui/button";
 import { OrderCard } from "@/features/orders/order-card";
 import { getApp } from "@/server";
 import { can } from "@/server/authz/permissions";
@@ -29,6 +30,18 @@ export default async function EventOrdersPage({ params }: Props) {
     <>
       <h2 className="text-ink mb-3 text-lg font-semibold">{t("title")}</h2>
       {!canRefund ? <p className="text-muted mb-4 text-sm">{t("adminOnly")}</p> : null}
+      {can(ctx.role, "attendee.export") ? (
+        <p className="mb-5 text-sm">
+          {/* A plain link: the browser downloads the file. */}
+          <a
+            href={`/api/dashboard/${orgSlug}/events/${eventId}/attendees.csv`}
+            className={buttonVariants({ variant: "secondary", size: "sm" })}
+          >
+            {t("export")}
+          </a>
+          <span className="text-muted ml-3">{t("exportHint")}</span>
+        </p>
+      ) : null}
       {orders.length === 0 ? (
         <p className="text-muted text-sm">{t("empty")}</p>
       ) : (

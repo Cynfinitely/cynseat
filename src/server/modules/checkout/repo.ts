@@ -199,3 +199,37 @@ export async function findOrdersOfUser(db: DbOrTx, userId: string): Promise<Orde
     .where(and(eq(orders.userId, userId), eq(orders.status, "paid")))
     .orderBy(desc(orders.createdAt));
 }
+
+/** Gives the account every paid order bought with its email that no account owns yet. */
+export async function attachOrdersToUser(
+  db: DbOrTx,
+  email: string,
+  userId: string,
+  now: Date,
+): Promise<number> {
+  const rows = await db
+    .update(orders)
+    .set({ userId, updatedAt: now })
+    .where(
+      and(
+        eq(sql`lower(${orders.email})`, email.toLowerCase()),
+        sql`${orders.userId} is null`,
+        eq(orders.status, "paid"),
+      ),
+    )
+    .returning({ id: orders.id });
+  return rows.length;
+}
+
+export async function findPaidOrdersByEmail(
+  db: DbOrTx,
+  email: string,
+  limit: number,
+): Promise<OrderRow[]> {
+  return db
+    .select()
+    .from(orders)
+    .where(and(eq(sql`lower(${orders.email})`, email.toLowerCase()), eq(orders.status, "paid")))
+    .orderBy(desc(orders.createdAt))
+    .limit(limit);
+}

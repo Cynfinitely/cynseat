@@ -4,13 +4,16 @@ import { describe, expect, it } from "vitest";
 import { parseTicketCode, ticketCodeMatches } from "../../../domain/tokens/tokens";
 import { createOrg, createPublishedEvent } from "../../../../tests/integration/fixtures";
 import { expectInventoryConsistent } from "../../../../tests/integration/invariants";
-import { setupTestApp, type TestApp } from "../../../../tests/integration/test-app";
+import { createUser, setupTestApp, type TestApp } from "../../../../tests/integration/test-app";
 import { holds, orders, orgProfiles, outboxJobs, tickets, ticketTypes } from "../../db/schema";
 import { cancelEvent, saveTranslation } from "../events/service";
 import { setCart, sweepExpiredHolds, type Buyer } from "../inventory/service";
 import {
   cancelCheckout,
+  claimGuestOrders,
   confirmPayment,
+  listOrdersOfUser,
+  sendOrderLinks,
   getOrderByToken,
   PaymentMismatchError,
   startCheckout,
@@ -415,6 +418,65 @@ describe("checkout", () => {
       expect(await cancelCheckout(app, who, event.id)).toBe("paid");
       expect(await ticketsOf(started.orderId)).toHaveLength(2);
       await expectInventoryConsistent(app, event.id);
+    });
+  });
+
+  describe("finding orders again", () => {
+    it("joins guest orders to an account only once it has proved it owns the address", async () => {
+      const { app, event } = await setup({ price: "0" });
+      const { started } = await checkout(app, event, { email: "Aino@Example.com" });
+      const impostor = {
+        userId: (await createUser(app, { verified: false })).actor.userId,
+        email: "aino@example.com",
+        emailVerified: false,
+      };
+      const owner = {
+        userId: (await createUser(app)).actor.userId,
+        email: "aino@example.com",
+        emailVerified: true,
+      };
+
+      expect(await claimGuestOrders(app, impostor)).toBe(0);
+      expect(await listOrdersOfUser(app, impostor.userId, "en")).toEqual([]);
+
+      expect(await claimGuestOrders(app, owner)).toBe(1);
+      const mine = await listOrdersOfUser(app, owner.userId, "en");
+      expect(mine.map((order) => order.id)).toEqual([started.orderId]);
+      expect(mine[0]!.accessToken).toBe(started.accessToken);
+
+      // Already claimed: a second account with the same address cannot take it over.
+      const second = {
+        userId: (await createUser(app)).actor.userId,
+        email: "AINO@example.com",
+        emailVerified: true,
+      };
+      expect(await claimGuestOrders(app, second)).toBe(0);
+      expect(await listOrdersOfUser(app, second.userId, "en")).toEqual([]);
+    });
+
+    it("emails order links on request, once an hour, and is silent about unknown addresses", async () => {
+      const { app, event } = await setup({ price: "0" });
+      const { started } = await checkout(app, event, { email: "finder@example.com" });
+      const links = () =>
+        app.mailer.sent.filter(
+          (mail) => mail.to === "finder@example.com" && mail.subject.startsWith("Your tickets for"),
+        );
+      const before = links().length;
+
+      await sendOrderLinks(app, "FINDER@example.com", "en");
+      await sendOrderLinks(app, "finder@example.com", "en");
+      const sent = links().slice(before);
+      // One from the purchase itself is excluded by `before`; exactly one link email now.
+      expect(sent).toHaveLength(1);
+      expect(sent[0]!.text).toContain(`/en/orders/${started.accessToken}`);
+
+      app.clock.advance(61 * 60_000);
+      await sendOrderLinks(app, "finder@example.com", "en");
+      expect(links().slice(before)).toHaveLength(2);
+
+      const total = app.mailer.sent.length;
+      await sendOrderLinks(app, "nobody-at-all@example.com", "en");
+      expect(app.mailer.sent).toHaveLength(total);
     });
   });
 

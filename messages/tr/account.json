@@ -1,0 +1,23 @@
+{
+  "find": {
+    "nav": "Biletlerimi bul",
+    "title": "Biletlerimi bul",
+    "intro": "Satın alırken kullandığınız e-posta adresini girin. Her siparişiniz için size bir bağlantı göndereceğiz.",
+    "email": "E-posta",
+    "submit": "Biletlerimi gönder",
+    "sentTitle": "E-postanızı kontrol edin",
+    "sentBody": "{email} adresine ait sipariş varsa bağlantılar yolda. Ulaşması bir dakika sürebilir."
+  },
+  "orders": {
+    "nav": "Biletlerim",
+    "title": "Biletlerim",
+    "empty": "Henüz biletiniz yok.",
+    "emptyHint": "{email} adresiyle alınan biletler, giriş yapmadan alınanlar dahil, burada görünür.",
+    "verify": "Bu adresle alınan biletleri görmek için e-posta adresinizi doğrulayın. Doğrulama bağlantısı gelen kutunuzda.",
+    "open": "Biletleri aç",
+    "tickets": "{count, plural, one {# bilet} other {# bilet}}",
+    "order": "Sipariş {reference}",
+    "past": "Geçmiş etkinlikler",
+    "upcoming": "Yaklaşan"
+  }
+}

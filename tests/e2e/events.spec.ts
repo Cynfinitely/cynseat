@@ -123,7 +123,8 @@ test("an organizer builds, publishes and cancels an event that the public can se
   const eventPath = `/o/${orgSlug}/e/kesakonsertti-${id}`;
 
   await test.step("the public sees it in their own language", async () => {
-    await visitor.goto("/en");
+    // From the organizer's public page (the home page lists only the soonest events).
+    await visitor.goto(`/en/o/${orgSlug}`);
     await visitor.getByRole("link", { name: titleEn }).click();
     await expect(visitor).toHaveURL(new RegExp(`/en${eventPath}$`));
     await expect(visitor.getByRole("heading", { level: 1, name: titleEn })).toBeVisible();

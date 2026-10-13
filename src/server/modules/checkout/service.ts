@@ -572,3 +572,54 @@ export async function listOrdersOfUser(
     })),
   );
 }
+
+// ---- Finding orders again ----------------------------------------------------------------
+
+/**
+ * Attaches orders bought as a guest to the account that has since proved it owns the
+ * email address. Never for an unverified address: otherwise signing up with someone
+ * else's email would hand over their tickets.
+ */
+export async function claimGuestOrders(
+  deps: Pick<CheckoutDeps, "db" | "clock">,
+  actor: { userId: string; email: string; emailVerified: boolean },
+): Promise<number> {
+  if (!actor.emailVerified) return 0;
+  return repo.attachOrdersToUser(deps.db, actor.email, actor.userId, deps.clock.now());
+}
+
+/**
+ * Emails the link to each recent order bought with this address. Says nothing about
+ * whether any exist, and sends each link at most once an hour however often it is asked.
+ */
+export async function sendOrderLinks(
+  deps: CheckoutDeps,
+  email: string,
+  locale: string,
+): Promise<void> {
+  const hour = Math.floor(deps.clock.now().getTime() / 3_600_000);
+  for (const order of await repo.findPaidOrdersByEmail(deps.db, email, 10)) {
+    const event = await repo.findOrderEvent(deps.db, order.eventId);
+    const emailLocale = toEmailLocale(locale);
+    await enqueueEmail(
+      deps.db,
+      deps.clock,
+      {
+        // To the address on the order, not the one typed: same person, original spelling.
+        to: order.email,
+        locale: emailLocale,
+        template: "orderLink",
+        data: {
+          event:
+            (event &&
+              pickTranslation(event.translations, emailLocale, event.event.defaultLocale)?.title) ??
+            "",
+          reference: order.publicId,
+          url: orderUrl(deps, emailLocale, orderAccessToken(deps.signingSecret, order.id)),
+        },
+      },
+      { dedupeKey: `order-link:${order.id}:${hour}` },
+    );
+  }
+  await sendConfirmations(deps);
+}

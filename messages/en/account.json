@@ -1,0 +1,23 @@
+{
+  "find": {
+    "nav": "Find my tickets",
+    "title": "Find my tickets",
+    "intro": "Enter the email address you used when buying. We will send you a link to each of your orders.",
+    "email": "Email",
+    "submit": "Send me my tickets",
+    "sentTitle": "Check your email",
+    "sentBody": "If there are orders for {email}, the links are on their way. They can take a minute to arrive."
+  },
+  "orders": {
+    "nav": "My tickets",
+    "title": "My tickets",
+    "empty": "You have no tickets yet.",
+    "emptyHint": "Tickets bought with {email} appear here, including ones bought without signing in.",
+    "verify": "Confirm your email address to see tickets bought with it. Check your inbox for the confirmation link.",
+    "open": "Open tickets",
+    "tickets": "{count, plural, one {# ticket} other {# tickets}}",
+    "order": "Order {reference}",
+    "past": "Past events",
+    "upcoming": "Upcoming"
+  }
+}

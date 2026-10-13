@@ -190,6 +190,8 @@
     "retry": "Send refund again",
     "unfulfillable": "Paid too late: no tickets were issued and the payment is refunded automatically.",
     "adminOnly": "Only an organization admin can refund.",
-    "selectFirst": "Select at least one ticket."
+    "selectFirst": "Select at least one ticket.",
+    "export": "Download attendee list (CSV)",
+    "exportHint": "Contains buyers' names and email addresses. Each download is recorded."
   }
 }

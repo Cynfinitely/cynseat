@@ -1,3 +1,4 @@
+import type account from "../../messages/en/account.json";
 import type admin from "../../messages/en/admin.json";
 import type auth from "../../messages/en/auth.json";
 import type checkout from "../../messages/en/checkout.json";
@@ -19,6 +20,7 @@ export const namespaces = [
   "storefront",
   "checkout",
   "seating",
+  "account",
 ] as const;
 
 export type Messages = {
@@ -30,6 +32,7 @@ export type Messages = {
   storefront: typeof storefront;
   checkout: typeof checkout;
   seating: typeof seating;
+  account: typeof account;
 };
 
 // Fails to compile if a namespace is declared in `Messages` but missing from the list

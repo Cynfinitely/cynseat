@@ -56,5 +56,11 @@
     "heading": "Hyvityksesi on matkalla",
     "body": "Hei {name}, olemme hyvittäneet {amount} tilauksestasi {reference} ({event}). Summan näkyminen tililläsi voi kestää muutaman arkipäivän. Hyvitetyt liput eivät ole enää voimassa.",
     "action": "Näytä tilaus"
+  },
+  "orderLink": {
+    "subject": "Lippusi tapahtumaan {event}",
+    "heading": "Tässä ovat lippusi",
+    "body": "Pyysit linkkiä tilaukseesi {reference} tapahtumaan {event}. Avaa se nähdäksesi lippusi.",
+    "action": "Avaa lippuni"
   }
 }

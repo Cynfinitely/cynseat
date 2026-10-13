@@ -190,6 +190,8 @@
     "retry": "İadeyi yeniden gönder",
     "unfulfillable": "Geç ödendi: bilet düzenlenmedi ve ödeme otomatik olarak iade ediliyor.",
     "adminOnly": "Yalnızca kuruluş yöneticisi iade yapabilir.",
-    "selectFirst": "En az bir bilet seçin."
+    "selectFirst": "En az bir bilet seçin.",
+    "export": "Katılımcı listesini indir (CSV)",
+    "exportHint": "Alıcıların adlarını ve e-posta adreslerini içerir. Her indirme kaydedilir."
   }
 }

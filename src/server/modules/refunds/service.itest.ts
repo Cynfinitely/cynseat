@@ -8,12 +8,21 @@ import {
 } from "../../../../tests/integration/fixtures";
 import { expectInventoryConsistent } from "../../../../tests/integration/invariants";
 import { codeOf, setupTestApp, type TestApp } from "../../../../tests/integration/test-app";
-import { holds, orders, outboxJobs, refunds, tickets, ticketTypes } from "../../db/schema";
+import {
+  auditLog,
+  holds,
+  orders,
+  outboxJobs,
+  refunds,
+  tickets,
+  ticketTypes,
+} from "../../db/schema";
 import { scanTicket } from "../checkin/service";
 import { confirmPayment, getOrderByToken, startCheckout } from "../checkout/service";
 import { cancelEvent } from "../events/service";
 import { setCart, type Buyer } from "../inventory/service";
 import {
+  exportAttendees,
   listEventOrders,
   refundCancelledEvent,
   refundOrder,
@@ -220,6 +229,42 @@ describe("refunds", () => {
         scanId: randomUUID(),
       });
       expect(outcome.result).toBe("void");
+    });
+  });
+
+  describe("attendee export", () => {
+    it("lists every ticket with its buyer, for admins only, and records the export", async () => {
+      const { app, org, event } = await setup({ price: "0" });
+      const rival = await createOrg(app);
+      const first = await purchase(app, event, 2);
+      await purchase(app, event, 1);
+      await refundOrder(app, await admin(org), first.orderId, {
+        ticketIds: [first.ticketIds[0]!],
+        restock: true,
+      });
+
+      const rows = await exportAttendees(app, await admin(org), event.id);
+      expect(rows).toHaveLength(3);
+      expect(rows.map((row) => row.status).sort()).toEqual(["valid", "valid", "void"]);
+      expect(rows[0]).toMatchObject({
+        buyerName: "Aino Buyer",
+        ticketType: "Standard",
+        section: null,
+      });
+      expect(rows[0]!.reference).toMatch(/^[2-9A-Z]{8}$/);
+
+      expect(
+        await codeOf(async () => exportAttendees(app, await org.as(org.member), event.id)),
+      ).toBe("FORBIDDEN");
+      expect(await codeOf(async () => exportAttendees(app, await org.as(org.door), event.id))).toBe(
+        "FORBIDDEN",
+      );
+      expect(await codeOf(async () => exportAttendees(app, await admin(rival), event.id))).toBe(
+        "NOT_FOUND",
+      );
+
+      const log = await app.db.select().from(auditLog).where(eq(auditLog.entityId, event.id));
+      expect(log.filter((entry) => entry.action === "attendees.exported")).toHaveLength(1);
     });
   });
 
