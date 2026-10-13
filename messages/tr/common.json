@@ -6,7 +6,11 @@
   "nav": {
     "home": "CynSeat ana sayfa",
     "language": "Dil",
-    "skipToContent": "İçeriğe geç"
+    "skipToContent": "İçeriğe geç",
+    "signIn": "Giriş yap",
+    "signOut": "Çıkış yap",
+    "dashboard": "Panel",
+    "account": "Hesap menüsü"
   },
   "languages": {
     "en": "English",
@@ -38,5 +42,35 @@
     "title": "Sayfa bulunamadı",
     "description": "Bu sayfa yok.",
     "home": "Ana sayfaya dön"
+  },
+  "roles": {
+    "admin": "Yönetici",
+    "member": "Üye",
+    "door_staff": "Kapı görevlisi"
+  },
+  "status": {
+    "pending": "İnceleme bekliyor",
+    "approved": "Onaylandı",
+    "rejected": "Onaylanmadı",
+    "suspended": "Askıya alındı"
+  },
+  "optional": "isteğe bağlı",
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "required": "Bu alan zorunludur.",
+    "too_short": "Bu çok kısa.",
+    "too_long": "Bu çok uzun.",
+    "invalid_email": "Geçerli bir e-posta adresi girin.",
+    "invalid_country": "Bir ülke seçin.",
+    "invalid_url": "https:// ile başlayan tam bir web adresi girin.",
+    "password_too_short": "En az 10 karakter kullanın.",
+    "invalid_characters": "Yalnızca küçük harf, rakam ve tekli kısa çizgi kullanın.",
+    "reserved": "Bu adres ayrılmış. Başka bir adres seçin.",
+    "slug_taken": "Bu adres zaten kullanılıyor.",
+    "organization_limit": "Bir hesap için kuruluş sınırına ulaştınız.",
+    "invalid_transition": "Bu kuruluşun durumu değişti. Sayfayı yenileyip tekrar deneyin.",
+    "forbidden": "Bunu yapma yetkiniz yok.",
+    "email_not_verified": "Önce e-posta adresinizi doğrulayın.",
+    "invalid_input": "İşaretli alanları kontrol edin."
   }
 }

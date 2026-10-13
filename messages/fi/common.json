@@ -6,7 +6,11 @@
   "nav": {
     "home": "CynSeat-etusivu",
     "language": "Kieli",
-    "skipToContent": "Siirry sisältöön"
+    "skipToContent": "Siirry sisältöön",
+    "signIn": "Kirjaudu sisään",
+    "signOut": "Kirjaudu ulos",
+    "dashboard": "Hallintapaneeli",
+    "account": "Tilivalikko"
   },
   "languages": {
     "en": "English",
@@ -38,5 +42,35 @@
     "title": "Sivua ei löytynyt",
     "description": "Tätä sivua ei ole olemassa.",
     "home": "Takaisin etusivulle"
+  },
+  "roles": {
+    "admin": "Ylläpitäjä",
+    "member": "Jäsen",
+    "door_staff": "Ovihenkilökunta"
+  },
+  "status": {
+    "pending": "Odottaa tarkistusta",
+    "approved": "Hyväksytty",
+    "rejected": "Ei hyväksytty",
+    "suspended": "Jäädytetty"
+  },
+  "optional": "valinnainen",
+  "errors": {
+    "generic": "Jokin meni vikaan. Yritä uudelleen.",
+    "required": "Tämä kenttä on pakollinen.",
+    "too_short": "Tämä on liian lyhyt.",
+    "too_long": "Tämä on liian pitkä.",
+    "invalid_email": "Anna kelvollinen sähköpostiosoite.",
+    "invalid_country": "Valitse maa.",
+    "invalid_url": "Anna koko verkko-osoite, joka alkaa https://.",
+    "password_too_short": "Käytä vähintään 10 merkkiä.",
+    "invalid_characters": "Käytä vain pieniä kirjaimia, numeroita ja yksittäisiä yhdysmerkkejä.",
+    "reserved": "Tämä osoite on varattu. Valitse toinen.",
+    "slug_taken": "Tämä osoite on jo käytössä.",
+    "organization_limit": "Olet saavuttanut yhden tilin organisaatioiden enimmäismäärän.",
+    "invalid_transition": "Organisaation tila on muuttunut. Lataa sivu uudelleen ja yritä uudelleen.",
+    "forbidden": "Sinulla ei ole oikeutta tähän.",
+    "email_not_verified": "Vahvista ensin sähköpostiosoitteesi.",
+    "invalid_input": "Tarkista korostetut kentät."
   }
 }

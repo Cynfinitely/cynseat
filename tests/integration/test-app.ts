@@ -40,6 +40,7 @@ export function setupTestApp(): () => TestApp {
           clock,
           appUrl: TEST_APP_URL,
           authSecret: "test-secret-test-secret-test-secret-0123",
+          authRateLimit: false,
         }),
         mailer,
         clock,

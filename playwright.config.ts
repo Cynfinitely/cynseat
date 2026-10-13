@@ -2,6 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 3100;
 const baseURL = `http://localhost:${PORT}`;
+export const CRON_SECRET = "e2e-only-cron-secret-0123456789";
+export const DATABASE_URL =
+  process.env.DATABASE_URL ?? "postgres://cynseat:cynseat@localhost:5433/cynseat";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -25,6 +28,11 @@ export default defineConfig({
     timeout: 180_000,
     env: {
       NEXT_PUBLIC_APP_URL: baseURL,
+      BETTER_AUTH_SECRET: "e2e-only-secret-e2e-only-secret-0123456789",
+      // The journeys sign several users up from one address within seconds.
+      AUTH_RATE_LIMIT: "off",
+      MAIL_DRIVER: "console",
+      CRON_SECRET,
       DATABASE_URL: process.env.DATABASE_URL ?? "postgres://cynseat:cynseat@localhost:5433/cynseat",
     },
   },

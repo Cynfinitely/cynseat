@@ -6,7 +6,11 @@
   "nav": {
     "home": "CynSeat home",
     "language": "Language",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard",
+    "account": "Account menu"
   },
   "languages": {
     "en": "English",
@@ -38,5 +42,35 @@
     "title": "Page not found",
     "description": "That page does not exist.",
     "home": "Back to home"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Member",
+    "door_staff": "Door staff"
+  },
+  "status": {
+    "pending": "Pending review",
+    "approved": "Approved",
+    "rejected": "Not approved",
+    "suspended": "Suspended"
+  },
+  "optional": "optional",
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "required": "This field is required.",
+    "too_short": "This is too short.",
+    "too_long": "This is too long.",
+    "invalid_email": "Enter a valid email address.",
+    "invalid_country": "Choose a country.",
+    "invalid_url": "Enter a full web address, starting with https://.",
+    "password_too_short": "Use at least 10 characters.",
+    "invalid_characters": "Use lowercase letters, numbers and single hyphens only.",
+    "reserved": "This address is reserved. Choose another.",
+    "slug_taken": "This address is already in use.",
+    "organization_limit": "You have reached the limit of organizations for one account.",
+    "invalid_transition": "This organization's status has changed. Reload the page and try again.",
+    "forbidden": "You do not have permission to do that.",
+    "email_not_verified": "Confirm your email address first.",
+    "invalid_input": "Check the highlighted fields."
   }
 }

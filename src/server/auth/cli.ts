@@ -9,6 +9,7 @@ export const auth = createAuth({
   baseURL: "http://localhost:3000",
   secret: "cli-only-secret-not-used-at-runtime",
   emails: { sendVerification: noop, sendPasswordReset: noop, sendInvitation: noop },
+  rateLimit: false,
   onOrganizationCreated: noop,
   onMembershipEvent: noop,
 });

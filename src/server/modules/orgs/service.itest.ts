@@ -131,6 +131,24 @@ describe("organizations", () => {
       expect((await profileOf(created!.id)).approvalStatus).toBe("pending");
     });
 
+    it("applies the slug rules to the auth API's own endpoints too", async () => {
+      const app = getApp();
+      const owner = await createUser(app);
+      const org = await register(app, owner);
+
+      for (const slug of ["admin", "Not A Slug", "x"]) {
+        await expect(
+          app.auth.api.createOrganization({ body: { name: "X", slug }, headers: owner.headers }),
+        ).rejects.toThrow(/Invalid slug/);
+        await expect(
+          app.auth.api.updateOrganization({
+            body: { organizationId: org.id, data: { slug } },
+            headers: owner.headers,
+          }),
+        ).rejects.toThrow(/Invalid slug/);
+      }
+    });
+
     it("cannot be approved through the auth API's own update endpoint", async () => {
       const app = getApp();
       const owner = await createUser(app);

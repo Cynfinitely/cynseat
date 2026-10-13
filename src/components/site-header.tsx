@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { AccountMenu } from "./account-menu";
 import { LanguageSwitcher } from "./language-switcher";
 
 export function SiteHeader() {
@@ -15,7 +16,10 @@ export function SiteHeader() {
         >
           CynSeat
         </Link>
-        <LanguageSwitcher />
+        <div className="flex items-center gap-3">
+          <AccountMenu />
+          <LanguageSwitcher />
+        </div>
       </div>
     </header>
   );

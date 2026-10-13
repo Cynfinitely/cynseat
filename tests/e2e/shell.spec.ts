@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { CRON_SECRET } from "../../playwright.config";
 
 const titles = {
   en: "Free ticketing for NGOs and event organizers",
@@ -40,4 +41,18 @@ test("health endpoint reports the database", async ({ request }) => {
   const response = await request.get("/api/health");
   expect(response.status()).toBe(200);
   expect(await response.json()).toEqual({ status: "ok", database: true });
+});
+
+test("cron endpoints refuse callers without the secret", async ({ request }) => {
+  expect((await request.get("/api/cron/dispatch-emails")).status()).toBe(401);
+  const wrong = await request.get("/api/cron/dispatch-emails", {
+    headers: { authorization: "Bearer not-the-secret" },
+  });
+  expect(wrong.status()).toBe(401);
+
+  const right = await request.get("/api/cron/dispatch-emails", {
+    headers: { authorization: `Bearer ${CRON_SECRET}` },
+  });
+  expect(right.status()).toBe(200);
+  expect(await right.json()).toEqual({ sent: expect.any(Number), failed: expect.any(Number) });
 });

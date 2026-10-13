@@ -1,0 +1,79 @@
+{
+  "orgs": {
+    "title": "Organisaatiosi",
+    "emptyTitle": "Et kuulu vielä mihinkään organisaatioon",
+    "emptyBody": "Rekisteröi organisaatiosi, niin voit alkaa luoda tapahtumia. CynSeatin ylläpitäjä tarkistaa jokaisen uuden organisaation ennen kuin se voi julkaista.",
+    "register": "Rekisteröi organisaatio",
+    "open": "Avaa",
+    "platformAdmin": "Alustan ylläpito"
+  },
+  "register": {
+    "title": "Rekisteröi organisaatio",
+    "subtitle": "Voit valmistella tapahtumia heti. Julkaiseminen avautuu, kun CynSeat on hyväksynyt organisaation.",
+    "name": "Organisaation nimi",
+    "slug": "Verkko-osoite",
+    "slugHint": "Julkinen sivusi on osoitteessa cynseat.com/o/{slug}",
+    "contactEmail": "Yhteyssähköposti",
+    "contactEmailHint": "Näytetään lipunostajille, joiden täytyy tavoittaa teidät.",
+    "country": "Maa",
+    "countryPlaceholder": "Valitse maa",
+    "legalName": "Rekisteröity nimi",
+    "businessId": "Y-tunnus tai yhdistyksen rekisterinumero",
+    "website": "Verkkosivusto",
+    "description": "Mitä organisaatiosi tekee?",
+    "descriptionHint": "Lause tai kaksi auttaa meitä tarkistamaan rekisteröintisi.",
+    "submit": "Rekisteröi organisaatio"
+  },
+  "nav": {
+    "label": "Organisaatio",
+    "overview": "Yleiskatsaus",
+    "members": "Jäsenet",
+    "settings": "Asetukset",
+    "all": "Kaikki organisaatiot"
+  },
+  "banner": {
+    "pendingTitle": "Odottaa hyväksyntää",
+    "pendingBody": "CynSeat tarkistaa tätä organisaatiota. Voit valmistella tapahtumia nyt ja julkaista ne, kun organisaatio on hyväksytty.",
+    "rejectedTitle": "Tätä organisaatiota ei hyväksytty",
+    "rejectedBody": "Et voi julkaista tapahtumia. Ota yhteyttä CynSeatiin, jos uskot tämän olevan virhe.",
+    "suspendedTitle": "Tämä organisaatio on jäädytetty",
+    "suspendedBody": "Sen tapahtumat eivät ole myynnissä. Kysy lisätietoja CynSeatilta.",
+    "note": "Viesti CynSeatilta: {note}"
+  },
+  "overview": {
+    "title": "Yleiskatsaus",
+    "yourRole": "Roolisi",
+    "status": "Tila",
+    "publicAddress": "Julkinen osoite",
+    "comingTitle": "Tapahtumat",
+    "comingBody": "Tapahtumien luominen ja lipunmyynti tulevat tämän hallintapaneelin seuraavaan versioon."
+  },
+  "members": {
+    "title": "Jäsenet",
+    "name": "Nimi",
+    "email": "Sähköposti",
+    "role": "Rooli",
+    "you": "sinä",
+    "remove": "Poista",
+    "removeConfirm": "Poistetaanko {name} tästä organisaatiosta?",
+    "roleFor": "Käyttäjän {name} rooli",
+    "inviteTitle": "Kutsu henkilö",
+    "inviteEmail": "Sähköposti",
+    "inviteRole": "Rooli",
+    "inviteSubmit": "Lähetä kutsu",
+    "inviteSent": "Kutsu lähetetty osoitteeseen {email}.",
+    "pendingTitle": "Avoimet kutsut",
+    "cancel": "Peru kutsu",
+    "expires": "Vanhenee {date}",
+    "roleHelpAdmin": "Ylläpitäjät hallinnoivat jäseniä, asetuksia, julkaisemista ja hyvityksiä.",
+    "roleHelpMember": "Jäsenet luovat ja muokkaavat tapahtumia ja näkevät tilaukset.",
+    "roleHelpDoorStaff": "Ovihenkilökunta voi vain skannata lippuja ovella.",
+    "lastAdmin": "Organisaatiolla on oltava vähintään yksi ylläpitäjä.",
+    "actions": "Toiminnot"
+  },
+  "settings": {
+    "title": "Asetukset",
+    "submit": "Tallenna muutokset",
+    "saved": "Muutokset tallennettu."
+  }
+}

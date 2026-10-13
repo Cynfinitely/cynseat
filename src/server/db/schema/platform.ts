@@ -10,12 +10,12 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { approvalStatuses, type ApprovalStatus } from "../../../domain/orgs/status";
 import { organization, user } from "./auth";
 
 const timestamptz = (name: string) => timestamp(name, { withTimezone: true });
 
-export const approvalStatuses = ["pending", "approved", "rejected", "suspended"] as const;
-export type ApprovalStatus = (typeof approvalStatuses)[number];
+export { approvalStatuses, type ApprovalStatus };
 
 /**
  * CynSeat's own facts about an organization. Kept apart from Better Auth's `organization`

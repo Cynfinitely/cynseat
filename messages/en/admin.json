@@ -1,0 +1,21 @@
+{
+  "orgs": {
+    "title": "Organizations",
+    "empty": "No organizations with this status.",
+    "registered": "Registered {date}",
+    "contact": "Contact",
+    "country": "Country",
+    "legalName": "Registered name",
+    "businessId": "Business ID",
+    "website": "Website",
+    "description": "Description",
+    "note": "Note to the organization",
+    "noteHint": "Included in the email to its admins.",
+    "previousNote": "Last note: {note}",
+    "approve": "Approve",
+    "reject": "Reject",
+    "suspend": "Suspend",
+    "reinstate": "Reinstate",
+    "filter": "Filter by status"
+  }
+}

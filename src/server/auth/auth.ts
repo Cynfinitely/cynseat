@@ -1,6 +1,9 @@
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
+import { MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from "../../domain/auth/schemas";
+import { checkSlug } from "../../domain/slug/slug";
 import type { Db } from "../db/client";
 import * as schema from "../db/schema";
 import { ac, roles } from "./access";
@@ -28,6 +31,8 @@ export type AuthDeps = {
   emails: AuthEmails;
   /** Called once an organization exists, so its CynSeat profile can be created. */
   onOrganizationCreated(input: { organizationId: string; userId: string }): Promise<void>;
+  /** Per-IP limits on the auth endpoints. Only ever switched off for automated tests. */
+  rateLimit: boolean;
   /** Membership changes made through Better Auth's endpoints, for the audit log. */
   onMembershipEvent(event: MembershipEvent): Promise<void>;
 };
@@ -47,8 +52,15 @@ export type MembershipEvent = {
   data: Record<string, unknown>;
 };
 
-export const MIN_PASSWORD_LENGTH = 10;
 export const MAX_ORGANIZATIONS_PER_USER = 5;
+
+// Organization endpoints are callable by any signed-in client, so the slug rules are
+// enforced here as well as in the registration form.
+function assertValidSlug(slug: string | undefined): void {
+  if (slug === undefined) return;
+  const problem = checkSlug(slug);
+  if (problem) throw new APIError("BAD_REQUEST", { message: `Invalid slug: ${problem}` });
+}
 
 export function createAuth(deps: AuthDeps) {
   return betterAuth({
@@ -56,10 +68,12 @@ export function createAuth(deps: AuthDeps) {
     baseURL: deps.baseURL,
     secret: deps.secret,
     database: drizzleAdapter(deps.db, { provider: "pg", schema }),
+    rateLimit: { enabled: deps.rateLimit },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
       minPasswordLength: MIN_PASSWORD_LENGTH,
+      maxPasswordLength: MAX_PASSWORD_LENGTH,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: ({ user, url }, request) =>
         deps.emails.sendPasswordReset({ user, url, request }),
@@ -92,6 +106,8 @@ export function createAuth(deps: AuthDeps) {
             request,
           }),
         organizationHooks: {
+          beforeCreateOrganization: async ({ organization: draft }) => assertValidSlug(draft.slug),
+          beforeUpdateOrganization: async ({ organization: draft }) => assertValidSlug(draft.slug),
           afterCreateOrganization: ({ organization: created, user }) =>
             deps.onOrganizationCreated({ organizationId: created.id, userId: user.id }),
           afterCreateInvitation: ({ invitation, inviter, organization: org }) =>

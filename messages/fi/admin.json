@@ -1,0 +1,21 @@
+{
+  "orgs": {
+    "title": "Organisaatiot",
+    "empty": "Ei organisaatioita tässä tilassa.",
+    "registered": "Rekisteröity {date}",
+    "contact": "Yhteystieto",
+    "country": "Maa",
+    "legalName": "Rekisteröity nimi",
+    "businessId": "Y-tunnus",
+    "website": "Verkkosivusto",
+    "description": "Kuvaus",
+    "note": "Viesti organisaatiolle",
+    "noteHint": "Sisällytetään ylläpitäjille lähetettävään sähköpostiin.",
+    "previousNote": "Viimeisin viesti: {note}",
+    "approve": "Hyväksy",
+    "reject": "Hylkää",
+    "suspend": "Jäädytä",
+    "reinstate": "Palauta",
+    "filter": "Suodata tilan mukaan"
+  }
+}

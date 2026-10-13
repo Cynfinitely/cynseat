@@ -1,0 +1,79 @@
+{
+  "orgs": {
+    "title": "Kuruluşlarınız",
+    "emptyTitle": "Henüz bir kuruluşa üye değilsiniz",
+    "emptyBody": "Etkinlik oluşturmaya başlamak için kuruluşunuzu kaydedin. Her yeni kuruluş, yayın yapabilmeden önce bir CynSeat yöneticisi tarafından incelenir.",
+    "register": "Kuruluş kaydet",
+    "open": "Aç",
+    "platformAdmin": "Platform yönetimi"
+  },
+  "register": {
+    "title": "Kuruluş kaydet",
+    "subtitle": "Etkinlikleri hemen hazırlayabilirsiniz. Yayınlama, CynSeat kuruluşu onayladığında açılır.",
+    "name": "Kuruluş adı",
+    "slug": "Web adresi",
+    "slugHint": "Herkese açık sayfanız cynseat.com/o/{slug} adresinde olacak",
+    "contactEmail": "İletişim e-postası",
+    "contactEmailHint": "Size ulaşması gereken bilet alıcılarına gösterilir.",
+    "country": "Ülke",
+    "countryPlaceholder": "Bir ülke seçin",
+    "legalName": "Tescilli ad",
+    "businessId": "Vergi veya dernek numarası",
+    "website": "Web sitesi",
+    "description": "Kuruluşunuz ne yapıyor?",
+    "descriptionHint": "Bir iki cümle, kaydınızı incelememize yardımcı olur.",
+    "submit": "Kuruluşu kaydet"
+  },
+  "nav": {
+    "label": "Kuruluş",
+    "overview": "Genel bakış",
+    "members": "Üyeler",
+    "settings": "Ayarlar",
+    "all": "Tüm kuruluşlar"
+  },
+  "banner": {
+    "pendingTitle": "Onay bekleniyor",
+    "pendingBody": "CynSeat bu kuruluşu inceliyor. Etkinlikleri şimdi hazırlayabilir, kuruluş onaylandığında yayınlayabilirsiniz.",
+    "rejectedTitle": "Bu kuruluş onaylanmadı",
+    "rejectedBody": "Etkinlik yayınlayamazsınız. Bunun bir hata olduğunu düşünüyorsanız CynSeat ile iletişime geçin.",
+    "suspendedTitle": "Bu kuruluş askıya alındı",
+    "suspendedBody": "Etkinlikleri satışta değil. Ayrıntılar için CynSeat ile iletişime geçin.",
+    "note": "CynSeat'ten not: {note}"
+  },
+  "overview": {
+    "title": "Genel bakış",
+    "yourRole": "Rolünüz",
+    "status": "Durum",
+    "publicAddress": "Herkese açık adres",
+    "comingTitle": "Etkinlikler",
+    "comingBody": "Etkinlik oluşturma ve bilet satışı bu panelin bir sonraki sürümünde geliyor."
+  },
+  "members": {
+    "title": "Üyeler",
+    "name": "Ad",
+    "email": "E-posta",
+    "role": "Rol",
+    "you": "siz",
+    "remove": "Çıkar",
+    "removeConfirm": "{name} bu kuruluştan çıkarılsın mı?",
+    "roleFor": "{name} için rol",
+    "inviteTitle": "Birini davet edin",
+    "inviteEmail": "E-posta",
+    "inviteRole": "Rol",
+    "inviteSubmit": "Davet gönder",
+    "inviteSent": "{email} adresine davet gönderildi.",
+    "pendingTitle": "Bekleyen davetler",
+    "cancel": "Daveti iptal et",
+    "expires": "{date} tarihinde sona erer",
+    "roleHelpAdmin": "Yöneticiler üyeleri, ayarları, yayınlamayı ve iadeleri yönetir.",
+    "roleHelpMember": "Üyeler etkinlik oluşturur, düzenler ve siparişleri görür.",
+    "roleHelpDoorStaff": "Kapı görevlileri yalnızca kapıda bilet tarayabilir.",
+    "lastAdmin": "Bir kuruluşun en az bir yöneticisi olmalıdır.",
+    "actions": "İşlemler"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "submit": "Değişiklikleri kaydet",
+    "saved": "Değişiklikler kaydedildi."
+  }
+}
