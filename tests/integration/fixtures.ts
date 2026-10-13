@@ -1,5 +1,7 @@
+import { eq } from "drizzle-orm";
 import type { CreateEventInput, TicketTypeInput } from "../../src/domain/events/schemas";
 import type { VenueInput } from "../../src/domain/venues/schemas";
+import { orgProfiles } from "../../src/server/db/schema";
 import {
   createEvent,
   createTicketType,
@@ -26,10 +28,10 @@ export type TestOrg = {
   as(user: TestUser): Promise<OrgContext>;
 };
 
-/** An organization with one user in each role. Approved unless `approved: false`. */
+/** An organization with one user in each role, approved and able to take payments by default. */
 export async function createOrg(
   app: TestApp,
-  options: { approved?: boolean; name?: string } = {},
+  options: { approved?: boolean; name?: string; payments?: boolean } = {},
 ): Promise<TestOrg> {
   const [admin, member, door] = await Promise.all([
     createUser(app),
@@ -49,6 +51,14 @@ export async function createOrg(
   if (options.approved ?? true) {
     const reviewer = await createUser(app, { platformAdmin: true });
     await reviewOrganization(app, reviewer.actor, { organizationId: org.id, decision: "approve" });
+  }
+
+  if (options.payments ?? true) {
+    // As if the organization had finished connecting its payment account.
+    await app.db
+      .update(orgProfiles)
+      .set({ stripeAccountId: `acct_${unique("test")}`, stripeChargesEnabled: true })
+      .where(eq(orgProfiles.organizationId, org.id));
   }
 
   return {

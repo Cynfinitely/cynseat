@@ -21,6 +21,17 @@ export type EmailTemplate =
       data: { inviter: string; organization: string; role: string; url: string };
     }
   | {
+      template: "orderConfirmation";
+      data: {
+        name: string;
+        event: string;
+        when: string;
+        reference: string;
+        tickets: string;
+        url: string;
+      };
+    }
+  | {
       template: "orgApproved" | "orgRejected" | "orgSuspended";
       data: { organization: string; url: string; note?: string };
     };

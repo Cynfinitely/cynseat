@@ -1,6 +1,7 @@
 // Wires the use-cases to their dependencies. The Next.js layer and the tests both build an
 // `App` from here, differing only in the database, mailer and clock they pass in.
 import { createAuth, type Auth, type AuthEmails } from "./auth/auth";
+import type { FeeRule } from "../domain/orders/fees";
 import { anonymous, type Actor } from "./authz/actor";
 import type { Db } from "./db/client";
 import { recordAudit } from "./modules/audit/service";
@@ -10,6 +11,7 @@ import { ensureOrgProfile, isPlatformAdmin, type CreateOrganization } from "./mo
 import type { Clock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
 import type { ObjectStore } from "./ports/object-store";
+import type { PaymentGateway } from "./ports/payment-gateway";
 
 export type AppConfig = {
   db: Db;
@@ -22,6 +24,11 @@ export type AppConfig = {
   authSecret: string;
   /** Per-IP limits on the auth endpoints. */
   authRateLimit: boolean;
+  gateway: PaymentGateway;
+  /** Key for order links and ticket QR codes. Changing it invalidates both. */
+  signingSecret: string;
+  /** CynSeat's fee on paid orders, unless an organization has its own. */
+  platformFee: FeeRule;
 };
 
 export type App = AppConfig & {

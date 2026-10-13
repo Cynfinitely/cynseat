@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { approveOrganization } from "./support/db";
+import { approveOrganization, enablePayments } from "./support/db";
 import { registerOrganization, signUp, uniqueId } from "./support/users";
 
 const ONE_PIXEL_PNG =
@@ -109,6 +109,7 @@ test("an organizer builds, publishes and cancels an event that the public can se
   });
 
   await approveOrganization(orgSlug);
+  await enablePayments(orgSlug);
 
   await test.step("publish", async () => {
     await page.reload();

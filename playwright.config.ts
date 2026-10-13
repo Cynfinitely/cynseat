@@ -32,6 +32,8 @@ export default defineConfig({
       // The journeys sign several users up from one address within seconds.
       AUTH_RATE_LIMIT: "off",
       MAIL_DRIVER: "console",
+      SIGNING_SECRET: "e2e-only-signing-secret-0123456789abcdef",
+      PAYMENTS_DRIVER: "fake",
       CRON_SECRET,
       DATABASE_URL: process.env.DATABASE_URL ?? "postgres://cynseat:cynseat@localhost:5433/cynseat",
     },

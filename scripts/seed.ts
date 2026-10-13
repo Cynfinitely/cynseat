@@ -2,6 +2,8 @@
 // published event: pnpm db:seed. Safe to run more than once.
 import { config } from "dotenv";
 import { eq } from "drizzle-orm";
+import { NO_FEE } from "../src/domain/orders/fees";
+import { createFakePaymentGateway } from "../src/server/adapters/fake/payment-gateway";
 import { createApp } from "../src/server/app";
 import type { UserActor } from "../src/server/authz/actor";
 import { createDb } from "../src/server/db/client";
@@ -57,6 +59,9 @@ async function main(): Promise<void> {
     appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
     authSecret: process.env.BETTER_AUTH_SECRET ?? "seed-only-secret-seed-only-secret-0123",
     authRateLimit: false,
+    gateway: createFakePaymentGateway({ payUrl: () => "" }),
+    signingSecret: process.env.SIGNING_SECRET ?? "seed-only-signing-secret-0123456789",
+    platformFee: NO_FEE,
   });
 
   async function ensureUser(email: string, name: string): Promise<UserActor> {

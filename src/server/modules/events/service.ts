@@ -383,6 +383,8 @@ async function problemsFor(
     startsAt: event.startsAt,
     now,
     activeTicketTypes: types.filter((type) => type.isActive).length,
+    hasPaidTickets: types.some((type) => type.isActive && type.priceAmount > 0),
+    paymentsReady: ctx.profile.stripeAccountId !== null && ctx.profile.stripeChargesEnabled,
   });
 }
 

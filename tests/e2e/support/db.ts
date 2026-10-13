@@ -48,3 +48,13 @@ export async function approveOrganization(slug: string): Promise<void> {
     [slug],
   );
 }
+
+/** Marks the organization as able to take payments, as if it had connected its account. */
+export async function enablePayments(slug: string): Promise<void> {
+  await query(
+    `update org_profiles set stripe_account_id = 'acct_e2e_' || organization_id,
+       stripe_charges_enabled = true
+     where organization_id = (select id from organization where slug = $1)`,
+    [slug],
+  );
+}

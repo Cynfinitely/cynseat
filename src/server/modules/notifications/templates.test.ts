@@ -19,6 +19,17 @@ const samples: EmailTemplate[] = [
     data: { organization: "Tiyatro", url: "https://x.test/d", note: "No" },
   },
   { template: "orgSuspended", data: { organization: "Tiyatro", url: "https://x.test/d" } },
+  {
+    template: "orderConfirmation",
+    data: {
+      name: "Aino",
+      event: "Bir Masal",
+      when: "10 January",
+      reference: "K7QM2XWP",
+      tickets: "2",
+      url: "https://x.test/orders/t",
+    },
+  },
 ];
 
 describe("renderEmail", () => {

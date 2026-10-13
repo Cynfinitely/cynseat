@@ -128,7 +128,8 @@
     "delete": "Poista luonnos",
     "deleteConfirm": "Poistetaanko tämä luonnos? Tätä ei voi kumota.",
     "done": "valmis",
-    "todo": "tekemättä"
+    "todo": "tekemättä",
+    "payments_not_ready": "Organisaatiosi voi vastaanottaa maksuja tai kaikki liput ovat ilmaisia"
   },
   "cover": {
     "title": "Juliste",

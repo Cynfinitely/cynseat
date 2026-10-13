@@ -8,6 +8,9 @@ export function publishProblemsFor(input: {
   startsAt: Date;
   now: Date;
   activeTicketTypes: number;
+  /** Whether any ticket costs money, and whether the organization can be paid. */
+  hasPaidTickets: boolean;
+  paymentsReady: boolean;
 }): PublishProblem[] {
   const problems: PublishProblem[] = [];
   if (!input.orgApproved) problems.push("org_not_approved");
@@ -15,6 +18,7 @@ export function publishProblemsFor(input: {
   if (!input.hasPlace) problems.push("missing_venue");
   if (input.startsAt.getTime() <= input.now.getTime()) problems.push("starts_in_past");
   if (input.activeTicketTypes < 1) problems.push("no_ticket_types");
+  if (input.hasPaidTickets && !input.paymentsReady) problems.push("payments_not_ready");
   return problems;
 }
 

@@ -2,6 +2,11 @@ import { randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { createMemoryMailer } from "../../src/server/adapters/fake/mailer";
 import { createMemoryObjectStore } from "../../src/server/adapters/fake/object-store";
+import {
+  createFakePaymentGateway,
+  type FakePaymentGateway,
+} from "../../src/server/adapters/fake/payment-gateway";
+import { NO_FEE, type FeeRule } from "../../src/domain/orders/fees";
 import { createApp, type App } from "../../src/server/app";
 import type { OrgRole } from "../../src/server/auth/roles";
 import type { UserActor } from "../../src/server/authz/actor";
@@ -17,7 +22,10 @@ export type TestClock = { now(): Date; advance(ms: number): void };
 export type TestApp = App & {
   mailer: ReturnType<typeof createMemoryMailer>;
   store: ReturnType<typeof createMemoryObjectStore>;
+  gateway: FakePaymentGateway;
   clock: TestClock;
+  /** Mutable, so a test can switch a platform fee on. */
+  platformFee: FeeRule;
 };
 
 /** A fully wired application on this test file's own database. */
@@ -36,6 +44,8 @@ export function setupTestApp(): () => TestApp {
       };
       const mailer = createMemoryMailer();
       const store = createMemoryObjectStore();
+      const gateway = createFakePaymentGateway({ payUrl: (id) => `${TEST_APP_URL}/pay/${id}` });
+      const platformFee: FeeRule = { ...NO_FEE };
       app = {
         ...createApp({
           db: getDb().db,
@@ -45,10 +55,15 @@ export function setupTestApp(): () => TestApp {
           appUrl: TEST_APP_URL,
           authSecret: "test-secret-test-secret-test-secret-0123",
           authRateLimit: false,
+          gateway,
+          signingSecret: "test-signing-secret-0123456789abcdef",
+          platformFee,
         }),
         mailer,
         store,
+        gateway,
         clock,
+        platformFee,
       };
     }
     return app;

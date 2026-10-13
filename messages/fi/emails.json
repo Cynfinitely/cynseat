@@ -44,5 +44,11 @@
     "body": "Organisaatiosi on jäädytetty. Sen tapahtumat eivät ole enää myynnissä.",
     "action": "Avaa hallintapaneeli"
   },
-  "note": "Viesti CynSeat-tiimiltä: {note}"
+  "note": "Viesti CynSeat-tiimiltä: {note}",
+  "orderConfirmation": {
+    "subject": "Lippusi tapahtumaan {event}",
+    "heading": "Lippusi tapahtumaan {event}",
+    "body": "Hei {name}, kiitos tilauksestasi {reference}. Sinulla on {tickets} lippu(a) tapahtumaan {event}, {when}. Avaa lippusi alta ja näytä QR-koodit ovella.",
+    "action": "Avaa lippuni"
+  }
 }

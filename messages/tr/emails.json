@@ -44,5 +44,11 @@
     "body": "Kuruluşunuz askıya alındı. Etkinlikleri artık satışta değil.",
     "action": "Paneli aç"
   },
-  "note": "CynSeat ekibinden not: {note}"
+  "note": "CynSeat ekibinden not: {note}",
+  "orderConfirmation": {
+    "subject": "{event} biletleriniz",
+    "heading": "{event} biletleriniz",
+    "body": "Merhaba {name}, {reference} numaralı siparişiniz için teşekkürler. {when} tarihindeki {event} etkinliği için {tickets} biletiniz var. Biletlerinizi aşağıdan açın ve kapıda QR kodlarını gösterin.",
+    "action": "Biletlerimi aç"
+  }
 }

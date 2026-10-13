@@ -14,6 +14,18 @@ export const env = createEnv({
       .refine((value) => value === "on" || process.env.VERCEL_ENV !== "production", {
         error: "AUTH_RATE_LIMIT cannot be off in production",
       }),
+    // Signs order links and ticket QR codes. Changing it invalidates every one issued.
+    SIGNING_SECRET: z.string().min(32),
+    // "fake" replaces the payment provider with a local stand-in. Never in production.
+    PAYMENTS_DRIVER: z
+      .enum(["fake", "stripe"])
+      .default("fake")
+      .refine((value) => value !== "fake" || process.env.VERCEL_ENV !== "production", {
+        error: "PAYMENTS_DRIVER cannot be fake in production",
+      }),
+    // CynSeat's fee on paid orders: hundredths of a percent, plus minor units per ticket.
+    PLATFORM_FEE_BPS: z.coerce.number().int().min(0).max(10_000).default(0),
+    PLATFORM_FEE_FIXED_MINOR: z.coerce.number().int().min(0).default(0),
     // Shared secret for /api/cron/*. Vercel Cron sends it as a bearer token.
     CRON_SECRET: z.string().min(24).optional(),
     // "local" keeps uploaded images on this machine's disk (development only).
@@ -32,6 +44,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     AUTH_RATE_LIMIT: process.env.AUTH_RATE_LIMIT,
+    SIGNING_SECRET: process.env.SIGNING_SECRET,
+    PAYMENTS_DRIVER: process.env.PAYMENTS_DRIVER,
+    PLATFORM_FEE_BPS: process.env.PLATFORM_FEE_BPS,
+    PLATFORM_FEE_FIXED_MINOR: process.env.PLATFORM_FEE_FIXED_MINOR,
     CRON_SECRET: process.env.CRON_SECRET,
     STORAGE_DRIVER: process.env.STORAGE_DRIVER,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,

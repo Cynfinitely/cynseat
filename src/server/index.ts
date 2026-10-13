@@ -1,6 +1,7 @@
 // The running application, built once per process from the validated environment.
 import { env } from "@/lib/env";
 import { createConsoleMailer } from "./adapters/fake/mailer";
+import { createFakePaymentGateway, type FakePaymentGateway } from "./adapters/fake/payment-gateway";
 import { createLocalObjectStore, type LocalObjectStore } from "./adapters/local/object-store";
 import { createResendMailer } from "./adapters/resend/mailer";
 import { createVercelBlobStore } from "./adapters/vercel/object-store";
@@ -38,6 +39,26 @@ function createStore(): ObjectStore {
   return createVercelBlobStore({ token: env.BLOB_READ_WRITE_TOKEN });
 }
 
+const globalForGateway = globalThis as unknown as { cynseatFakeGateway?: FakePaymentGateway };
+
+/**
+ * The stand-in payment provider, when that is the configured driver. Its "payment page"
+ * is a page of this app, which needs to reach it.
+ */
+export function getFakeGateway(): FakePaymentGateway | null {
+  if (env.PAYMENTS_DRIVER !== "fake") return null;
+  globalForGateway.cynseatFakeGateway ??= createFakePaymentGateway({
+    payUrl: (sessionId) => `${appUrl()}/en/dev/pay/${sessionId}`,
+  });
+  return globalForGateway.cynseatFakeGateway;
+}
+
+function createGateway() {
+  const fake = getFakeGateway();
+  if (fake) return fake;
+  throw new Error("PAYMENTS_DRIVER=stripe is not available yet");
+}
+
 export function getApp(): App {
   globalForApp.cynseatApp ??= createApp({
     db: getDb().db,
@@ -47,6 +68,9 @@ export function getApp(): App {
     appUrl: appUrl(),
     authSecret: env.BETTER_AUTH_SECRET,
     authRateLimit: env.AUTH_RATE_LIMIT === "on",
+    gateway: createGateway(),
+    signingSecret: env.SIGNING_SECRET,
+    platformFee: { bps: env.PLATFORM_FEE_BPS, fixedMinor: env.PLATFORM_FEE_FIXED_MINOR },
   });
   return globalForApp.cynseatApp;
 }

@@ -12,6 +12,8 @@ describe("publishProblemsFor", () => {
     startsAt: later,
     now,
     activeTicketTypes: 1,
+    hasPaidTickets: true,
+    paymentsReady: true,
   };
 
   it("finds nothing wrong with a complete event", () => {
@@ -27,6 +29,8 @@ describe("publishProblemsFor", () => {
         startsAt: now,
         now,
         activeTicketTypes: 0,
+        hasPaidTickets: false,
+        paymentsReady: false,
       }),
     ).toEqual([
       "org_not_approved",
@@ -43,8 +47,15 @@ describe("publishProblemsFor", () => {
     [{ hasPlace: false }, "missing_venue"],
     [{ startsAt: new Date("2026-12-31T00:00:00Z") }, "starts_in_past"],
     [{ activeTicketTypes: 0 }, "no_ticket_types"],
+    [{ paymentsReady: false }, "payments_not_ready"],
   ] as const)("flags %j alone", (change, problem) => {
     expect(publishProblemsFor({ ...ready, ...change })).toEqual([problem]);
+  });
+
+  it("lets free events be published without a payment account", () => {
+    expect(publishProblemsFor({ ...ready, hasPaidTickets: false, paymentsReady: false })).toEqual(
+      [],
+    );
   });
 });
 

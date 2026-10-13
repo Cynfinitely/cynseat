@@ -44,5 +44,11 @@
     "body": "Your organization has been suspended. Its events are no longer on sale.",
     "action": "Open dashboard"
   },
-  "note": "Note from the CynSeat team: {note}"
+  "note": "Note from the CynSeat team: {note}",
+  "orderConfirmation": {
+    "subject": "Your tickets for {event}",
+    "heading": "Your tickets for {event}",
+    "body": "Hi {name}, thank you for your order {reference}. You have {tickets} ticket(s) for {event} on {when}. Open your tickets below and show the QR codes at the door.",
+    "action": "Open my tickets"
+  }
 }

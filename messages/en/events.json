@@ -128,7 +128,8 @@
     "delete": "Delete draft",
     "deleteConfirm": "Delete this draft? This cannot be undone.",
     "done": "done",
-    "todo": "to do"
+    "todo": "to do",
+    "payments_not_ready": "Your organization can take payments, or every ticket is free"
   },
   "cover": {
     "title": "Poster",

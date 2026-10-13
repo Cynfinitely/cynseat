@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   index,
   integer,
@@ -39,6 +40,15 @@ export const orgProfiles = pgTable(
     contactEmail: text("contact_email"),
     website: text("website"),
     description: text("description"),
+    /** The organization's own payment account; ticket money goes there directly. */
+    stripeAccountId: text("stripe_account_id").unique(),
+    /** Whether that account can take payments right now, as last reported by the provider. */
+    stripeChargesEnabled: boolean("stripe_charges_enabled").notNull().default(false),
+    stripeDetailsSubmitted: boolean("stripe_details_submitted").notNull().default(false),
+    stripeSyncedAt: timestamptz("stripe_synced_at"),
+    /** Platform fee for this organization; null means the platform default. */
+    feeBps: integer("fee_bps"),
+    feeFixedMinor: integer("fee_fixed_minor"),
     defaultCurrency: text("default_currency").notNull().default("eur"),
     defaultLocale: text("default_locale").notNull().default("en"),
     defaultTimezone: text("default_timezone").notNull().default("Europe/Helsinki"),
@@ -53,6 +63,10 @@ export const orgProfiles = pgTable(
     check(
       "org_profiles_reviewed_check",
       sql`${table.approvalStatus} = 'pending' or ${table.reviewedAt} is not null`,
+    ),
+    check(
+      "org_profiles_fee_check",
+      sql`(${table.feeBps} is null or ${table.feeBps} between 0 and 10000) and (${table.feeFixedMinor} is null or ${table.feeFixedMinor} >= 0)`,
     ),
     check("org_profiles_country_check", sql`${table.country} ~ '^[A-Z]{2}$'`),
     check("org_profiles_currency_check", sql`${table.defaultCurrency} ~ '^[a-z]{3}$'`),

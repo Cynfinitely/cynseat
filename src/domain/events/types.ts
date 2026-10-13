@@ -37,6 +37,7 @@ export const publishProblems = [
   "missing_venue",
   "starts_in_past",
   "no_ticket_types",
+  "payments_not_ready",
 ] as const;
 export type PublishProblem = (typeof publishProblems)[number];
 

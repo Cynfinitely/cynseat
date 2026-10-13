@@ -128,7 +128,8 @@
     "delete": "Taslağı sil",
     "deleteConfirm": "Bu taslak silinsin mi? Bu işlem geri alınamaz.",
     "done": "tamam",
-    "todo": "yapılacak"
+    "todo": "yapılacak",
+    "payments_not_ready": "Kuruluşunuz ödeme alabiliyor veya tüm biletler ücretsiz"
   },
   "cover": {
     "title": "Afiş",
