@@ -20,6 +20,14 @@ export default defineConfig([
     "src/server/db/migrations/**",
   ]),
   {
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
+  {
     files: ["src/domain/**"],
     rules: {
       "no-restricted-imports": restrict([

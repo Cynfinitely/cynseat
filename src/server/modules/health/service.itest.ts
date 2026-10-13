@@ -1,11 +1,11 @@
 import { sql } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
-import { useTestDb } from "../../../../tests/integration/test-db";
+import { setupTestDb } from "../../../../tests/integration/test-db";
 import { createDb } from "../../db/client";
 import { checkHealth } from "./service";
 
 describe("checkHealth", () => {
-  const getDb = useTestDb();
+  const getDb = setupTestDb();
 
   it("reports ok when the database answers", async () => {
     expect(await checkHealth(getDb().db)).toEqual({ status: "ok", database: true });
@@ -20,7 +20,7 @@ describe("checkHealth", () => {
 
 // Guards the harness itself: later inventory tests rely on real row locks across connections.
 describe("integration harness", () => {
-  const getDb = useTestDb();
+  const getDb = setupTestDb();
 
   it("runs transactions on separate connections with real row locking", async () => {
     const { db } = getDb();

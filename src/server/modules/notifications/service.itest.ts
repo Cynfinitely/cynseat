@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
-import { useTestApp } from "../../../../tests/integration/test-app";
+import { setupTestApp } from "../../../../tests/integration/test-app";
 import { outboxJobs } from "../../db/schema";
 import {
   countPendingEmails,
@@ -18,7 +18,7 @@ const job = (to: string): EmailJob => ({
 });
 
 describe("email outbox", () => {
-  const getApp = useTestApp();
+  const getApp = setupTestApp();
   const getJob = async (id: string) => {
     const [row] = await getApp().db.select().from(outboxJobs).where(eq(outboxJobs.id, id));
     return row!;

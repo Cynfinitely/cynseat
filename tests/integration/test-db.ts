@@ -8,7 +8,7 @@ import { TEMPLATE_DB } from "./global-setup";
  * Gives the calling test file its own migrated database, cloned from the template.
  * Tests commit for real (no rollback wrapper) so concurrency behaviour is genuine.
  */
-export function useTestDb(options: { max?: number } = {}): () => DbHandle {
+export function setupTestDb(options: { max?: number } = {}): () => DbHandle {
   let handle: DbHandle | undefined;
   const name = `t_${randomBytes(6).toString("hex")}`;
   const adminUrl = inject("pgAdminUrl");
@@ -29,7 +29,7 @@ export function useTestDb(options: { max?: number } = {}): () => DbHandle {
   });
 
   return () => {
-    if (!handle) throw new Error("useTestDb(): database is only available inside tests");
+    if (!handle) throw new Error("setupTestDb(): database is only available inside tests");
     return handle;
   };
 }

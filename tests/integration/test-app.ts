@@ -6,7 +6,7 @@ import type { OrgRole } from "../../src/server/auth/roles";
 import type { UserActor } from "../../src/server/authz/actor";
 import { user } from "../../src/server/db/schema";
 import { grantPlatformAdmin } from "../../src/server/modules/orgs/service";
-import { useTestDb } from "./test-db";
+import { setupTestDb } from "./test-db";
 
 export const TEST_APP_URL = "http://localhost:3000";
 const PASSWORD = "correct-horse-battery";
@@ -19,8 +19,8 @@ export type TestApp = App & {
 };
 
 /** A fully wired application on this test file's own database. */
-export function useTestApp(): () => TestApp {
-  const getDb = useTestDb();
+export function setupTestApp(): () => TestApp {
+  const getDb = setupTestDb();
   let app: TestApp | undefined;
 
   return () => {

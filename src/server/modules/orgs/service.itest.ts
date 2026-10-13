@@ -5,7 +5,7 @@ import {
   codeOf,
   createUser,
   unique,
-  useTestApp,
+  setupTestApp,
   type TestApp,
   type TestUser,
 } from "../../../../tests/integration/test-app";
@@ -38,7 +38,7 @@ async function register(app: TestApp, owner: TestUser, overrides = {}) {
 }
 
 describe("organizations", () => {
-  const getApp = useTestApp();
+  const getApp = setupTestApp();
   const profileOf = async (organizationId: string) => {
     const [row] = await getApp()
       .db.select()
