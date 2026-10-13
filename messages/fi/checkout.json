@@ -67,6 +67,7 @@
     "free_ticket_limit": "Tällä sähköpostiosoitteella on jo enimmäismäärä ilmaislippuja tähän tapahtumaan.",
     "invalid_quantity": "Valitse kelvollinen lippumäärä.",
     "try_again": "Jokin meni vikaan. Yritä uudelleen.",
-    "seats_taken": "Osa paikoista ei ole enää saatavilla."
+    "seats_taken": "Osa paikoista ei ole enää saatavilla.",
+    "too_many_requests": "Liian monta yritystä. Odota hetki ja yritä uudelleen."
   }
 }

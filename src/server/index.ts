@@ -5,6 +5,8 @@ import { createFakePaymentGateway, type FakePaymentGateway } from "./adapters/fa
 import { createLocalObjectStore, type LocalObjectStore } from "./adapters/local/object-store";
 import { createResendMailer } from "./adapters/resend/mailer";
 import { createStripeGateway } from "./adapters/stripe/payment-gateway";
+import { createMemoryRateLimiter } from "./adapters/local/rate-limiter";
+import { createUpstashRateLimiter } from "./adapters/upstash/rate-limiter";
 import { createVercelBlobStore } from "./adapters/vercel/object-store";
 import { createApp, type App } from "./app";
 import { getDb } from "./db/client";
@@ -12,6 +14,7 @@ import { checkHealth, type HealthReport } from "./modules/health/service";
 import { systemClock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
 import type { ObjectStore } from "./ports/object-store";
+import type { RateLimiter } from "./ports/rate-limiter";
 
 const globalForApp = globalThis as unknown as { cynseatApp?: App };
 
@@ -69,6 +72,19 @@ function createGateway() {
   });
 }
 
+function createRateLimiter(): RateLimiter {
+  if (env.RATE_LIMIT === "off") {
+    return { check: async () => ({ allowed: true, retryAfterSeconds: 0 }) };
+  }
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
+    return createUpstashRateLimiter({
+      url: env.UPSTASH_REDIS_REST_URL,
+      token: env.UPSTASH_REDIS_REST_TOKEN,
+    });
+  }
+  return createMemoryRateLimiter(systemClock);
+}
+
 export function getApp(): App {
   globalForApp.cynseatApp ??= createApp({
     db: getDb().db,
@@ -79,6 +95,7 @@ export function getApp(): App {
     authSecret: env.BETTER_AUTH_SECRET,
     authRateLimit: env.AUTH_RATE_LIMIT === "on",
     gateway: createGateway(),
+    rateLimiter: createRateLimiter(),
     signingSecret: env.SIGNING_SECRET,
     platformFee: { bps: env.PLATFORM_FEE_BPS, fixedMinor: env.PLATFORM_FEE_FIXED_MINOR },
   });

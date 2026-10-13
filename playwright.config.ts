@@ -31,6 +31,7 @@ export default defineConfig({
       BETTER_AUTH_SECRET: "e2e-only-secret-e2e-only-secret-0123456789",
       // The journeys sign several users up from one address within seconds.
       AUTH_RATE_LIMIT: "off",
+      RATE_LIMIT: "off",
       MAIL_DRIVER: "console",
       SIGNING_SECRET: "e2e-only-signing-secret-0123456789abcdef",
       PAYMENTS_DRIVER: "fake",

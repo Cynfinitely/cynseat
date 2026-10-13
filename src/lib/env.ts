@@ -29,6 +29,16 @@ export const env = createEnv({
     // CynSeat's fee on paid orders: hundredths of a percent, plus minor units per ticket.
     PLATFORM_FEE_BPS: z.coerce.number().int().min(0).max(10_000).default(0),
     PLATFORM_FEE_FIXED_MINOR: z.coerce.number().int().min(0).default(0),
+    // Shared counters for rate limiting. Without these, each server instance counts alone.
+    UPSTASH_REDIS_REST_URL: z.url().optional(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+    // "off" exists for automated tests only and is refused on a production deployment.
+    RATE_LIMIT: z
+      .enum(["on", "off"])
+      .default("on")
+      .refine((value) => value === "on" || process.env.VERCEL_ENV !== "production", {
+        error: "RATE_LIMIT cannot be off in production",
+      }),
     // Shared secret for /api/cron/*. Vercel Cron sends it as a bearer token.
     CRON_SECRET: z.string().min(24).optional(),
     // "local" keeps uploaded images on this machine's disk (development only).
@@ -53,6 +63,9 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     PLATFORM_FEE_BPS: process.env.PLATFORM_FEE_BPS,
     PLATFORM_FEE_FIXED_MINOR: process.env.PLATFORM_FEE_FIXED_MINOR,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    RATE_LIMIT: process.env.RATE_LIMIT,
     CRON_SECRET: process.env.CRON_SECRET,
     STORAGE_DRIVER: process.env.STORAGE_DRIVER,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,

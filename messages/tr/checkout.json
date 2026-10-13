@@ -67,6 +67,7 @@
     "free_ticket_limit": "Bu e-posta adresi, bu etkinlik için en fazla sayıda ücretsiz bilete zaten sahip.",
     "invalid_quantity": "Geçerli bir bilet sayısı seçin.",
     "try_again": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
-    "seats_taken": "Bu koltukların bazıları artık müsait değil."
+    "seats_taken": "Bu koltukların bazıları artık müsait değil.",
+    "too_many_requests": "Çok fazla deneme yapıldı. Lütfen bir dakika bekleyip tekrar deneyin."
   }
 }

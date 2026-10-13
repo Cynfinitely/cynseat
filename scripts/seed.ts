@@ -60,6 +60,7 @@ async function main(): Promise<void> {
     authSecret: process.env.BETTER_AUTH_SECRET ?? "seed-only-secret-seed-only-secret-0123",
     authRateLimit: false,
     gateway: createFakePaymentGateway({ payUrl: () => "" }),
+    rateLimiter: { check: async () => ({ allowed: true, retryAfterSeconds: 0 }) },
     signingSecret: process.env.SIGNING_SECRET ?? "seed-only-signing-secret-0123456789",
     platformFee: NO_FEE,
   });

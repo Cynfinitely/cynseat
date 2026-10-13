@@ -66,3 +66,17 @@ test("the payment webhook rejects unsigned and forged notifications", async ({ r
   });
   expect(forged.status()).toBe(400);
 });
+
+test("pages are sent with security headers", async ({ request }) => {
+  const response = await request.get("/en");
+  const headers = response.headers();
+  expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(headers["content-security-policy"]).toContain("object-src 'none'");
+  // Plain eval stays forbidden outside development (WebAssembly compilation is allowed).
+  expect(headers["content-security-policy"]).not.toContain(" 'unsafe-eval'");
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["strict-transport-security"]).toContain("max-age=");
+  expect(headers["permissions-policy"]).toContain("camera=(self)");
+  expect(headers["x-powered-by"]).toBeUndefined();
+});

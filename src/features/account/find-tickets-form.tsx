@@ -24,8 +24,13 @@ export function FindTicketsForm() {
     formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof schema>>({ resolver: zodResolver(schema) });
 
+  const [formError, setFormError] = useState<string>();
+
   const onSubmit = handleSubmit(async ({ email }) => {
-    await sendOrderLinksAction({ email });
+    setFormError(undefined);
+    const result = await sendOrderLinksAction({ email });
+    // The only failure shown is asking too often; whether orders exist is never revealed.
+    if (!result.ok) return setFormError(errorText(result.reason));
     setSentTo(email);
   });
 
@@ -39,6 +44,7 @@ export function FindTicketsForm() {
   const emailError = errorText(errors.email?.message);
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
+      {formError ? <Alert tone="danger">{formError}</Alert> : null}
       <Field id="email" label={t("email")} error={emailError}>
         <Input
           type="email"

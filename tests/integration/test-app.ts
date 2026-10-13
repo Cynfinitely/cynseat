@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { createMemoryMailer } from "../../src/server/adapters/fake/mailer";
 import { createMemoryObjectStore } from "../../src/server/adapters/fake/object-store";
+import { createMemoryRateLimiter } from "../../src/server/adapters/local/rate-limiter";
 import {
   createFakePaymentGateway,
   type FakePaymentGateway,
@@ -56,6 +57,7 @@ export function setupTestApp(): () => TestApp {
           authSecret: "test-secret-test-secret-test-secret-0123",
           authRateLimit: false,
           gateway,
+          rateLimiter: createMemoryRateLimiter(clock),
           signingSecret: "test-signing-secret-0123456789abcdef",
           platformFee,
         }),

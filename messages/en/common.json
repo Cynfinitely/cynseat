@@ -92,7 +92,8 @@
     "too_many_seats": "A seat map can have at most 5,000 seats.",
     "duplicate_section_name": "Two sections have the same name. Give each its own name.",
     "invalid_layout": "The seat map could not be saved. Check the highlighted values.",
-    "invalid_name": "Enter a name."
+    "invalid_name": "Enter a name.",
+    "too_many_requests": "Too many attempts. Please wait a minute and try again."
   },
   "categories": {
     "music": "Music",

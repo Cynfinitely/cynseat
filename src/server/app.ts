@@ -13,6 +13,7 @@ import type { Clock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
 import type { ObjectStore } from "./ports/object-store";
 import type { PaymentGateway } from "./ports/payment-gateway";
+import type { RateLimiter } from "./ports/rate-limiter";
 
 export type AppConfig = {
   db: Db;
@@ -26,6 +27,7 @@ export type AppConfig = {
   /** Per-IP limits on the auth endpoints. */
   authRateLimit: boolean;
   gateway: PaymentGateway;
+  rateLimiter: RateLimiter;
   /** Key for order links and ticket QR codes. Changing it invalidates both. */
   signingSecret: string;
   /** CynSeat's fee on paid orders, unless an organization has its own. */
