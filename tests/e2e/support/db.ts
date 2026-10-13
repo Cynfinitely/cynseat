@@ -58,3 +58,13 @@ export async function enablePayments(slug: string): Promise<void> {
     [slug],
   );
 }
+
+/** Ids of the tickets in the newest paid order of an email address. */
+export async function ticketIdsFor(email: string): Promise<string[]> {
+  const rows = await query<{ id: string }>(
+    `select t.id from tickets t join orders o on o.id = t.order_id
+     where o.email = $1 order by t.created_at, t.seq`,
+    [email],
+  );
+  return rows.map((row) => row.id);
+}

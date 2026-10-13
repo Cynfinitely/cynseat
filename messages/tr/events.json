@@ -28,7 +28,8 @@
     "details": "Ayrıntılar",
     "venue": "Mekân",
     "tickets": "Biletler",
-    "back": "Tüm etkinlikler"
+    "back": "Tüm etkinlikler",
+    "checkin": "Giriş kontrolü"
   },
   "details": {
     "title": "Ayrıntılar",
@@ -139,5 +140,29 @@
     "remove": "Afişi kaldır",
     "saved": "Afiş kaydedildi.",
     "current": "Geçerli afiş"
+  },
+  "checkin": {
+    "title": "Giriş kontrolü",
+    "progress": "{total} biletten {checkedIn} giriş yaptı",
+    "startCamera": "Kamerayı başlat",
+    "stopCamera": "Kamerayı durdur",
+    "cameraHelp": "Kamerayı biletteki QR koduna tutun.",
+    "cameraError": "Kamera başlatılamadı. Bu sitenin kamerayı kullanabildiğini kontrol edin veya kodu aşağıya girin.",
+    "cameraUnsupported": "Bu tarayıcı kamerayla tarama yapamıyor. Kodu aşağıya girin.",
+    "manualTitle": "Kod girin",
+    "manualLabel": "Bilet kodu",
+    "manualSubmit": "Bileti kontrol et",
+    "offline": "Bağlantı yok. Kontrol edilmedi. Yeniden deneniyor…",
+    "result": {
+      "accepted": "Geçerli. İçeri alın.",
+      "duplicate": "Zaten kullanılmış",
+      "void": "Geçerli değil: iade edilmiş veya iptal edilmiş",
+      "wrong_event": "Bu bilet başka bir etkinlik için",
+      "not_found": "Geçerli bir bilet değil"
+    },
+    "usedAt": "{time} saatinde kullanıldı",
+    "holder": "{description} · {name} · sipariş {reference}",
+    "undo": "Girişi geri al",
+    "ready": "Taramaya hazır"
   }
 }

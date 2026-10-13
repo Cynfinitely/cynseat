@@ -28,7 +28,8 @@
     "details": "Details",
     "venue": "Venue",
     "tickets": "Tickets",
-    "back": "All events"
+    "back": "All events",
+    "checkin": "Check-in"
   },
   "details": {
     "title": "Details",
@@ -139,5 +140,29 @@
     "remove": "Remove poster",
     "saved": "Poster saved.",
     "current": "Current poster"
+  },
+  "checkin": {
+    "title": "Check-in",
+    "progress": "{checkedIn} of {total} checked in",
+    "startCamera": "Start camera",
+    "stopCamera": "Stop camera",
+    "cameraHelp": "Point the camera at the QR code on the ticket.",
+    "cameraError": "The camera could not be started. Check that this site may use it, or enter the code below.",
+    "cameraUnsupported": "This browser cannot scan with the camera. Enter the code below.",
+    "manualTitle": "Enter a code",
+    "manualLabel": "Ticket code",
+    "manualSubmit": "Check ticket",
+    "offline": "No connection. Not checked. Trying again…",
+    "result": {
+      "accepted": "Valid. Let them in.",
+      "duplicate": "Already used",
+      "void": "Not valid: refunded or cancelled",
+      "wrong_event": "This ticket is for a different event",
+      "not_found": "Not a valid ticket"
+    },
+    "usedAt": "Used at {time}",
+    "holder": "{description} · {name} · order {reference}",
+    "undo": "Undo check-in",
+    "ready": "Ready to scan"
   }
 }

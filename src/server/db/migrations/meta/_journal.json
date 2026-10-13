@@ -36,6 +36,13 @@
       "when": 1791904641990,
       "tag": "0004_org_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791905931940,
+      "tag": "0005_check_ins",
+      "breakpoints": true
     }
   ]
 }

@@ -14,6 +14,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { scanResults } from "../../../domain/checkin/types";
 import {
   holdPhases,
   holdStatuses,
@@ -243,5 +244,32 @@ export const paymentEvents = pgTable(
     index("payment_events_unprocessed_idx")
       .on(table.receivedAt)
       .where(sql`${table.processedAt} is null`),
+  ],
+);
+
+/** Every scan attempt at the door, successful or not. Rows are only ever added. */
+export const checkIns = pgTable(
+  "check_ins",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    organizationId: text("organization_id").notNull(),
+    eventId: uuid("event_id").notNull(),
+    ticketId: uuid("ticket_id"),
+    /** Chosen by the scanning device, so a retried request is recognised as the same scan. */
+    scanId: uuid("scan_id").notNull(),
+    result: text("result", { enum: scanResults }).notNull(),
+    scannedBy: text("scanned_by").references(() => user.id, { onDelete: "set null" }),
+    createdAt: timestamptz("created_at").notNull(),
+  },
+  (table) => [
+    foreignKey({
+      name: "check_ins_event_fk",
+      columns: [table.organizationId, table.eventId],
+      foreignColumns: [events.organizationId, events.id],
+    }).onDelete("restrict"),
+    check("check_ins_result_check", sql`${table.result} in ${inList(scanResults)}`),
+    unique("check_ins_scan_unique").on(table.organizationId, table.scanId),
+    index("check_ins_event_idx").on(table.eventId, table.createdAt),
+    index("check_ins_ticket_idx").on(table.ticketId),
   ],
 );

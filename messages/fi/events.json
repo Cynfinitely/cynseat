@@ -28,7 +28,8 @@
     "details": "Tiedot",
     "venue": "Paikka",
     "tickets": "Liput",
-    "back": "Kaikki tapahtumat"
+    "back": "Kaikki tapahtumat",
+    "checkin": "Sisäänkirjaus"
   },
   "details": {
     "title": "Tiedot",
@@ -139,5 +140,29 @@
     "remove": "Poista juliste",
     "saved": "Juliste tallennettu.",
     "current": "Nykyinen juliste"
+  },
+  "checkin": {
+    "title": "Sisäänkirjaus",
+    "progress": "{checkedIn} / {total} kirjattu sisään",
+    "startCamera": "Käynnistä kamera",
+    "stopCamera": "Pysäytä kamera",
+    "cameraHelp": "Kohdista kamera lipun QR-koodiin.",
+    "cameraError": "Kameraa ei voitu käynnistää. Tarkista, että sivusto saa käyttää sitä, tai syötä koodi alle.",
+    "cameraUnsupported": "Tämä selain ei voi skannata kameralla. Syötä koodi alle.",
+    "manualTitle": "Syötä koodi",
+    "manualLabel": "Lipun koodi",
+    "manualSubmit": "Tarkista lippu",
+    "offline": "Ei yhteyttä. Ei tarkistettu. Yritetään uudelleen…",
+    "result": {
+      "accepted": "Voimassa. Päästä sisään.",
+      "duplicate": "Jo käytetty",
+      "void": "Ei voimassa: hyvitetty tai peruttu",
+      "wrong_event": "Tämä lippu on toiseen tapahtumaan",
+      "not_found": "Ei kelvollinen lippu"
+    },
+    "usedAt": "Käytetty klo {time}",
+    "holder": "{description} · {name} · tilaus {reference}",
+    "undo": "Kumoa sisäänkirjaus",
+    "ready": "Valmis skannaamaan"
   }
 }

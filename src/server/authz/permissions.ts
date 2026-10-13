@@ -15,6 +15,8 @@ export const orgPermissions = {
   "event.manage": ["admin", "member"],
   "event.publish": ["admin"],
   "venue.manage": ["admin", "member"],
+  "checkin.scan": ["admin", "member", "door_staff"],
+  "checkin.undo": ["admin"],
 } as const satisfies Record<string, readonly OrgRole[]>;
 
 export type OrgAction = keyof typeof orgPermissions;

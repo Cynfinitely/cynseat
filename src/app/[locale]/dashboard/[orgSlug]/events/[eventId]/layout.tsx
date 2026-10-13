@@ -39,6 +39,9 @@ export default async function EventLayout({ children, params }: Props) {
             { href: base, label: t("nav.details") },
             { href: `${base}/venue`, label: t("nav.venue") },
             { href: `${base}/tickets`, label: t("nav.tickets") },
+            ...(can(ctx.role, "checkin.scan")
+              ? [{ href: `${base}/check-in`, label: t("nav.checkin") }]
+              : []),
           ]}
         />
       </div>
