@@ -1,0 +1,48 @@
+{
+  "layout": {
+    "footer": "Saat tämän viestin, koska CynSeat-tililläsi on tapahtunut jotain. Jos et tunnista tätä, voit jättää viestin huomiotta.",
+    "linkHelp": "Jos painike ei toimi, kopioi tämä linkki selaimeesi:"
+  },
+  "roles": {
+    "admin": "ylläpitäjä",
+    "member": "jäsen",
+    "door_staff": "ovihenkilökunta"
+  },
+  "verifyEmail": {
+    "subject": "Vahvista sähköpostiosoitteesi",
+    "heading": "Vahvista sähköpostiosoitteesi",
+    "body": "Hei {name}, vahvista tämä sähköpostiosoite, niin CynSeat-tilisi on valmis.",
+    "action": "Vahvista sähköposti"
+  },
+  "resetPassword": {
+    "subject": "Vaihda salasanasi",
+    "heading": "Vaihda salasanasi",
+    "body": "Hei {name}, valitse uusi salasana alla olevasta painikkeesta. Linkki vanhenee tunnin kuluttua.",
+    "action": "Valitse uusi salasana"
+  },
+  "orgInvitation": {
+    "subject": "{inviter} kutsui sinut organisaatioon {organization} CynSeatissa",
+    "heading": "Liity organisaatioon {organization}",
+    "body": "{inviter} kutsui sinut organisaatioon {organization} CynSeatissa. Roolisi: {role}.",
+    "action": "Näytä kutsu"
+  },
+  "orgApproved": {
+    "subject": "{organization} on hyväksytty",
+    "heading": "{organization} on hyväksytty",
+    "body": "Organisaatiosi on hyväksytty. Voit nyt julkaista tapahtumia CynSeatissa.",
+    "action": "Avaa hallintapaneeli"
+  },
+  "orgRejected": {
+    "subject": "Organisaatiota {organization} ei hyväksytty",
+    "heading": "Organisaatiota {organization} ei hyväksytty",
+    "body": "Emme voineet hyväksyä organisaatiotasi.",
+    "action": "Avaa hallintapaneeli"
+  },
+  "orgSuspended": {
+    "subject": "{organization} on jäädytetty",
+    "heading": "{organization} on jäädytetty",
+    "body": "Organisaatiosi on jäädytetty. Sen tapahtumat eivät ole enää myynnissä.",
+    "action": "Avaa hallintapaneeli"
+  },
+  "note": "Viesti CynSeat-tiimiltä: {note}"
+}
