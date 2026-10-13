@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CynSeat
 
-## Getting Started
+Free ticketing for NGOs and event organizers: a single-event ticket storefront with a short path from the event page to checkout.
 
-First, run the development server:
+**[Live site](https://cynseat.vercel.app)**
+
+## Features
+
+- **Ticket storefront** for one event, with a live count of remaining tickets and a low-stock notice
+- **Stripe Checkout** for guests and signed-in users, up to 5 tickets per purchase
+- **Atomic seat allocation** — seats are reserved in a Firestore transaction, so two buyers can never get the same seat
+- **PDF tickets** generated per seat with `pdf-lib` and stored in Firebase Storage
+- **My tickets** page for signed-in users
+- **Admin view** with a downloadable ticket list
+- **English, Finnish, and Turkish** localization with a language switcher
+
+## Tech stack
+
+- [Next.js 14](https://nextjs.org/) (Pages Router) + TypeScript
+- Tailwind CSS
+- Firebase Authentication, Firestore, and Storage (client SDK + Admin SDK)
+- Stripe Checkout
+- i18next / react-i18next
+- Deployed on Vercel
+
+## Getting started
+
+Requirements: Node.js 18.17+, a Firebase project, and a Stripe account.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Create `.env.local` in the project root:
 
-## Learn More
+| Variable | Used for |
+| --- | --- |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | Firebase web app config |
+| `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | Firebase Analytics (optional) |
+| `FIREBASE_PROJECT_ID` | Firebase Admin SDK (server) |
+| `FIREBASE_CLIENT_EMAIL` | Firebase Admin SDK (server) |
+| `FIREBASE_PRIVATE_KEY` | Firebase Admin SDK (server) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe.js in the browser |
+| `NEXT_PUBLIC_STRIPE_TEST_KEY` | Stripe secret key, read by the API routes only |
 
-To learn more about Next.js, take a look at the following resources:
+## Configuring the event
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Event settings live in `lib/constants.ts`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+| Constant | Default | Meaning |
+| --- | --- | --- |
+| `TICKET_PRICE_EUR` | `5` | Price per ticket, in euros |
+| `MAX_TICKETS_PER_PURCHASE` | `5` | Largest order allowed |
+| `MAX_EVENT_TICKETS` | `300` | Total seats for the event |
+| `LOW_REMAINING_THRESHOLD` | `20` | When to show the "few left" notice |
+| `EVENT_POSTER_SRC` | `/masal.jpeg` | Poster image in `public/` |
 
-## Deploy on Vercel
+Admin accounts are listed in `lib/admin.ts`. Event copy is in `locales/{en,fi,tr}/common.json`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+pages/            routes: storefront, sign in/up, tickets, admin, success/cancel
+pages/api/        create-checkout-session, retrieve-checkout-session, handlePurchase
+components/       header, footer, checkout button, ticket card, language switcher
+contexts/         auth context
+firebase/         client and Admin SDK setup
+lib/              constants, admin check, auth error mapping, return-URL helper
+locales/          en, fi, tr translations
+assets/           PDF ticket template
+scripts/          database cleanup and Firestore test scripts (see scripts/README_CLEANUP.md)
+```
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Run ESLint |
+
+## License
+
+[MIT](LICENSE)
