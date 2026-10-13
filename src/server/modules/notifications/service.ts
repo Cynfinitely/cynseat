@@ -6,7 +6,10 @@ import type { Mailer } from "../../ports/mailer";
 import { renderEmail, type EmailLocale, type EmailTemplate } from "./templates";
 
 /** Anything that can run queries: the database handle or an open transaction. */
-export type DbOrTx = Pick<Db, "insert" | "select" | "update" | "delete" | "execute">;
+export type DbOrTx = Pick<
+  Db,
+  "insert" | "select" | "selectDistinct" | "update" | "delete" | "execute"
+>;
 
 export type EmailJob = EmailTemplate & { to: string; locale: EmailLocale };
 

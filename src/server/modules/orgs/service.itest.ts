@@ -395,11 +395,32 @@ describe("organizations", () => {
       expect((await profileOf(org.id)).approvalNote).toBe("n");
     });
 
-    it("lets exactly one of two conflicting simultaneous reviews win", async () => {
+    it("applies a decision once when two reviewers make it at the same moment", async () => {
       const app = getApp();
       const reviewer = await createUser(app, { platformAdmin: true });
       const org = await register(app, await createUser(app));
 
+      // Rejecting needs a pending organization, so whichever lands second must fail.
+      const results = await Promise.all(
+        [1, 2, 3].map(() =>
+          codeOf(() =>
+            reviewOrganization(app, reviewer.actor, { organizationId: org.id, decision: "reject" }),
+          ),
+        ),
+      );
+
+      expect(results.sort()).toEqual(["CONFLICT", "CONFLICT", "none"]);
+      expect(
+        (await auditActions(org.id)).filter((action) => action === "org.rejected"),
+      ).toHaveLength(1);
+    });
+
+    it("never records a decision that did not happen when reviews conflict", async () => {
+      const app = getApp();
+      const reviewer = await createUser(app, { platformAdmin: true });
+      const org = await register(app, await createUser(app));
+
+      // Approve-then-reject fails the reject; reject-then-approve is a legitimate reversal.
       const results = await Promise.all(
         (["approve", "reject"] as const).map((decision) =>
           codeOf(() =>
@@ -408,9 +429,12 @@ describe("organizations", () => {
         ),
       );
 
-      expect(results.sort()).toEqual(["CONFLICT", "none"]);
-      const actions = await auditActions(org.id);
-      expect(actions.filter((action) => action !== "org.registered")).toHaveLength(1);
+      expect(results[0]).toBe("none");
+      expect((await profileOf(org.id)).approvalStatus).toBe("approved");
+      const decisions = (await auditActions(org.id)).filter(
+        (action) => action !== "org.registered",
+      );
+      expect(decisions).toHaveLength(results.filter((code) => code === "none").length);
     });
 
     it("reports an unknown organization as not found", async () => {
