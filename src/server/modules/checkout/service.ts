@@ -20,16 +20,18 @@ import { transactionWithRetry } from "../../db/retry";
 import type { VenueSnapshot } from "../../db/schema";
 import { conflict, notFound } from "../../errors";
 import type { Clock } from "../../ports/clock";
+import type { Mailer } from "../../ports/mailer";
 import type { PaymentGateway } from "../../ports/payment-gateway";
 import * as inventory from "../inventory/repo";
 import { releaseExpiredHolds, type Buyer } from "../inventory/service";
-import { enqueueEmail, type DbOrTx } from "../notifications/service";
+import { dispatchEmails, enqueueEmail, type DbOrTx } from "../notifications/service";
 import { toEmailLocale } from "../notifications/templates";
 import * as repo from "./repo";
 
 export type CheckoutDeps = {
   db: Db;
   clock: Clock;
+  mailer: Mailer;
   gateway: PaymentGateway;
   appUrl: string;
   /** Key for order links and ticket codes. */
@@ -147,6 +149,14 @@ async function fulfill(
   return "paid";
 }
 
+/**
+ * Sends the confirmation queued by `fulfill`, now that its transaction has committed.
+ * A failure here is not the buyer's problem: the email stays queued for the next sweep.
+ */
+async function sendConfirmations(deps: CheckoutDeps): Promise<void> {
+  await dispatchEmails(deps, { limit: 10 }).catch(() => {});
+}
+
 // ---- Starting a checkout -----------------------------------------------------------------
 
 export type CheckoutStarted =
@@ -249,7 +259,10 @@ export async function startCheckout(
 
   const { order } = prepared;
   const accessToken = orderAccessToken(deps.signingSecret, order.id);
-  if (order.status === "paid") return { kind: "complete", orderId: order.id, accessToken };
+  if (order.status === "paid") {
+    if (prepared.created) await sendConfirmations(deps);
+    return { kind: "complete", orderId: order.id, accessToken };
+  }
 
   if (order.stripeCheckoutSessionId) {
     // Resuming: find out what became of the payment page opened earlier.
@@ -324,9 +337,11 @@ export async function confirmPayment(deps: CheckoutDeps, orderId: string): Promi
     if (state.currency.toLowerCase() !== order.currency) {
       throw new PaymentMismatchError(order.id, "currency");
     }
-    return transactionWithRetry(deps.db, (tx) =>
+    const status = await transactionWithRetry(deps.db, (tx) =>
       fulfill(deps, tx, order.id, { paymentIntentId: state.paymentIntentId }),
     );
+    if (status === "paid") await sendConfirmations(deps);
+    return status;
   }
   if (state.status === "expired") return closeUnpaidOrder(deps, order.id, "expired");
   return order.status;

@@ -8,6 +8,7 @@ import { Badge, type BadgeTone } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { SaleState } from "@/domain/events/rules";
 import { formatMoney } from "@/domain/money/money";
+import { TicketSelector } from "@/features/checkout/ticket-selector";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getApp } from "@/server";
@@ -53,6 +54,7 @@ export default async function EventPage({ params }: Props) {
   const inZone = { timeZone: event.timezone } as const;
   const time = (date: Date) => format.dateTime(date, { timeStyle: "short", ...inZone });
   const contentLang = event.contentLocale === locale ? undefined : event.contentLocale;
+  const onSale = event.ticketTypes.filter((type) => type.state === "on_sale");
   const paragraphs = (event.description ?? "").split(/\n\s*\n/).filter((p) => p.trim() !== "");
 
   return (
@@ -191,9 +193,19 @@ export default async function EventPage({ params }: Props) {
                 ))}
               </ul>
             )}
-            {event.status === "published" &&
-            event.ticketTypes.some((type) => type.state === "on_sale") ? (
-              <p className="text-muted border-line mt-2 border-t pt-3 text-sm">{t("salesSoon")}</p>
+            {event.status === "published" ? (
+              <TicketSelector
+                eventId={event.id}
+                currency={event.currency}
+                maxPerOrder={event.maxTicketsPerOrder}
+                options={onSale.map((type) => ({
+                  id: type.id,
+                  name: type.name,
+                  priceAmount: type.priceAmount,
+                  // Never offer more than are left, when stock is low enough to be shown.
+                  max: Math.min(type.maxPerOrder, type.remaining ?? type.maxPerOrder),
+                }))}
+              />
             ) : null}
             {event.contactEmail ? (
               <p className="text-muted mt-3 text-sm">

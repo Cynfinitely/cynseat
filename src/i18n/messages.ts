@@ -1,5 +1,6 @@
 import type admin from "../../messages/en/admin.json";
 import type auth from "../../messages/en/auth.json";
+import type checkout from "../../messages/en/checkout.json";
 import type common from "../../messages/en/common.json";
 import type dashboard from "../../messages/en/dashboard.json";
 import type events from "../../messages/en/events.json";
@@ -8,7 +9,15 @@ import type { Locale } from "./routing";
 
 // One file per feature under messages/<locale>/. Add the namespace here and in `Messages`.
 // (emails.json is read by the server's email templates, not by the UI.)
-export const namespaces = ["common", "auth", "dashboard", "admin", "events", "storefront"] as const;
+export const namespaces = [
+  "common",
+  "auth",
+  "dashboard",
+  "admin",
+  "events",
+  "storefront",
+  "checkout",
+] as const;
 
 export type Messages = {
   common: typeof common;
@@ -17,6 +26,7 @@ export type Messages = {
   admin: typeof admin;
   events: typeof events;
   storefront: typeof storefront;
+  checkout: typeof checkout;
 };
 
 export async function loadMessages(locale: Locale): Promise<Messages> {

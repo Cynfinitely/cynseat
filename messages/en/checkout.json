@@ -1,0 +1,67 @@
+{
+  "selector": {
+    "quantity": "Quantity for {name}",
+    "total": "Total",
+    "continue": "Continue",
+    "none": "Choose at least one ticket.",
+    "max": "You can buy up to {max} tickets in one order."
+  },
+  "page": {
+    "title": "Checkout",
+    "summary": "Your order",
+    "reserved": "Your tickets are reserved for {time}.",
+    "expired": "Your reservation has run out.",
+    "emptyTitle": "Your cart is empty",
+    "emptyBody": "Your reservation may have run out. Choose your tickets again.",
+    "back": "Back to the event",
+    "email": "Email",
+    "emailHint": "Your tickets are sent to this address.",
+    "name": "Full name",
+    "pay": "Pay {total}",
+    "getTickets": "Get tickets",
+    "change": "Change tickets",
+    "cancelled": "Payment was cancelled. Your tickets are still reserved while the timer runs.",
+    "free": "Free",
+    "terms": "Tickets are sold by {organization}."
+  },
+  "order": {
+    "title": "Order {reference}",
+    "thanks": "Thank you, {name}.",
+    "sentTo": "A copy of these tickets has been sent to {email}.",
+    "pendingTitle": "Confirming your payment",
+    "pendingBody": "This usually takes a few seconds. The page updates by itself.",
+    "expiredTitle": "This order was not completed",
+    "expiredBody": "No payment was taken. You can start again from the event page.",
+    "unfulfillableTitle": "We could not issue your tickets",
+    "unfulfillableBody": "Your payment arrived after the reservation ran out and the tickets had been sold. Your payment is being refunded in full.",
+    "tickets": "Tickets",
+    "ticket": "Ticket {number} of {total}",
+    "show": "Show this code at the door.",
+    "void": "This ticket is no longer valid.",
+    "checkedIn": "Checked in",
+    "summary": "Summary",
+    "total": "Total",
+    "qrAlt": "QR code for ticket {number}",
+    "eventCancelled": "This event has been cancelled.",
+    "notFoundTitle": "Order not found",
+    "notFoundBody": "Check the link in your confirmation email."
+  },
+  "fake": {
+    "title": "Test payment",
+    "body": "Payments are in test mode on this site. No money is taken.",
+    "amount": "Amount",
+    "pay": "Pay now",
+    "cancel": "Cancel and go back"
+  },
+  "errors": {
+    "sold_out": "Those tickets are no longer available. Choose again.",
+    "not_on_sale": "Tickets for this event are not on sale right now.",
+    "too_many_tickets": "That is more tickets than one order can hold.",
+    "cart_expired": "Your reservation has run out. Choose your tickets again.",
+    "checkout_in_progress": "You have a payment in progress for this event. Finish or cancel it first.",
+    "payments_unavailable": "The organizer cannot take payments at the moment. Please try again later.",
+    "free_ticket_limit": "This email address already has the maximum number of free tickets for this event.",
+    "invalid_quantity": "Choose a valid number of tickets.",
+    "try_again": "Something went wrong. Please try again."
+  }
+}

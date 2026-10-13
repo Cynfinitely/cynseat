@@ -29,7 +29,6 @@
       "not_started": "{date} tarihinden itibaren satışta"
     },
     "remaining": "Yalnızca {count} kaldı",
-    "salesSoon": "Çevrimiçi bilet satışı yakında açılıyor.",
     "cancelledTitle": "Bu etkinlik iptal edildi",
     "contact": "Sorularınız mı var? Düzenleyiciyle iletişime geçin: {email}.",
     "about": "Etkinlik hakkında",

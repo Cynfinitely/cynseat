@@ -1,0 +1,67 @@
+{
+  "selector": {
+    "quantity": "{name} adedi",
+    "total": "Toplam",
+    "continue": "Devam et",
+    "none": "En az bir bilet seçin.",
+    "max": "Tek siparişte en fazla {max} bilet alabilirsiniz."
+  },
+  "page": {
+    "title": "Ödeme",
+    "summary": "Siparişiniz",
+    "reserved": "Biletleriniz {time} boyunca sizin için ayrıldı.",
+    "expired": "Rezervasyonunuzun süresi doldu.",
+    "emptyTitle": "Sepetiniz boş",
+    "emptyBody": "Rezervasyonunuzun süresi dolmuş olabilir. Biletlerinizi yeniden seçin.",
+    "back": "Etkinliğe dön",
+    "email": "E-posta",
+    "emailHint": "Biletleriniz bu adrese gönderilir.",
+    "name": "Ad soyad",
+    "pay": "{total} öde",
+    "getTickets": "Biletleri al",
+    "change": "Biletleri değiştir",
+    "cancelled": "Ödeme iptal edildi. Süre dolana kadar biletleriniz ayrılmış durumda.",
+    "free": "Ücretsiz",
+    "terms": "Biletler {organization} tarafından satılmaktadır."
+  },
+  "order": {
+    "title": "Sipariş {reference}",
+    "thanks": "Teşekkürler, {name}.",
+    "sentTo": "Bu biletlerin bir kopyası {email} adresine gönderildi.",
+    "pendingTitle": "Ödemeniz onaylanıyor",
+    "pendingBody": "Bu genellikle birkaç saniye sürer. Sayfa kendiliğinden güncellenir.",
+    "expiredTitle": "Bu sipariş tamamlanmadı",
+    "expiredBody": "Herhangi bir ödeme alınmadı. Etkinlik sayfasından yeniden başlayabilirsiniz.",
+    "unfulfillableTitle": "Biletlerinizi düzenleyemedik",
+    "unfulfillableBody": "Ödemeniz rezervasyon süresi dolduktan sonra ulaştı ve biletler satılmıştı. Ödemenizin tamamı iade ediliyor.",
+    "tickets": "Biletler",
+    "ticket": "Bilet {number} / {total}",
+    "show": "Bu kodu kapıda gösterin.",
+    "void": "Bu bilet artık geçerli değil.",
+    "checkedIn": "Giriş yapıldı",
+    "summary": "Özet",
+    "total": "Toplam",
+    "qrAlt": "{number}. biletin QR kodu",
+    "eventCancelled": "Bu etkinlik iptal edildi.",
+    "notFoundTitle": "Sipariş bulunamadı",
+    "notFoundBody": "Onay e-postanızdaki bağlantıyı kontrol edin."
+  },
+  "fake": {
+    "title": "Test ödemesi",
+    "body": "Bu sitede ödemeler test modundadır. Para çekilmez.",
+    "amount": "Tutar",
+    "pay": "Şimdi öde",
+    "cancel": "İptal et ve geri dön"
+  },
+  "errors": {
+    "sold_out": "Bu biletler artık mevcut değil. Yeniden seçin.",
+    "not_on_sale": "Bu etkinliğin biletleri şu anda satışta değil.",
+    "too_many_tickets": "Bu, tek bir sipariş için çok fazla bilet.",
+    "cart_expired": "Rezervasyonunuzun süresi doldu. Biletlerinizi yeniden seçin.",
+    "checkout_in_progress": "Bu etkinlik için devam eden bir ödemeniz var. Önce onu tamamlayın veya iptal edin.",
+    "payments_unavailable": "Düzenleyici şu anda ödeme alamıyor. Lütfen daha sonra tekrar deneyin.",
+    "free_ticket_limit": "Bu e-posta adresi, bu etkinlik için en fazla sayıda ücretsiz bilete zaten sahip.",
+    "invalid_quantity": "Geçerli bir bilet sayısı seçin.",
+    "try_again": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+  }
+}

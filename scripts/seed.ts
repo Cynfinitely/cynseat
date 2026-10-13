@@ -1,13 +1,13 @@
 // Fills a development database with a platform admin, an approved organization and a
 // published event: pnpm db:seed. Safe to run more than once.
 import { config } from "dotenv";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { NO_FEE } from "../src/domain/orders/fees";
 import { createFakePaymentGateway } from "../src/server/adapters/fake/payment-gateway";
 import { createApp } from "../src/server/app";
 import type { UserActor } from "../src/server/authz/actor";
 import { createDb } from "../src/server/db/client";
-import { events, organization, user } from "../src/server/db/schema";
+import { events, organization, orgProfiles, user } from "../src/server/db/schema";
 import {
   createEvent,
   createTicketType,
@@ -100,6 +100,13 @@ async function main(): Promise<void> {
       });
       await reviewOrganization(app, admin, { organizationId: org.id, decision: "approve" });
     }
+    // Stands in for a connected payment account, which only the fake payment driver accepts.
+    await db
+      .update(orgProfiles)
+      .set({ stripeAccountId: "acct_demo_seed", stripeChargesEnabled: true })
+      .where(
+        sql`${orgProfiles.organizationId} = (select id from organization where slug = ${ORG_SLUG})`,
+      );
     const ctx = await getOrgContext(db, organizer, ORG_SLUG);
 
     const [seeded] = await db

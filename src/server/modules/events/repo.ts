@@ -300,6 +300,17 @@ export async function findPublicEvent(db: DbOrTx, organizationSlug: string, even
   return row;
 }
 
+export async function findPublicEventById(db: DbOrTx, eventId: string) {
+  const [row] = await db
+    .select(publicColumns)
+    .from(events)
+    .innerJoin(organization, eq(organization.id, events.organizationId))
+    .innerJoin(orgProfiles, eq(orgProfiles.organizationId, events.organizationId))
+    .where(and(publiclyVisible, eq(events.id, eventId)))
+    .limit(1);
+  return row;
+}
+
 export async function findPublicOrganization(db: DbOrTx, slug: string) {
   const [row] = await db
     .select({

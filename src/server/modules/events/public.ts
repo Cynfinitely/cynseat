@@ -51,6 +51,7 @@ export type PublicEvent = PublicEventCard & {
   endsAt: Date | null;
   doorsAt: Date | null;
   contactEmail: string | null;
+  maxTicketsPerOrder: number;
   ticketTypes: PublicTicketType[];
 };
 
@@ -168,6 +169,7 @@ export async function getPublicEvent(
     endsAt: event.endsAt,
     doorsAt: event.doorsAt,
     contactEmail: row.contactEmail,
+    maxTicketsPerOrder: event.maxTicketsPerOrder,
     ticketTypes: details.ticketTypes.map((type) => {
       const remaining = remainingOf(type);
       return {
@@ -187,5 +189,29 @@ export async function getPublicEvent(
         ),
       };
     }),
+  };
+}
+
+/** The little a checkout page needs to know about the event being bought. */
+export async function getEventForCheckout(
+  deps: Deps,
+  eventId: string,
+  locale: ContentLocale,
+): Promise<{
+  title: string;
+  contentLocale: string;
+  slug: string;
+  organization: { slug: string; name: string };
+} | null> {
+  const row = await repo.findPublicEventById(deps.db, eventId);
+  if (!row) return null;
+  const details = await repo.findPublicDetails(deps.db, [eventId]);
+  const translation = pickTranslation(details.translations, locale, row.event.defaultLocale);
+  if (!translation) return null;
+  return {
+    title: translation.title,
+    contentLocale: translation.locale,
+    slug: row.event.slug,
+    organization: { slug: row.organization.slug, name: row.organization.name },
   };
 }

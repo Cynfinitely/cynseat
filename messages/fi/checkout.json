@@ -1,0 +1,67 @@
+{
+  "selector": {
+    "quantity": "Määrä: {name}",
+    "total": "Yhteensä",
+    "continue": "Jatka",
+    "none": "Valitse vähintään yksi lippu.",
+    "max": "Voit ostaa enintään {max} lippua yhdessä tilauksessa."
+  },
+  "page": {
+    "title": "Kassa",
+    "summary": "Tilauksesi",
+    "reserved": "Lippusi on varattu vielä {time}.",
+    "expired": "Varauksesi on päättynyt.",
+    "emptyTitle": "Ostoskorisi on tyhjä",
+    "emptyBody": "Varauksesi on voinut päättyä. Valitse liput uudelleen.",
+    "back": "Takaisin tapahtumaan",
+    "email": "Sähköposti",
+    "emailHint": "Liput lähetetään tähän osoitteeseen.",
+    "name": "Koko nimi",
+    "pay": "Maksa {total}",
+    "getTickets": "Hae liput",
+    "change": "Muuta lippuja",
+    "cancelled": "Maksu peruttiin. Lippusi ovat yhä varattuina, kunnes aika loppuu.",
+    "free": "Ilmainen",
+    "terms": "Liput myy {organization}."
+  },
+  "order": {
+    "title": "Tilaus {reference}",
+    "thanks": "Kiitos, {name}.",
+    "sentTo": "Kopio lipuista on lähetetty osoitteeseen {email}.",
+    "pendingTitle": "Vahvistetaan maksuasi",
+    "pendingBody": "Tämä kestää yleensä muutaman sekunnin. Sivu päivittyy itsestään.",
+    "expiredTitle": "Tätä tilausta ei viety loppuun",
+    "expiredBody": "Maksua ei veloitettu. Voit aloittaa alusta tapahtuman sivulta.",
+    "unfulfillableTitle": "Emme voineet toimittaa lippujasi",
+    "unfulfillableBody": "Maksusi saapui varauksen päätyttyä, ja liput oli jo myyty. Maksusi hyvitetään kokonaan.",
+    "tickets": "Liput",
+    "ticket": "Lippu {number} / {total}",
+    "show": "Näytä tämä koodi ovella.",
+    "void": "Tämä lippu ei ole enää voimassa.",
+    "checkedIn": "Kirjattu sisään",
+    "summary": "Yhteenveto",
+    "total": "Yhteensä",
+    "qrAlt": "Lipun {number} QR-koodi",
+    "eventCancelled": "Tämä tapahtuma on peruttu.",
+    "notFoundTitle": "Tilausta ei löytynyt",
+    "notFoundBody": "Tarkista vahvistusviestissäsi oleva linkki."
+  },
+  "fake": {
+    "title": "Testimaksu",
+    "body": "Maksut ovat tällä sivustolla testitilassa. Rahaa ei veloiteta.",
+    "amount": "Summa",
+    "pay": "Maksa nyt",
+    "cancel": "Peruuta ja palaa"
+  },
+  "errors": {
+    "sold_out": "Nämä liput eivät ole enää saatavilla. Valitse uudelleen.",
+    "not_on_sale": "Tämän tapahtuman liput eivät ole juuri nyt myynnissä.",
+    "too_many_tickets": "Yhteen tilaukseen ei mahdu näin montaa lippua.",
+    "cart_expired": "Varauksesi on päättynyt. Valitse liput uudelleen.",
+    "checkout_in_progress": "Sinulla on tälle tapahtumalle maksu kesken. Vie se loppuun tai peru se ensin.",
+    "payments_unavailable": "Järjestäjä ei voi juuri nyt vastaanottaa maksuja. Yritä myöhemmin uudelleen.",
+    "free_ticket_limit": "Tällä sähköpostiosoitteella on jo enimmäismäärä ilmaislippuja tähän tapahtumaan.",
+    "invalid_quantity": "Valitse kelvollinen lippumäärä.",
+    "try_again": "Jokin meni vikaan. Yritä uudelleen."
+  }
+}

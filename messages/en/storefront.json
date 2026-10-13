@@ -29,7 +29,6 @@
       "not_started": "On sale from {date}"
     },
     "remaining": "Only {count} left",
-    "salesSoon": "Online ticket sales open soon.",
     "cancelledTitle": "This event has been cancelled",
     "contact": "Questions? Contact the organizer at {email}.",
     "about": "About this event",

@@ -29,7 +29,6 @@
       "not_started": "Myynnissä {date} alkaen"
     },
     "remaining": "Vain {count} jäljellä",
-    "salesSoon": "Verkkolipunmyynti avautuu pian.",
     "cancelledTitle": "Tämä tapahtuma on peruttu",
     "contact": "Kysyttävää? Ota yhteyttä järjestäjään: {email}.",
     "about": "Tietoa tapahtumasta",
