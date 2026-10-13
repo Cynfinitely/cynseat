@@ -1,6 +1,8 @@
 import { and, asc, desc, eq, sql } from "drizzle-orm";
 import {
   events,
+  eventSeats,
+  eventSections,
   eventTranslations,
   holdItems,
   holds,
@@ -150,12 +152,24 @@ export async function insertTickets(
     .onConflictDoNothing({ target: [tickets.orderItemId, tickets.seq] });
 }
 
-export async function findTickets(db: DbOrTx, orderId: string): Promise<TicketRow[]> {
-  return db
-    .select()
+/** An order's tickets, each with its seat when the event has reserved seating. */
+export async function findTickets(db: DbOrTx, orderId: string) {
+  const rows = await db
+    .select({
+      ticket: tickets,
+      section: eventSections.name,
+      row: eventSeats.rowLabel,
+      seat: eventSeats.seatLabel,
+    })
     .from(tickets)
+    .leftJoin(eventSeats, eq(eventSeats.id, tickets.eventSeatId))
+    .leftJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
     .where(eq(tickets.orderId, orderId))
     .orderBy(asc(tickets.orderItemId), asc(tickets.seq));
+  return rows.map(({ ticket, section, row, seat }) => ({
+    ...ticket,
+    seat: section !== null && row !== null && seat !== null ? { section, row, seat } : null,
+  }));
 }
 
 /** The event an order is for, with its organizer and every language's text. */

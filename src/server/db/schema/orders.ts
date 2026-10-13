@@ -168,6 +168,8 @@ export const orderItems = pgTable(
     quantity: integer("quantity").notNull(),
     unitPriceAmount: integer("unit_price_amount").notNull(),
     lineTotalAmount: integer("line_total_amount").notNull(),
+    /** Set for reserved seating: this line is for one particular seat. */
+    eventSeatId: uuid("event_seat_id"),
   },
   (table) => [
     foreignKey({
@@ -181,6 +183,7 @@ export const orderItems = pgTable(
       foreignColumns: [ticketTypes.eventId, ticketTypes.id],
     }).onDelete("restrict"),
     check("order_items_quantity_check", sql`${table.quantity} > 0`),
+    check("order_items_seat_check", sql`${table.eventSeatId} is null or ${table.quantity} = 1`),
     check("order_items_price_check", sql`${table.unitPriceAmount} >= 0`),
     check(
       "order_items_total_check",
@@ -203,6 +206,8 @@ export const tickets = pgTable(
     /** Position within the order line (1..quantity). */
     seq: integer("seq").notNull(),
     ticketTypeId: uuid("ticket_type_id").notNull(),
+    /** The seat this ticket is for, in reserved seating. */
+    eventSeatId: uuid("event_seat_id"),
     status: text("status", { enum: ticketStatuses }).notNull().default("valid"),
     voidReason: text("void_reason"),
     voidedAt: timestamptz("voided_at"),
@@ -221,6 +226,10 @@ export const tickets = pgTable(
     }).onDelete("restrict"),
     // Makes issuing tickets idempotent: the same order line can never produce two sets.
     unique("tickets_item_seq_unique").on(table.orderItemId, table.seq),
+    // The last line of defence for reserved seating: one live ticket per seat, ever.
+    uniqueIndex("tickets_one_valid_per_seat")
+      .on(table.eventSeatId)
+      .where(sql`${table.status} = 'valid' and ${table.eventSeatId} is not null`),
     check("tickets_status_check", sql`${table.status} in ${inList(ticketStatuses)}`),
     check("tickets_seq_check", sql`${table.seq} > 0`),
     index("tickets_event_idx").on(table.organizationId, table.eventId, table.status),

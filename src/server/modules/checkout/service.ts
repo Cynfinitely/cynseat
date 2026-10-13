@@ -23,7 +23,7 @@ import type { Clock } from "../../ports/clock";
 import type { Mailer } from "../../ports/mailer";
 import type { PaymentGateway } from "../../ports/payment-gateway";
 import * as inventory from "../inventory/repo";
-import { releaseExpiredHolds, type Buyer } from "../inventory/service";
+import { releaseExpiredHolds, returnHeldInventory, type Buyer } from "../inventory/service";
 import { dispatchEmails, enqueueEmail, type DbOrTx } from "../notifications/service";
 import { toEmailLocale } from "../notifications/templates";
 import * as repo from "./repo";
@@ -70,9 +70,19 @@ async function fulfill(
 
   const items = await repo.findOrderItems(tx, orderId);
 
+  // Ticket types first (items come sorted by type), then seats: the lock order used everywhere.
+  const seatIds = items.flatMap((item) => (item.eventSeatId ? [item.eventSeatId] : []));
+
   if (hold?.status === "active") {
     // The normal case: the tickets were reserved all along.
-    for (const item of items) await inventory.convertReserved(tx, item);
+    for (const item of items) {
+      if (item.eventSeatId) await inventory.adjustSeatedSold(tx, item.ticketTypeId, 1);
+      else await inventory.convertReserved(tx, item);
+    }
+    const sold = await inventory.sellHeldSeats(tx, hold.id);
+    // An active hold always still has its seats; anything else is a bug worth stopping for.
+    if (sold !== seatIds.length)
+      throw new Error(`Order ${orderId}: hold has ${sold} seats, order has ${seatIds.length}`);
     await inventory.markHold(tx, hold.id, { status: "converted", updatedAt: now });
   } else {
     // The reservation lapsed before the payment was confirmed. Take the tickets again if
@@ -80,8 +90,11 @@ async function fulfill(
     const secured = await tx
       .transaction(async (savepoint) => {
         for (const item of items) {
-          if (!(await inventory.sellUnreserved(savepoint, item))) throw new Error("gone");
+          if (item.eventSeatId) await inventory.adjustSeatedSold(savepoint, item.ticketTypeId, 1);
+          else if (!(await inventory.sellUnreserved(savepoint, item))) throw new Error("gone");
         }
+        // The very same seats, or nothing: a buyer is never moved to other seats.
+        if (!(await inventory.sellFreeSeats(savepoint, seatIds))) throw new Error("gone");
         return true;
       })
       .catch(() => false);
@@ -106,6 +119,7 @@ async function fulfill(
         orderItemId: item.id,
         seq: index + 1,
         ticketTypeId: item.ticketTypeId,
+        eventSeatId: item.eventSeatId,
         createdAt: now,
       })),
     ),
@@ -193,9 +207,12 @@ export async function startCheckout(
     }
 
     const lines = await repo.findHoldLines(tx, hold.id);
-    const quantity = lines.reduce((sum, line) => sum + line.quantity, 0);
+    const seats = await inventory.findHeldSeats(tx, hold.id);
+    const quantity = lines.reduce((sum, line) => sum + line.quantity, 0) + seats.length;
     if (quantity === 0) throw conflict("cart_expired");
-    const totalAmount = lines.reduce((sum, line) => sum + line.quantity * line.unitPriceAmount, 0);
+    const totalAmount =
+      lines.reduce((sum, line) => sum + line.quantity * line.unitPriceAmount, 0) +
+      seats.reduce((sum, seat) => sum + seat.unitPriceAmount, 0);
     const profile = await repo.findPaymentProfile(tx, event.organizationId);
 
     if (totalAmount === 0) {
@@ -231,9 +248,8 @@ export async function startCheckout(
       createdAt: now,
       updatedAt: now,
     });
-    await repo.insertOrderItems(
-      tx,
-      lines.map((line) => ({
+    await repo.insertOrderItems(tx, [
+      ...lines.map((line) => ({
         organizationId: event.organizationId,
         orderId,
         eventId: event.id,
@@ -243,7 +259,19 @@ export async function startCheckout(
         unitPriceAmount: line.unitPriceAmount,
         lineTotalAmount: line.unitPriceAmount * line.quantity,
       })),
-    );
+      // One line per reserved seat.
+      ...seats.map((seat) => ({
+        organizationId: event.organizationId,
+        orderId,
+        eventId: event.id,
+        ticketTypeId: seat.ticketTypeId,
+        description: seat.ticketTypeName,
+        quantity: 1,
+        unitPriceAmount: seat.unitPriceAmount,
+        lineTotalAmount: seat.unitPriceAmount,
+        eventSeatId: seat.seatId,
+      })),
+    ]);
 
     if (totalAmount === 0) {
       await fulfill(deps, tx, orderId, { paymentIntentId: null });
@@ -367,8 +395,7 @@ export async function closeUnpaidOrder(
         now,
         where: { holdId: unlocked.holdId },
       });
-      for (const item of await inventory.sumHoldItems(tx, closed))
-        await inventory.unreserve(tx, item);
+      await returnHeldInventory(tx, closed);
     }
     const order = (await repo.lockOrder(tx, orderId))!;
     if (order.status !== "pending") return order.status;
@@ -428,6 +455,8 @@ export type OrderView = {
     description: string;
     status: "valid" | "void";
     checkedInAt: Date | null;
+    /** For reserved seating: where the holder sits. */
+    seat: { section: string; row: string; seat: string } | null;
     /** What the ticket's QR code contains. Only present on valid tickets. */
     code: string | null;
   }[];
@@ -486,6 +515,7 @@ async function viewOf(
       description: descriptions.get(ticket.orderItemId) ?? "",
       status: ticket.status,
       checkedInAt: ticket.checkedInAt,
+      seat: ticket.seat,
       code:
         ticket.status === "valid"
           ? ticketCode(deps.signingSecret, ticket.id, ticket.tokenVersion)

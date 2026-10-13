@@ -17,6 +17,7 @@ const expected: Record<OrgAction, Record<OrgRole, boolean>> = {
   "event.manage": { admin: true, member: true, door_staff: false },
   "event.publish": { admin: true, member: false, door_staff: false },
   "venue.manage": { admin: true, member: true, door_staff: false },
+  "seatmap.manage": { admin: true, member: true, door_staff: false },
   "order.view": { admin: true, member: true, door_staff: false },
   "order.refund": { admin: true, member: false, door_staff: false },
   "checkin.scan": { admin: true, member: true, door_staff: true },

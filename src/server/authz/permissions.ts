@@ -15,6 +15,7 @@ export const orgPermissions = {
   "event.manage": ["admin", "member"],
   "event.publish": ["admin"],
   "venue.manage": ["admin", "member"],
+  "seatmap.manage": ["admin", "member"],
   "order.view": ["admin", "member"],
   "order.refund": ["admin"],
   "checkin.scan": ["admin", "member", "door_staff"],

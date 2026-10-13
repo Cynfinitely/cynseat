@@ -1,5 +1,15 @@
 import { and, asc, eq, inArray, isNull, lte, sql } from "drizzle-orm";
-import { events, holdItems, holds, orders, orgProfiles, ticketTypes } from "../../db/schema";
+import {
+  events,
+  eventSeats,
+  eventSections,
+  holdItems,
+  holds,
+  orders,
+  orgProfiles,
+  ticketTypes,
+  ticketTypeSections,
+} from "../../db/schema";
 import type { DbOrTx } from "../notifications/service";
 
 export type HoldRow = typeof holds.$inferSelect;
@@ -241,4 +251,212 @@ export async function findCartTypes(db: DbOrTx, eventId: string, ticketTypeIds: 
     })
     .from(ticketTypes)
     .where(and(eq(ticketTypes.eventId, eventId), inArray(ticketTypes.id, ticketTypeIds)));
+}
+
+// ---- Reserved seats ----------------------------------------------------------------------
+
+export type SeatChoice = { seatId: string; ticketTypeId: string };
+
+/**
+ * Holds specific seats for a buyer, all or none. The requested rows are locked in id
+ * order (every transaction that touches seats does the same, so they cannot deadlock),
+ * then claimed only if each is still free and the chosen ticket type is really on sale
+ * for that seat's section.
+ *
+ * Returns the ids that could not be had; empty means the hold succeeded.
+ */
+export async function claimSeats(
+  db: DbOrTx,
+  input: { eventId: string; holdId: string; choices: SeatChoice[]; now: Date },
+): Promise<string[]> {
+  if (input.choices.length === 0) return [];
+  const ids = input.choices.map((choice) => choice.seatId).sort();
+  const locked = await db
+    .select({ id: eventSeats.id, sectionId: eventSeats.eventSectionId, status: eventSeats.status })
+    .from(eventSeats)
+    .where(and(eq(eventSeats.eventId, input.eventId), inArray(eventSeats.id, ids)))
+    .orderBy(asc(eventSeats.id))
+    .for("update");
+
+  const typeIds = [...new Set(input.choices.map((choice) => choice.ticketTypeId))];
+  const { now } = input;
+  const sellable = await db
+    .select({ ticketTypeId: ticketTypes.id, sectionId: ticketTypeSections.eventSectionId })
+    .from(ticketTypes)
+    .innerJoin(ticketTypeSections, eq(ticketTypeSections.ticketTypeId, ticketTypes.id))
+    .where(
+      and(
+        eq(ticketTypes.eventId, input.eventId),
+        inArray(ticketTypes.id, typeIds),
+        eq(ticketTypes.kind, "seated"),
+        eq(ticketTypes.isActive, true),
+        isNull(ticketTypes.archivedAt),
+        sql`(${ticketTypes.salesStartAt} is null or ${ticketTypes.salesStartAt} <= ${now})`,
+        sql`(${ticketTypes.salesEndAt} is null or ${ticketTypes.salesEndAt} > ${now})`,
+      ),
+    );
+  const allowed = new Set(sellable.map((row) => `${row.ticketTypeId}/${row.sectionId}`));
+
+  const refused = input.choices
+    .filter((choice) => {
+      const seat = locked.find((row) => row.id === choice.seatId);
+      return (
+        !seat ||
+        seat.status !== "available" ||
+        !allowed.has(`${choice.ticketTypeId}/${seat.sectionId}`)
+      );
+    })
+    .map((choice) => choice.seatId);
+  if (refused.length > 0) return refused;
+
+  for (const choice of input.choices) {
+    await db
+      .update(eventSeats)
+      .set({ status: "held", holdId: input.holdId, heldTicketTypeId: choice.ticketTypeId })
+      .where(and(eq(eventSeats.id, choice.seatId), eq(eventSeats.status, "available")));
+  }
+  return [];
+}
+
+/** Seats to change, locked in id order. */
+const lockedSeats = (db: DbOrTx, where: ReturnType<typeof and>) =>
+  db
+    .select({ id: eventSeats.id })
+    .from(eventSeats)
+    .where(where)
+    .orderBy(asc(eventSeats.id))
+    .for("update");
+
+/** Frees seats held by these holds (all of them, or only the ones named). */
+export async function releaseSeats(
+  db: DbOrTx,
+  holdIds: string[],
+  onlySeatIds?: string[],
+): Promise<void> {
+  if (holdIds.length === 0 || onlySeatIds?.length === 0) return;
+  await db
+    .update(eventSeats)
+    .set({ status: "available", holdId: null, heldTicketTypeId: null })
+    .where(
+      inArray(
+        eventSeats.id,
+        lockedSeats(
+          db,
+          and(
+            inArray(eventSeats.holdId, holdIds),
+            onlySeatIds ? inArray(eventSeats.id, onlySeatIds) : undefined,
+          ),
+        ),
+      ),
+    );
+}
+
+/** Changes the ticket type chosen for a seat the buyer already holds. */
+export async function setHeldSeatType(
+  db: DbOrTx,
+  holdId: string,
+  choice: SeatChoice,
+): Promise<void> {
+  await db
+    .update(eventSeats)
+    .set({ heldTicketTypeId: choice.ticketTypeId })
+    .where(and(eq(eventSeats.id, choice.seatId), eq(eventSeats.holdId, holdId)));
+}
+
+/** The seats in a hold with what the buyer will pay for each. */
+export async function findHeldSeats(db: DbOrTx, holdId: string) {
+  return db
+    .select({
+      seatId: eventSeats.id,
+      sectionId: eventSeats.eventSectionId,
+      sectionName: eventSections.name,
+      rowLabel: eventSeats.rowLabel,
+      seatLabel: eventSeats.seatLabel,
+      ticketTypeId: ticketTypes.id,
+      ticketTypeName: ticketTypes.name,
+      unitPriceAmount: ticketTypes.priceAmount,
+    })
+    .from(eventSeats)
+    .innerJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
+    .innerJoin(ticketTypes, eq(ticketTypes.id, eventSeats.heldTicketTypeId))
+    .where(eq(eventSeats.holdId, holdId))
+    .orderBy(asc(eventSections.sortOrder), asc(eventSeats.rowLabel), asc(eventSeats.id));
+}
+
+/** Marks a hold's seats as sold. Returns how many there were. */
+export async function sellHeldSeats(db: DbOrTx, holdId: string): Promise<number> {
+  const rows = await db
+    .update(eventSeats)
+    .set({ status: "sold", holdId: null, heldTicketTypeId: null })
+    .where(inArray(eventSeats.id, lockedSeats(db, eq(eventSeats.holdId, holdId))))
+    .returning({ id: eventSeats.id });
+  return rows.length;
+}
+
+/** Sells seats that are not held (a payment that arrived after its hold lapsed). */
+export async function sellFreeSeats(db: DbOrTx, seatIds: string[]): Promise<boolean> {
+  if (seatIds.length === 0) return true;
+  const rows = await db
+    .update(eventSeats)
+    .set({ status: "sold" })
+    .where(
+      inArray(
+        eventSeats.id,
+        lockedSeats(db, and(inArray(eventSeats.id, seatIds), eq(eventSeats.status, "available"))),
+      ),
+    )
+    .returning({ id: eventSeats.id });
+  return rows.length === seatIds.length;
+}
+
+/** After a refund: the seat goes back on sale, or is kept off it. */
+export async function unsellSeats(db: DbOrTx, seatIds: string[], restock: boolean): Promise<void> {
+  if (seatIds.length === 0) return;
+  await db
+    .update(eventSeats)
+    .set({ status: restock ? "available" : "blocked" })
+    .where(
+      inArray(
+        eventSeats.id,
+        lockedSeats(db, and(inArray(eventSeats.id, seatIds), eq(eventSeats.status, "sold"))),
+      ),
+    );
+}
+
+/** Adds to (or takes from) the sold count of a ticket type that is sold by seat. */
+export async function adjustSeatedSold(
+  db: DbOrTx,
+  ticketTypeId: string,
+  delta: number,
+): Promise<void> {
+  await db
+    .update(ticketTypes)
+    .set({ qtySold: sql`${ticketTypes.qtySold} + ${delta}` })
+    .where(eq(ticketTypes.id, ticketTypeId));
+}
+
+/** Whether a seated ticket type is on sale right now for a given section. */
+export async function seatTypeAllowed(
+  db: DbOrTx,
+  input: { eventId: string; sectionId: string; choice: SeatChoice; now: Date },
+): Promise<boolean> {
+  const { now } = input;
+  const rows = await db
+    .select({ id: ticketTypes.id })
+    .from(ticketTypes)
+    .innerJoin(ticketTypeSections, eq(ticketTypeSections.ticketTypeId, ticketTypes.id))
+    .where(
+      and(
+        eq(ticketTypes.eventId, input.eventId),
+        eq(ticketTypes.id, input.choice.ticketTypeId),
+        eq(ticketTypeSections.eventSectionId, input.sectionId),
+        eq(ticketTypes.kind, "seated"),
+        eq(ticketTypes.isActive, true),
+        isNull(ticketTypes.archivedAt),
+        sql`(${ticketTypes.salesStartAt} is null or ${ticketTypes.salesStartAt} <= ${now})`,
+        sql`(${ticketTypes.salesEndAt} is null or ${ticketTypes.salesEndAt} > ${now})`,
+      ),
+    )
+    .limit(1);
+  return rows.length === 1;
 }

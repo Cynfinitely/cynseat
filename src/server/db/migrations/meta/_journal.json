@@ -50,6 +50,20 @@
       "when": 1791906349115,
       "tag": "0006_refunds",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791907123100,
+      "tag": "0007_seating",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791907123794,
+      "tag": "0008_seat_references",
+      "breakpoints": true
     }
   ]
 }

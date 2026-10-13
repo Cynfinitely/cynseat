@@ -9,7 +9,7 @@ import type { TestApp } from "./test-app";
 export async function expectInventoryConsistent(app: TestApp, eventId: string): Promise<void> {
   const { rows } = await app.db.execute<{
     name: string;
-    capacity: number;
+    capacity: number | null;
     qty_held: number;
     qty_sold: number;
     held: number;
@@ -24,6 +24,27 @@ export async function expectInventoryConsistent(app: TestApp, eventId: string): 
   for (const row of rows) {
     expect(row.qty_held, `${row.name}: reserved`).toBe(row.held);
     expect(row.qty_sold, `${row.name}: sold`).toBe(row.issued);
-    expect(row.qty_held + row.qty_sold, `${row.name}: capacity`).toBeLessThanOrEqual(row.capacity);
+    // Ticket types sold by seat have no capacity of their own: the seats are the limit.
+    if (row.capacity !== null) {
+      expect(row.qty_held + row.qty_sold, `${row.name}: capacity`).toBeLessThanOrEqual(
+        row.capacity,
+      );
+    }
+  }
+
+  // Every seat's state must agree with the holds and tickets that refer to it.
+  const seats = await app.db.execute<{
+    seat_key: string;
+    status: string;
+    held: boolean;
+    tickets: number;
+  }>(sql`
+    select s.seat_key, s.status,
+      exists(select 1 from holds h where h.id = s.hold_id and h.status = 'active') as held,
+      (select count(*) from tickets k where k.event_seat_id = s.id and k.status = 'valid')::int as tickets
+    from event_seats s where s.event_id = ${eventId}`);
+  for (const seat of seats.rows) {
+    expect(seat.held, `${seat.seat_key}: held by an active hold`).toBe(seat.status === "held");
+    expect(seat.tickets, `${seat.seat_key}: valid tickets`).toBe(seat.status === "sold" ? 1 : 0);
   }
 }

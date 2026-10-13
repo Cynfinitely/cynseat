@@ -18,6 +18,8 @@ import { conflict, invalid, notFound } from "../../errors";
 import { recordAudit } from "../audit/service";
 import { closeUnpaidOrder, orderUrl, type CheckoutDeps } from "../checkout/service";
 import { findOrderEvent } from "../checkout/repo";
+import { unsellSeats } from "../inventory/repo";
+import { returnHeldInventory } from "../inventory/service";
 import { dispatchEmails, enqueueEmail, type DbOrTx } from "../notifications/service";
 import { toEmailLocale } from "../notifications/templates";
 import type { OrgContext } from "../orgs/service";
@@ -56,6 +58,7 @@ async function open(
     .select({
       id: tickets.id,
       ticketTypeId: tickets.ticketTypeId,
+      eventSeatId: tickets.eventSeatId,
       unitPriceAmount: orderItems.unitPriceAmount,
     })
     .from(tickets)
@@ -129,6 +132,12 @@ async function open(
         })
         .where(eq(ticketTypes.id, ticketTypeId));
     }
+    // Reserved seats go back on sale, or are blocked if they should not be resold.
+    await unsellSeats(
+      tx,
+      chosen.flatMap((ticket) => (ticket.eventSeatId ? [ticket.eventSeatId] : [])),
+      input.restock,
+    );
   }
 
   await tx
@@ -380,16 +389,10 @@ export async function refundCancelledEvent(deps: Deps, eventId: string): Promise
       .set({ status: "released", releasedAt: now, updatedAt: now })
       .where(and(eq(holds.eventId, eventId), eq(holds.status, "active"), eq(holds.phase, "cart")))
       .returning({ id: holds.id });
-    if (closed.length > 0) {
-      await tx.execute(sql`
-        update ticket_types t set qty_held = t.qty_held - s.quantity
-        from (select ticket_type_id, sum(quantity)::int as quantity from hold_items
-              where hold_id in (${sql.join(
-                closed.map((hold) => sql`${hold.id}::uuid`),
-                sql`, `,
-              )}) group by ticket_type_id) s
-        where t.id = s.ticket_type_id`);
-    }
+    await returnHeldInventory(
+      tx,
+      closed.map((hold) => hold.id),
+    );
   });
 
   const paid = await deps.db

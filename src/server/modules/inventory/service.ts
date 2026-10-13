@@ -13,6 +13,16 @@ export type Buyer = { sessionId: string; userId: string | null };
 
 export type CartLineInput = { ticketTypeId: string; quantity: number };
 
+export type CartSeat = {
+  seatId: string;
+  sectionName: string;
+  rowLabel: string;
+  seatLabel: string;
+  ticketTypeId: string;
+  ticketTypeName: string;
+  unitPriceAmount: number;
+};
+
 export type Cart = {
   holdId: string;
   eventId: string;
@@ -20,6 +30,8 @@ export type Cart = {
   phase: "cart" | "checkout";
   currency: string;
   lines: { ticketTypeId: string; name: string; quantity: number; unitPriceAmount: number }[];
+  /** Reserved seats, each with the ticket type chosen for it. */
+  seats: CartSeat[];
   totalAmount: number;
   totalQuantity: number;
 };
@@ -30,8 +42,13 @@ const plusSeconds = (date: Date, seconds: number) => new Date(date.getTime() + s
  * Gives back everything reserved by the holds just closed. Ticket types are always
  * updated in id order, here and everywhere else, so transactions cannot deadlock on them.
  */
-async function returnInventory(tx: DbOrTx, holdIds: string[], now: Date): Promise<void> {
+export async function returnHeldInventory(tx: DbOrTx, holdIds: string[]): Promise<void> {
   for (const item of await repo.sumHoldItems(tx, holdIds)) await repo.unreserve(tx, item);
+  await repo.releaseSeats(tx, holdIds);
+}
+
+async function returnInventory(tx: DbOrTx, holdIds: string[], now: Date): Promise<void> {
+  await returnHeldInventory(tx, holdIds);
   await repo.expirePendingOrders(tx, holdIds, now);
 }
 
@@ -53,6 +70,9 @@ async function cartOf(tx: DbOrTx, hold: repo.HoldRow, currency: string): Promise
     hold.eventId,
     items.map((item) => item.ticketTypeId),
   );
+  const seats = (await repo.findHeldSeats(tx, hold.id)).map(
+    ({ sectionId: _sectionId, ...seat }) => seat,
+  );
   const lines = items.map((item) => {
     const type = types.find((candidate) => candidate.id === item.ticketTypeId)!;
     return {
@@ -69,22 +89,29 @@ async function cartOf(tx: DbOrTx, hold: repo.HoldRow, currency: string): Promise
     phase: hold.phase,
     currency,
     lines,
-    totalAmount: lines.reduce((sum, line) => sum + line.quantity * line.unitPriceAmount, 0),
-    totalQuantity: lines.reduce((sum, line) => sum + line.quantity, 0),
+    seats,
+    totalAmount:
+      lines.reduce((sum, line) => sum + line.quantity * line.unitPriceAmount, 0) +
+      seats.reduce((sum, seat) => sum + seat.unitPriceAmount, 0),
+    totalQuantity: lines.reduce((sum, line) => sum + line.quantity, 0) + seats.length,
   };
 }
 
 /**
- * Sets the buyer's cart for an event to exactly `lines`, reserving or freeing tickets as
- * needed. All or nothing: if any line cannot be reserved the cart is left as it was.
- * Returns null when the cart ends up empty.
+ * Sets the buyer's cart for an event to exactly `lines` and `seats`, reserving or freeing
+ * tickets as needed. All or nothing: if anything cannot be reserved the cart is left as it
+ * was. Returns null when the cart ends up empty.
  */
 export async function setCart(
   deps: Deps,
   buyer: Buyer,
   eventId: string,
   lines: CartLineInput[],
+  seats: repo.SeatChoice[] = [],
 ): Promise<Cart | null> {
+  if (new Set(seats.map((seat) => seat.seatId)).size !== seats.length || seats.length > 50) {
+    throw invalid("invalid_quantity");
+  }
   const wanted = new Map<string, number>();
   for (const line of lines) {
     if (!Number.isInteger(line.quantity) || line.quantity < 0 || line.quantity > 50) {
@@ -92,7 +119,8 @@ export async function setCart(
     }
     wanted.set(line.ticketTypeId, (wanted.get(line.ticketTypeId) ?? 0) + line.quantity);
   }
-  const totalWanted = [...wanted.values()].reduce((sum, quantity) => sum + quantity, 0);
+  const totalWanted =
+    [...wanted.values()].reduce((sum, quantity) => sum + quantity, 0) + seats.length;
 
   return transactionWithRetry(deps.db, async (tx) => {
     const now = deps.clock.now();
@@ -149,6 +177,37 @@ export async function setCart(
       }
       if (delta !== 0)
         await repo.setHoldItem(tx, { holdId: hold.id, eventId, ticketTypeId, quantity });
+    }
+
+    // Seats after ticket types, as in every other transaction.
+    const held = await repo.findHeldSeats(tx, hold.id);
+    const keep = new Map(seats.map((seat) => [seat.seatId, seat]));
+    await repo.releaseSeats(
+      tx,
+      [hold.id],
+      held.filter((seat) => !keep.has(seat.seatId)).map((seat) => seat.seatId),
+    );
+    const refused = await repo.claimSeats(tx, {
+      eventId,
+      holdId: hold.id,
+      choices: seats.filter((seat) => !held.some((mine) => mine.seatId === seat.seatId)),
+      now,
+    });
+    if (refused.length > 0) {
+      throw conflict("seats_taken", Object.fromEntries(refused.map((id) => [id, "seats_taken"])));
+    }
+    // A seat kept from before may have had its ticket type changed.
+    for (const mine of held) {
+      const choice = keep.get(mine.seatId);
+      if (!choice || choice.ticketTypeId === mine.ticketTypeId) continue;
+      const allowed = await repo.seatTypeAllowed(tx, {
+        eventId,
+        sectionId: mine.sectionId,
+        choice,
+        now,
+      });
+      if (!allowed) throw conflict("seats_taken", { [mine.seatId]: "seats_taken" });
+      await repo.setHeldSeatType(tx, hold.id, choice);
     }
 
     if (totalWanted === 0) {

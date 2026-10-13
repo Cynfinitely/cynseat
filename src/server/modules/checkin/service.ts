@@ -3,7 +3,15 @@ import type { ScanResult } from "../../../domain/checkin/types";
 import { parseTicketCode, ticketCodeMatches } from "../../../domain/tokens/tokens";
 import { authorizeOrg } from "../../authz/authorize";
 import type { Db } from "../../db/client";
-import { checkIns, events, orderItems, orders, tickets } from "../../db/schema";
+import {
+  checkIns,
+  events,
+  eventSeats,
+  eventSections,
+  orderItems,
+  orders,
+  tickets,
+} from "../../db/schema";
 import { notFound } from "../../errors";
 import type { Clock } from "../../ports/clock";
 import { recordAudit } from "../audit/service";
@@ -19,6 +27,8 @@ export type ScanOutcome = {
     description: string;
     buyerName: string;
     reference: string;
+    /** For reserved seating: where the holder sits. */
+    seat: { section: string; row: string; seat: string } | null;
     /** When the ticket was (first) used. */
     checkedInAt: Date | null;
   } | null;
@@ -80,10 +90,15 @@ export async function scanTicket(
           description: orderItems.description,
           buyerName: orders.buyerName,
           reference: orders.publicId,
+          section: eventSections.name,
+          row: eventSeats.rowLabel,
+          seat: eventSeats.seatLabel,
         })
         .from(tickets)
         .innerJoin(orderItems, eq(orderItems.id, tickets.orderItemId))
         .innerJoin(orders, eq(orders.id, tickets.orderId))
+        .leftJoin(eventSeats, eq(eventSeats.id, tickets.eventSeatId))
+        .leftJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
         .where(and(eq(tickets.id, parsed.ticketId), eq(tickets.organizationId, organizationId)))
     : [];
 
@@ -101,6 +116,10 @@ export async function scanTicket(
     description: found.description,
     buyerName: found.buyerName,
     reference: found.reference,
+    seat:
+      found.section !== null && found.row !== null && found.seat !== null
+        ? { section: found.section, row: found.row, seat: found.seat }
+        : null,
     checkedInAt,
   });
 
