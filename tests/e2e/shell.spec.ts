@@ -56,3 +56,13 @@ test("cron endpoints refuse callers without the secret", async ({ request }) => 
   expect(right.status()).toBe(200);
   expect(await right.json()).toEqual({ sent: expect.any(Number), failed: expect.any(Number) });
 });
+
+test("the payment webhook rejects unsigned and forged notifications", async ({ request }) => {
+  const body = JSON.stringify({ id: "evt_forged", type: "checkout.session.completed" });
+  expect((await request.post("/api/webhooks/payments", { data: body })).status()).toBe(400);
+  const forged = await request.post("/api/webhooks/payments", {
+    data: body,
+    headers: { "x-cynseat-signature": "00".repeat(32) },
+  });
+  expect(forged.status()).toBe(400);
+});

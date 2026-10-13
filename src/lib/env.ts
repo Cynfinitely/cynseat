@@ -23,6 +23,9 @@ export const env = createEnv({
       .refine((value) => value !== "fake" || process.env.VERCEL_ENV !== "production", {
         error: "PAYMENTS_DRIVER cannot be fake in production",
       }),
+    STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
+    // Signing secret of the Stripe webhook endpoint that listens to connected accounts.
+    STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
     // CynSeat's fee on paid orders: hundredths of a percent, plus minor units per ticket.
     PLATFORM_FEE_BPS: z.coerce.number().int().min(0).max(10_000).default(0),
     PLATFORM_FEE_FIXED_MINOR: z.coerce.number().int().min(0).default(0),
@@ -46,6 +49,8 @@ export const env = createEnv({
     AUTH_RATE_LIMIT: process.env.AUTH_RATE_LIMIT,
     SIGNING_SECRET: process.env.SIGNING_SECRET,
     PAYMENTS_DRIVER: process.env.PAYMENTS_DRIVER,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     PLATFORM_FEE_BPS: process.env.PLATFORM_FEE_BPS,
     PLATFORM_FEE_FIXED_MINOR: process.env.PLATFORM_FEE_FIXED_MINOR,
     CRON_SECRET: process.env.CRON_SECRET,

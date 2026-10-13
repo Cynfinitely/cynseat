@@ -10,6 +10,7 @@ export const orgPermissions = {
   "org.members.view": ["admin", "member"],
   "org.members.manage": ["admin"],
   "org.audit.view": ["admin"],
+  "org.payments.manage": ["admin"],
   "event.view": ["admin", "member", "door_staff"],
   "event.manage": ["admin", "member"],
   "event.publish": ["admin"],

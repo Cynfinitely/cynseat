@@ -12,6 +12,7 @@ const expected: Record<OrgAction, Record<OrgRole, boolean>> = {
   "org.members.view": { admin: true, member: true, door_staff: false },
   "org.members.manage": { admin: true, member: false, door_staff: false },
   "org.audit.view": { admin: true, member: false, door_staff: false },
+  "org.payments.manage": { admin: true, member: false, door_staff: false },
   "event.view": { admin: true, member: true, door_staff: true },
   "event.manage": { admin: true, member: true, door_staff: false },
   "event.publish": { admin: true, member: false, door_staff: false },

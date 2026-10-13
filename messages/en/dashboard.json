@@ -30,7 +30,8 @@
     "members": "Members",
     "settings": "Settings",
     "all": "All organizations",
-    "events": "Events"
+    "events": "Events",
+    "payments": "Payments"
   },
   "banner": {
     "pendingTitle": "Waiting for approval",
@@ -77,5 +78,21 @@
     "title": "Settings",
     "submit": "Save changes",
     "saved": "Changes saved."
+  },
+  "payments": {
+    "title": "Payments",
+    "intro": "Ticket money is paid straight into your organization's own Stripe account. CynSeat never holds it.",
+    "noneTitle": "Not connected",
+    "noneBody": "Connect a Stripe account to sell paid tickets. Free events do not need one.",
+    "incompleteTitle": "Almost there",
+    "incompleteBody": "Stripe still needs some details before you can take payments.",
+    "readyTitle": "Ready to take payments",
+    "readyBody": "Your Stripe account is connected and can accept payments.",
+    "connect": "Connect with Stripe",
+    "resume": "Continue with Stripe",
+    "needsApproval": "Your organization has to be approved by CynSeat before it can connect a payment account.",
+    "adminOnly": "Only an organization admin can manage payments.",
+    "fee": "CynSeat's fee on paid tickets: {fee}. Stripe's own card fees apply separately.",
+    "noFee": "none"
   }
 }

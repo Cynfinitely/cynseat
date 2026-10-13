@@ -21,6 +21,11 @@ export default async function OrgLayout({ children, params }: Props) {
     { href: `${base}/events`, label: t("nav.events"), show: can(ctx.role, "event.view") },
     { href: `${base}/members`, label: t("nav.members"), show: can(ctx.role, "org.members.view") },
     {
+      href: `${base}/payments`,
+      label: t("nav.payments"),
+      show: can(ctx.role, "org.payments.manage"),
+    },
+    {
       href: `${base}/settings`,
       label: t("nav.settings"),
       show: can(ctx.role, "org.settings.update"),

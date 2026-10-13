@@ -29,7 +29,47 @@ export type CheckoutState = {
   url: string | null;
 };
 
+export type AccountState = {
+  id: string;
+  /** Whether the account can take payments right now. */
+  chargesEnabled: boolean;
+  /** Whether the organization has finished the provider's onboarding form. */
+  detailsSubmitted: boolean;
+};
+
+/** A provider notification, reduced to what CynSeat acts on. */
+export type GatewayEvent = {
+  id: string;
+  type: string;
+  /** The connected account the event is about, when there is one. */
+  accountId: string | null;
+  /** Set for payment-page events. */
+  checkoutSessionId: string | null;
+  orderId: string | null;
+  payload: Record<string, unknown>;
+};
+
 export type PaymentGateway = {
+  /** Opens a payment account for an organization. Money for its tickets goes there. */
+  createAccount(input: {
+    organizationId: string;
+    name: string;
+    email: string;
+    country: string;
+  }): Promise<{ id: string }>;
+  /** A one-time link where the organization completes the provider's onboarding. */
+  createOnboardingLink(input: {
+    accountId: string;
+    returnUrl: string;
+    refreshUrl: string;
+  }): Promise<{ url: string }>;
+  getAccount(accountId: string): Promise<AccountState | null>;
+  /**
+   * Checks that a notification really comes from the provider and decodes it.
+   * Throws if the signature does not verify.
+   */
+  parseEvent(rawBody: string, signature: string | null): GatewayEvent;
+
   /** Opens a hosted payment page. Repeating the call for the same order returns the same page. */
   createCheckout(request: CheckoutRequest): Promise<{ id: string; url: string }>;
   getCheckout(input: { sessionId: string; accountId: string }): Promise<CheckoutState | null>;

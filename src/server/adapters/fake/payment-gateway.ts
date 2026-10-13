@@ -1,5 +1,11 @@
-import { randomBytes } from "node:crypto";
-import type { CheckoutRequest, CheckoutState, PaymentGateway } from "../../ports/payment-gateway";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import type {
+  AccountState,
+  CheckoutRequest,
+  CheckoutState,
+  GatewayEvent,
+  PaymentGateway,
+} from "../../ports/payment-gateway";
 
 type Session = CheckoutState & { request: CheckoutRequest };
 
@@ -7,11 +13,40 @@ type Session = CheckoutState & { request: CheckoutRequest };
  * Stand-in for the payment provider in development and tests. Sessions live in memory;
  * `pay` and `tamper` play the part of the buyer and of anything that might go wrong.
  */
-export function createFakePaymentGateway(options: { payUrl(sessionId: string): string }) {
+export function createFakePaymentGateway(options: {
+  payUrl(sessionId: string): string;
+  /** Where the stand-in onboarding form lives. */
+  onboardingUrl?(accountId: string, returnUrl: string): string;
+  /** Signs notifications, as the provider's webhook secret would. */
+  webhookSecret?: string;
+}) {
   const sessions = new Map<string, Session>();
   const byOrder = new Map<string, string>();
+  const accounts = new Map<string, AccountState>();
+  const webhookSecret = options.webhookSecret ?? "fake-webhook-secret";
+  const sign = (body: string) => createHmac("sha256", webhookSecret).update(body).digest();
 
   const gateway: PaymentGateway = {
+    async createAccount({ organizationId }) {
+      const id = `acct_fake_${organizationId}`;
+      if (!accounts.has(id))
+        accounts.set(id, { id, chargesEnabled: false, detailsSubmitted: false });
+      return { id };
+    },
+    async createOnboardingLink({ accountId, returnUrl }) {
+      return { url: options.onboardingUrl?.(accountId, returnUrl) ?? returnUrl };
+    },
+    async getAccount(accountId) {
+      return accounts.get(accountId) ?? null;
+    },
+    parseEvent(rawBody, signature) {
+      const given = Buffer.from(signature ?? "", "hex");
+      const expected = sign(rawBody);
+      if (given.length !== expected.length || !timingSafeEqual(given, expected)) {
+        throw new Error("Invalid webhook signature");
+      }
+      return JSON.parse(rawBody) as GatewayEvent;
+    },
     async createCheckout(request) {
       const existing = byOrder.get(request.orderId);
       if (existing) return { id: existing, url: options.payUrl(existing) };
@@ -51,6 +86,24 @@ export function createFakePaymentGateway(options: { payUrl(sessionId: string): s
   return {
     ...gateway,
     sessions,
+    accounts,
+    /** The organization finishes (or loses) its onboarding. */
+    setAccount(accountId: string, state: Partial<Omit<AccountState, "id">>): void {
+      const account = accounts.get(accountId);
+      if (account) Object.assign(account, state);
+    },
+    /** A notification as the provider would deliver it: a body and its signature header. */
+    notification(event: Omit<GatewayEvent, "id" | "payload"> & { id?: string }): {
+      body: string;
+      signature: string;
+    } {
+      const body = JSON.stringify({
+        id: `evt_fake_${randomBytes(8).toString("hex")}`,
+        payload: {},
+        ...event,
+      });
+      return { body, signature: sign(body).toString("hex") };
+    },
     /** The buyer pays. Returns false if the page was already closed. */
     pay(sessionId: string): boolean {
       const session = sessions.get(sessionId);

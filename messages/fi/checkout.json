@@ -51,7 +51,10 @@
     "body": "Maksut ovat tällä sivustolla testitilassa. Rahaa ei veloiteta.",
     "amount": "Summa",
     "pay": "Maksa nyt",
-    "cancel": "Peruuta ja palaa"
+    "cancel": "Peruuta ja palaa",
+    "connectTitle": "Testimaksutili",
+    "connectBody": "Tämä korvaa Stripen käyttöönottolomakkeen, kun maksut ovat testitilassa.",
+    "connectDone": "Viimeistele käyttöönotto"
   },
   "errors": {
     "sold_out": "Nämä liput eivät ole enää saatavilla. Valitse uudelleen.",

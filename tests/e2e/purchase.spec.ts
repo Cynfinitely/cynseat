@@ -77,7 +77,20 @@ test.describe("buying tickets", () => {
   test("a guest pays for tickets, after first backing out of the payment page", async ({
     browser,
   }) => {
-    const { page: owner, orgSlug } = await organizer(browser);
+    // This organizer connects their payment account through the dashboard.
+    const signedUp = await signUp(browser, "Olga Owner");
+    const owner = signedUp.page;
+    const orgSlug = await registerOrganization(owner, `Yhdistys ${uniqueId()}`);
+    await owner.getByRole("link", { name: "Payments" }).click();
+    await expect(owner.getByText("Your organization has to be approved by CynSeat")).toBeVisible();
+    await approveOrganization(orgSlug);
+    await owner.reload();
+    await expect(owner.getByText("Not connected")).toBeVisible();
+    await noViolations(owner);
+    await owner.getByRole("button", { name: "Connect with Stripe" }).click();
+    await owner.getByRole("button", { name: "Complete onboarding" }).click();
+    await expect(owner.getByText("Ready to take payments")).toBeVisible();
+
     const title = `Paid Concert ${uniqueId()}`;
     const eventPath = await publishEvent(owner, orgSlug, { title, price: "12,50", capacity: 50 });
 

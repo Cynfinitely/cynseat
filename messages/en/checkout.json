@@ -51,7 +51,10 @@
     "body": "Payments are in test mode on this site. No money is taken.",
     "amount": "Amount",
     "pay": "Pay now",
-    "cancel": "Cancel and go back"
+    "cancel": "Cancel and go back",
+    "connectTitle": "Test payment account",
+    "connectBody": "This stands in for Stripe's onboarding form while payments are in test mode.",
+    "connectDone": "Complete onboarding"
   },
   "errors": {
     "sold_out": "Those tickets are no longer available. Choose again.",

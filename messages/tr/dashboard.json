@@ -30,7 +30,8 @@
     "members": "Üyeler",
     "settings": "Ayarlar",
     "all": "Tüm kuruluşlar",
-    "events": "Etkinlikler"
+    "events": "Etkinlikler",
+    "payments": "Ödemeler"
   },
   "banner": {
     "pendingTitle": "Onay bekleniyor",
@@ -77,5 +78,21 @@
     "title": "Ayarlar",
     "submit": "Değişiklikleri kaydet",
     "saved": "Değişiklikler kaydedildi."
+  },
+  "payments": {
+    "title": "Ödemeler",
+    "intro": "Bilet gelirleri doğrudan kuruluşunuzun kendi Stripe hesabına ödenir. CynSeat bu parayı hiçbir zaman tutmaz.",
+    "noneTitle": "Bağlı değil",
+    "noneBody": "Ücretli bilet satmak için bir Stripe hesabı bağlayın. Ücretsiz etkinlikler için gerekmez.",
+    "incompleteTitle": "Neredeyse tamam",
+    "incompleteBody": "Ödeme alabilmeniz için Stripe'ın hâlâ bazı bilgilere ihtiyacı var.",
+    "readyTitle": "Ödeme almaya hazır",
+    "readyBody": "Stripe hesabınız bağlandı ve ödeme kabul edebilir.",
+    "connect": "Stripe ile bağlan",
+    "resume": "Stripe ile devam et",
+    "needsApproval": "Bir ödeme hesabı bağlayabilmesi için kuruluşunuzun CynSeat tarafından onaylanması gerekir.",
+    "adminOnly": "Ödemeleri yalnızca kuruluş yöneticisi yönetebilir.",
+    "fee": "CynSeat'in ücretli biletlerdeki komisyonu: {fee}. Stripe'ın kendi kart ücretleri ayrıca uygulanır.",
+    "noFee": "yok"
   }
 }

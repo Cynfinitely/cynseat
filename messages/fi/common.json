@@ -78,7 +78,8 @@
     "invalid_venue": "Valitse tapahtumapaikka.",
     "not_found": "Tätä ei enää ole. Lataa sivu uudelleen.",
     "image_type": "Valitse JPEG-, PNG- tai WebP-kuva.",
-    "image_too_large": "Kuva on suurempi kuin 4 Mt."
+    "image_too_large": "Kuva on suurempi kuin 4 Mt.",
+    "org_not_approved": "Organisaatiotasi ei ole vielä hyväksytty."
   },
   "categories": {
     "music": "Musiikki",

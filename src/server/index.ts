@@ -4,6 +4,7 @@ import { createConsoleMailer } from "./adapters/fake/mailer";
 import { createFakePaymentGateway, type FakePaymentGateway } from "./adapters/fake/payment-gateway";
 import { createLocalObjectStore, type LocalObjectStore } from "./adapters/local/object-store";
 import { createResendMailer } from "./adapters/resend/mailer";
+import { createStripeGateway } from "./adapters/stripe/payment-gateway";
 import { createVercelBlobStore } from "./adapters/vercel/object-store";
 import { createApp, type App } from "./app";
 import { getDb } from "./db/client";
@@ -49,6 +50,9 @@ export function getFakeGateway(): FakePaymentGateway | null {
   if (env.PAYMENTS_DRIVER !== "fake") return null;
   globalForGateway.cynseatFakeGateway ??= createFakePaymentGateway({
     payUrl: (sessionId) => `${appUrl()}/en/dev/pay/${sessionId}`,
+    onboardingUrl: (accountId, returnUrl) =>
+      `${appUrl()}/en/dev/connect/${accountId}?return=${encodeURIComponent(returnUrl)}`,
+    webhookSecret: env.SIGNING_SECRET,
   });
   return globalForGateway.cynseatFakeGateway;
 }
@@ -56,7 +60,13 @@ export function getFakeGateway(): FakePaymentGateway | null {
 function createGateway() {
   const fake = getFakeGateway();
   if (fake) return fake;
-  throw new Error("PAYMENTS_DRIVER=stripe is not available yet");
+  if (!env.STRIPE_SECRET_KEY || !env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error("PAYMENTS_DRIVER=stripe needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET");
+  }
+  return createStripeGateway({
+    secretKey: env.STRIPE_SECRET_KEY,
+    webhookSecret: env.STRIPE_WEBHOOK_SECRET,
+  });
 }
 
 export function getApp(): App {

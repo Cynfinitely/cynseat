@@ -78,7 +78,8 @@
     "invalid_venue": "Choose a venue.",
     "not_found": "That no longer exists. Reload the page.",
     "image_type": "Choose a JPEG, PNG or WebP image.",
-    "image_too_large": "The image is larger than 4 MB."
+    "image_too_large": "The image is larger than 4 MB.",
+    "org_not_approved": "Your organization has not been approved yet."
   },
   "categories": {
     "music": "Music",

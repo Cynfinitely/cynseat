@@ -2,7 +2,7 @@
 
 Free ticketing for NGOs and event organizers. Organizations register, create events at new or existing venues, and sell tickets; buyers get QR-coded tickets by email.
 
-> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Finished so far: accounts, organizations with roles (admin, member, door staff), invitations and platform approval, the shared venue directory, multilingual events with ticket types and posters, the public storefront, and buying general-admission tickets (reservations, checkout, QR-coded tickets by link and email). Payments currently run against a built-in test gateway; the Stripe Connect integration, refunds, seat maps and check-in follow in later phases.
+> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Finished so far: accounts, organizations with roles (admin, member, door staff), invitations and platform approval, the shared venue directory, multilingual events with ticket types and posters, the public storefront, buying general-admission tickets (reservations, checkout, QR-coded tickets by link and email), and connecting each organization's own Stripe account. The Stripe integration is written and unit-tested but has not yet been run against Stripe itself; by default payments use a built-in test gateway. Refunds, seat maps and check-in follow in later phases.
 
 ## Tech stack
 
@@ -42,20 +42,21 @@ The approval queue is at `/en/admin/organizations`.
 
 ### Environment variables
 
-| Variable                                       | Used for                                                                                             |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                          | Public base URL of the app                                                                           |
-| `DATABASE_URL`                                 | Postgres connection string                                                                           |
-| `DATABASE_URL_UNPOOLED`                        | Optional direct connection used for migrations                                                       |
-| `BETTER_AUTH_SECRET`                           | Signs sessions and tokens (32+ characters)                                                           |
-| `SIGNING_SECRET`                               | Signs order links and ticket QR codes (32+ characters). Changing it invalidates those already issued |
-| `PAYMENTS_DRIVER`                              | `fake` (built-in test payment page; refused in production) or `stripe`                               |
-| `PLATFORM_FEE_BPS`, `PLATFORM_FEE_FIXED_MINOR` | CynSeat's fee on paid orders; both default to 0                                                      |
-| `MAIL_DRIVER`                                  | `console` (print emails) or `resend` (send them)                                                     |
-| `RESEND_API_KEY`, `EMAIL_FROM`                 | Needed when `MAIL_DRIVER=resend`                                                                     |
-| `STORAGE_DRIVER`                               | `local` (posters on this machine's disk, development only) or `vercel-blob`                          |
-| `BLOB_READ_WRITE_TOKEN`                        | Needed when `STORAGE_DRIVER=vercel-blob`                                                             |
-| `CRON_SECRET`                                  | Protects `/api/cron/*`; Vercel Cron sends it automatically                                           |
+| Variable                                       | Used for                                                                                                                    |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                          | Public base URL of the app                                                                                                  |
+| `DATABASE_URL`                                 | Postgres connection string                                                                                                  |
+| `DATABASE_URL_UNPOOLED`                        | Optional direct connection used for migrations                                                                              |
+| `BETTER_AUTH_SECRET`                           | Signs sessions and tokens (32+ characters)                                                                                  |
+| `SIGNING_SECRET`                               | Signs order links and ticket QR codes (32+ characters). Changing it invalidates those already issued                        |
+| `PAYMENTS_DRIVER`                              | `fake` (built-in test payment page; refused in production) or `stripe`                                                      |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`   | Needed when `PAYMENTS_DRIVER=stripe`. Point a Stripe webhook that listens to connected accounts at `/api/webhooks/payments` |
+| `PLATFORM_FEE_BPS`, `PLATFORM_FEE_FIXED_MINOR` | CynSeat's fee on paid orders; both default to 0                                                                             |
+| `MAIL_DRIVER`                                  | `console` (print emails) or `resend` (send them)                                                                            |
+| `RESEND_API_KEY`, `EMAIL_FROM`                 | Needed when `MAIL_DRIVER=resend`                                                                                            |
+| `STORAGE_DRIVER`                               | `local` (posters on this machine's disk, development only) or `vercel-blob`                                                 |
+| `BLOB_READ_WRITE_TOKEN`                        | Needed when `STORAGE_DRIVER=vercel-blob`                                                                                    |
+| `CRON_SECRET`                                  | Protects `/api/cron/*`; Vercel Cron sends it automatically                                                                  |
 
 Variables are validated at startup in `src/lib/env.ts`; the build fails if one is missing or malformed.
 

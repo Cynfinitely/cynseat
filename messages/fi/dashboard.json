@@ -30,7 +30,8 @@
     "members": "Jäsenet",
     "settings": "Asetukset",
     "all": "Kaikki organisaatiot",
-    "events": "Tapahtumat"
+    "events": "Tapahtumat",
+    "payments": "Maksut"
   },
   "banner": {
     "pendingTitle": "Odottaa hyväksyntää",
@@ -77,5 +78,21 @@
     "title": "Asetukset",
     "submit": "Tallenna muutokset",
     "saved": "Muutokset tallennettu."
+  },
+  "payments": {
+    "title": "Maksut",
+    "intro": "Lipputulot maksetaan suoraan organisaatiosi omalle Stripe-tilille. CynSeat ei säilytä niitä missään vaiheessa.",
+    "noneTitle": "Ei yhdistetty",
+    "noneBody": "Yhdistä Stripe-tili myydäksesi maksullisia lippuja. Ilmaistapahtumat eivät tarvitse sitä.",
+    "incompleteTitle": "Melkein valmista",
+    "incompleteBody": "Stripe tarvitsee vielä joitakin tietoja, ennen kuin voit vastaanottaa maksuja.",
+    "readyTitle": "Valmis vastaanottamaan maksuja",
+    "readyBody": "Stripe-tilisi on yhdistetty ja voi vastaanottaa maksuja.",
+    "connect": "Yhdistä Stripeen",
+    "resume": "Jatka Stripessä",
+    "needsApproval": "CynSeatin on hyväksyttävä organisaatiosi, ennen kuin se voi yhdistää maksutilin.",
+    "adminOnly": "Vain organisaation ylläpitäjä voi hallita maksuja.",
+    "fee": "CynSeatin palkkio maksullisista lipuista: {fee}. Stripen omat korttimaksut veloitetaan erikseen.",
+    "noFee": "ei palkkiota"
   }
 }

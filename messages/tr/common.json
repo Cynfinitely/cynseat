@@ -78,7 +78,8 @@
     "invalid_venue": "Bir mekân seçin.",
     "not_found": "Bu artık yok. Sayfayı yenileyin.",
     "image_type": "JPEG, PNG veya WebP görsel seçin.",
-    "image_too_large": "Görsel 4 MB'den büyük."
+    "image_too_large": "Görsel 4 MB'den büyük.",
+    "org_not_approved": "Kuruluşunuz henüz onaylanmadı."
   },
   "categories": {
     "music": "Müzik",

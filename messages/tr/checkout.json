@@ -51,7 +51,10 @@
     "body": "Bu sitede ödemeler test modundadır. Para çekilmez.",
     "amount": "Tutar",
     "pay": "Şimdi öde",
-    "cancel": "İptal et ve geri dön"
+    "cancel": "İptal et ve geri dön",
+    "connectTitle": "Test ödeme hesabı",
+    "connectBody": "Ödemeler test modundayken bu sayfa Stripe'ın kayıt formunun yerini tutar.",
+    "connectDone": "Kaydı tamamla"
   },
   "errors": {
     "sold_out": "Bu biletler artık mevcut değil. Yeniden seçin.",
