@@ -44,7 +44,8 @@
     "qrAlt": "{number}. biletin QR kodu",
     "eventCancelled": "Bu etkinlik iptal edildi.",
     "notFoundTitle": "Sipariş bulunamadı",
-    "notFoundBody": "Onay e-postanızdaki bağlantıyı kontrol edin."
+    "notFoundBody": "Onay e-postanızdaki bağlantıyı kontrol edin.",
+    "refunded": "İade edilen: {amount}"
   },
   "fake": {
     "title": "Test ödemesi",

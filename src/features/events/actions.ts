@@ -19,6 +19,7 @@ import { getApp } from "@/server";
 import type { App } from "@/server/app";
 import * as events from "@/server/modules/events/service";
 import { getOrgContext, type OrgContext } from "@/server/modules/orgs/service";
+import { refundCancelledEvent } from "@/server/modules/refunds/service";
 import { createVenue, searchVenues } from "@/server/modules/venues/service";
 
 const nothing = z.undefined();
@@ -145,9 +146,14 @@ export async function unpublishEventAction(orgSlug: string, eventId: string) {
 }
 
 export async function cancelEventAction(orgSlug: string, eventId: string, input: unknown) {
-  return orgAction(orgSlug, cancelEventSchema, input, (app, ctx, data) =>
-    events.cancelEvent(app, ctx, eventId, data.reason),
-  );
+  return orgAction(orgSlug, cancelEventSchema, input, async (app, ctx, data) => {
+    await events.cancelEvent(app, ctx, eventId, data.reason);
+    // Refund buyers straight away. If this is interrupted, the scheduler finishes the job.
+    await refundCancelledEvent(app, eventId).catch((error) => {
+      console.error("refunding cancelled event failed; the scheduler will retry", eventId, error);
+    });
+    revalidatePath("/[locale]", "layout");
+  });
 }
 
 export async function deleteDraftEventAction(orgSlug: string, eventId: string) {

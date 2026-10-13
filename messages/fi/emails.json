@@ -50,5 +50,11 @@
     "heading": "Lippusi tapahtumaan {event}",
     "body": "Hei {name}, kiitos tilauksestasi {reference}. Sinulla on {tickets} lippu(a) tapahtumaan {event}, {when}. Avaa lippusi alta ja näytä QR-koodit ovella.",
     "action": "Avaa lippuni"
+  },
+  "orderRefunded": {
+    "subject": "Hyvitys tilauksestasi {reference}",
+    "heading": "Hyvityksesi on matkalla",
+    "body": "Hei {name}, olemme hyvittäneet {amount} tilauksestasi {reference} ({event}). Summan näkyminen tililläsi voi kestää muutaman arkipäivän. Hyvitetyt liput eivät ole enää voimassa.",
+    "action": "Näytä tilaus"
   }
 }

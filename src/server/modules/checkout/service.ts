@@ -38,6 +38,8 @@ export type CheckoutDeps = {
   signingSecret: string;
   /** CynSeat's fee unless an organization has its own. */
   platformFee: FeeRule;
+  /** Called when a paid order cannot be honoured, so that it is refunded. */
+  onUnfulfillable?: (orderId: string) => Promise<void>;
 };
 
 const plusSeconds = (date: Date, seconds: number) => new Date(date.getTime() + seconds * 1000);
@@ -341,6 +343,8 @@ export async function confirmPayment(deps: CheckoutDeps, orderId: string): Promi
       fulfill(deps, tx, order.id, { paymentIntentId: state.paymentIntentId }),
     );
     if (status === "paid") await sendConfirmations(deps);
+    // The buyer paid for tickets that no longer exist: give the money back.
+    if (status === "unfulfillable") await deps.onUnfulfillable?.(order.id);
     return status;
   }
   if (state.status === "expired") return closeUnpaidOrder(deps, order.id, "expired");
@@ -348,7 +352,7 @@ export async function confirmPayment(deps: CheckoutDeps, orderId: string): Promi
 }
 
 /** Ends an unpaid order and puts its tickets back on sale. Does nothing to a paid order. */
-async function closeUnpaidOrder(
+export async function closeUnpaidOrder(
   deps: CheckoutDeps,
   orderId: string,
   status: "expired" | "cancelled",
@@ -410,6 +414,7 @@ export type OrderView = {
   buyerName: string;
   currency: string;
   totalAmount: number;
+  refundedAmount: number;
   paidAt: Date | null;
   items: {
     description: string;
@@ -467,6 +472,7 @@ async function viewOf(
     buyerName: order.buyerName,
     currency: order.currency,
     totalAmount: order.totalAmount,
+    refundedAmount: order.refundedAmount,
     paidAt: order.paidAt,
     items: items.map(({ description, quantity, unitPriceAmount, lineTotalAmount }) => ({
       description,

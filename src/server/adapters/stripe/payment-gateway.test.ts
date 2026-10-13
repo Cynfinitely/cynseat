@@ -21,6 +21,7 @@ function stubClient(answers: Record<string, (...args: unknown[]) => unknown>) {
   const client = {
     accounts: { create: method("accounts.create"), retrieve: method("accounts.retrieve") },
     accountLinks: { create: method("accountLinks.create") },
+    refunds: { create: method("refunds.create") },
     checkout: {
       sessions: {
         create: method("sessions.create"),
@@ -160,6 +161,24 @@ describe("Stripe gateway", () => {
       requirement_collection: "stripe",
     });
     expect(options).toEqual({ idempotencyKey: "org:org1:account" });
+  });
+
+  it("refunds on the organization's account with a key that makes repeats harmless", async () => {
+    const { calls, gateway } = stubClient({
+      "refunds.create": () => ({ id: "re_1", status: "pending", failure_reason: null }),
+    });
+    const result = await gateway.refund({
+      accountId: "acct_org",
+      paymentIntentId: "pi_1",
+      amount: 1250,
+      idempotencyKey: "refund:abc",
+      refundApplicationFee: true,
+    });
+    expect(result).toEqual({ id: "re_1", status: "pending", failureReason: undefined });
+    expect(calls[0]!.args).toEqual([
+      { payment_intent: "pi_1", amount: 1250, refund_application_fee: true },
+      { stripeAccount: "acct_org", idempotencyKey: "refund:abc" },
+    ]);
   });
 
   describe("notifications", () => {

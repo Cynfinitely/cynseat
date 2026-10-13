@@ -50,5 +50,11 @@
     "heading": "Your tickets for {event}",
     "body": "Hi {name}, thank you for your order {reference}. You have {tickets} ticket(s) for {event} on {when}. Open your tickets below and show the QR codes at the door.",
     "action": "Open my tickets"
+  },
+  "orderRefunded": {
+    "subject": "Refund for your order {reference}",
+    "heading": "Your refund is on its way",
+    "body": "Hi {name}, we have refunded {amount} for your order {reference} ({event}). It can take a few working days to reach your account. Refunded tickets are no longer valid.",
+    "action": "View order"
   }
 }

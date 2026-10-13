@@ -79,7 +79,12 @@
     "not_found": "Tätä ei enää ole. Lataa sivu uudelleen.",
     "image_type": "Valitse JPEG-, PNG- tai WebP-kuva.",
     "image_too_large": "Kuva on suurempi kuin 4 Mt.",
-    "org_not_approved": "Organisaatiotasi ei ole vielä hyväksytty."
+    "org_not_approved": "Organisaatiotasi ei ole vielä hyväksytty.",
+    "tickets_not_refundable": "Osa lipuista on jo hyvitetty. Lataa sivu uudelleen.",
+    "nothing_to_refund": "Tässä tilauksessa ei ole enää hyvitettävää.",
+    "order_not_paid": "Vain maksetut tilaukset voidaan hyvittää.",
+    "refund_exceeds_total": "Tämä hyvittäisi enemmän kuin maksettiin.",
+    "refund_not_retryable": "Tätä hyvitystä ei voi lähettää uudelleen."
   },
   "categories": {
     "music": "Musiikki",

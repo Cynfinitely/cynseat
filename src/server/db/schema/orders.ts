@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   check,
   customType,
   foreignKey,
@@ -271,5 +272,66 @@ export const checkIns = pgTable(
     unique("check_ins_scan_unique").on(table.organizationId, table.scanId),
     index("check_ins_event_idx").on(table.eventId, table.createdAt),
     index("check_ins_ticket_idx").on(table.ticketId),
+  ],
+);
+
+export const refundStatuses = ["pending", "succeeded", "failed"] as const;
+export type RefundStatus = (typeof refundStatuses)[number];
+
+export const refundSources = ["organizer", "system"] as const;
+
+/** Money returned to a buyer, in whole or in part. */
+export const refunds = pgTable(
+  "refunds",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    organizationId: text("organization_id").notNull(),
+    orderId: uuid("order_id").notNull(),
+    amount: integer("amount").notNull(),
+    /** Why: "requested", "event_cancelled" or "unfulfillable". */
+    reason: text("reason").notNull(),
+    note: text("note"),
+    status: text("status", { enum: refundStatuses }).notNull().default("pending"),
+    source: text("source", { enum: refundSources }).notNull(),
+    /** Whether the refunded tickets went back on sale. */
+    restock: boolean("restock").notNull().default(false),
+    /** How many times this refund has been sent to the provider again after failing. */
+    retries: integer("retries").notNull().default(0),
+    providerRefundId: text("provider_refund_id").unique(),
+    failureReason: text("failure_reason"),
+    initiatedBy: text("initiated_by").references(() => user.id, { onDelete: "set null" }),
+    createdAt: timestamptz("created_at").notNull(),
+    updatedAt: timestamptz("updated_at").notNull(),
+  },
+  (table) => [
+    foreignKey({
+      name: "refunds_order_fk",
+      columns: [table.organizationId, table.orderId],
+      foreignColumns: [orders.organizationId, orders.id],
+    }).onDelete("restrict"),
+    check("refunds_amount_check", sql`${table.amount} >= 0`),
+    check("refunds_status_check", sql`${table.status} in ${inList(refundStatuses)}`),
+    check("refunds_source_check", sql`${table.source} in ${inList(refundSources)}`),
+    index("refunds_order_idx").on(table.orderId),
+    index("refunds_pending_idx")
+      .on(table.createdAt)
+      .where(sql`${table.status} = 'pending'`),
+  ],
+);
+
+export const refundTickets = pgTable(
+  "refund_tickets",
+  {
+    refundId: uuid("refund_id")
+      .notNull()
+      .references(() => refunds.id, { onDelete: "cascade" }),
+    ticketId: uuid("ticket_id")
+      .notNull()
+      .references(() => tickets.id, { onDelete: "restrict" }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.refundId, table.ticketId] }),
+    // A ticket can be refunded once.
+    unique("refund_tickets_ticket_unique").on(table.ticketId),
   ],
 );

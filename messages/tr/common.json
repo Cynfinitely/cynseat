@@ -79,7 +79,12 @@
     "not_found": "Bu artık yok. Sayfayı yenileyin.",
     "image_type": "JPEG, PNG veya WebP görsel seçin.",
     "image_too_large": "Görsel 4 MB'den büyük.",
-    "org_not_approved": "Kuruluşunuz henüz onaylanmadı."
+    "org_not_approved": "Kuruluşunuz henüz onaylanmadı.",
+    "tickets_not_refundable": "Bu biletlerin bir kısmı zaten iade edilmiş. Sayfayı yenileyin.",
+    "nothing_to_refund": "Bu siparişte iade edilecek bir şey kalmadı.",
+    "order_not_paid": "Yalnızca ödenmiş siparişler iade edilebilir.",
+    "refund_exceeds_total": "Bu, ödenenden fazlasını iade eder.",
+    "refund_not_retryable": "Bu iade yeniden gönderilemez."
   },
   "categories": {
     "music": "Müzik",

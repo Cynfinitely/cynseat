@@ -160,6 +160,11 @@ export default async function OrderPage({ params }: Props) {
               <span>{t("total")}</span>
               <span>{money(order.totalAmount)}</span>
             </p>
+            {order.refundedAmount > 0 ? (
+              <p className="text-muted mt-2 text-sm">
+                {t("refunded", { amount: money(order.refundedAmount) })}
+              </p>
+            ) : null}
             {event.contactEmail ? (
               <p className="text-muted mt-4 text-sm">
                 {tStore("contact", { email: event.contactEmail })}

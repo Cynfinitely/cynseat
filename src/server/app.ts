@@ -7,6 +7,7 @@ import type { Db } from "./db/client";
 import { recordAudit } from "./modules/audit/service";
 import { sendEmailNow } from "./modules/notifications/service";
 import { toEmailLocale, type EmailLocale } from "./modules/notifications/templates";
+import { refundUnfulfillableOrder } from "./modules/refunds/service";
 import { ensureOrgProfile, isPlatformAdmin, type CreateOrganization } from "./modules/orgs/service";
 import type { Clock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
@@ -34,6 +35,8 @@ export type AppConfig = {
 export type App = AppConfig & {
   auth: Auth;
   createOrganization: CreateOrganization;
+  /** Refunds a paid order that could not be given tickets. */
+  onUnfulfillable?: (orderId: string) => Promise<void>;
   resolveActor(headers: Headers): Promise<Actor>;
   /** A pending invitation addressed to the signed-in user, or null. */
   findInvitation(headers: Headers, invitationId: string): Promise<PendingInvitationView | null>;
@@ -107,7 +110,9 @@ export function createApp(config: AppConfig): App {
       }),
   });
 
-  return {
+  // Built last and attached, so the checkout code can ask for a refund without the two
+  // modules importing each other.
+  const app: App = {
     ...config,
     auth,
     async createOrganization(input) {
@@ -144,4 +149,6 @@ export function createApp(config: AppConfig): App {
       };
     },
   };
+  app.onUnfulfillable = (orderId) => refundUnfulfillableOrder(app, orderId);
+  return app;
 }

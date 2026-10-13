@@ -2,7 +2,7 @@
 
 Free ticketing for NGOs and event organizers. Organizations register, create events at new or existing venues, and sell tickets; buyers get QR-coded tickets by email.
 
-> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Finished so far: accounts, organizations with roles (admin, member, door staff), invitations and platform approval, the shared venue directory, multilingual events with ticket types and posters, the public storefront, buying general-admission tickets (reservations, checkout, QR-coded tickets by link and email), and connecting each organization's own Stripe account. The Stripe integration is written and unit-tested but has not yet been run against Stripe itself; by default payments use a built-in test gateway. Refunds, seat maps and check-in follow in later phases.
+> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Working today: accounts; organizations with roles (admin, member, door staff), invitations and platform approval; the shared venue directory; multilingual events with ticket types and posters; the public storefront; buying general-admission tickets (reservations, checkout, QR-coded tickets by link and email); each organization's own Stripe account; refunds, including automatic refunds when an event is cancelled; and door check-in. The Stripe integration is written and unit-tested but has not yet been run against Stripe itself; by default payments use a built-in test gateway. Still to come: reserved seating with seat maps, attendee exports, PDF tickets and production hardening.
 
 ## Tech stack
 

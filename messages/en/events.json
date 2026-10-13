@@ -29,7 +29,8 @@
     "venue": "Venue",
     "tickets": "Tickets",
     "back": "All events",
-    "checkin": "Check-in"
+    "checkin": "Check-in",
+    "orders": "Orders"
   },
   "details": {
     "title": "Details",
@@ -164,5 +165,31 @@
     "holder": "{description} · {name} · order {reference}",
     "undo": "Undo check-in",
     "ready": "Ready to scan"
+  },
+  "orders": {
+    "title": "Orders",
+    "empty": "No orders yet.",
+    "order": "Order {reference}",
+    "buyer": "{name} · {email}",
+    "total": "Total {total}",
+    "refunded": "Refunded {amount}",
+    "ticket": "{description}",
+    "valid": "Valid",
+    "void": "Void",
+    "checkedIn": "Checked in",
+    "select": "Refund {description}, ticket {number}",
+    "restock": "Put refunded tickets back on sale",
+    "refundSelected": "Refund selected tickets",
+    "refundAll": "Refund whole order",
+    "confirm": "Refund {amount} to {name}? Their tickets stop working immediately.",
+    "done": "Refund sent.",
+    "pending": "Refund accepted by the payment provider; it will complete shortly.",
+    "failed": "The refund failed: {reason}. The tickets were cancelled. You can send the refund again.",
+    "refundFailed": "Refund of {amount} failed",
+    "refundOk": "Refund of {amount}",
+    "retry": "Send refund again",
+    "unfulfillable": "Paid too late: no tickets were issued and the payment is refunded automatically.",
+    "adminOnly": "Only an organization admin can refund.",
+    "selectFirst": "Select at least one ticket."
   }
 }

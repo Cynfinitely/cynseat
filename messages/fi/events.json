@@ -29,7 +29,8 @@
     "venue": "Paikka",
     "tickets": "Liput",
     "back": "Kaikki tapahtumat",
-    "checkin": "Sisäänkirjaus"
+    "checkin": "Sisäänkirjaus",
+    "orders": "Tilaukset"
   },
   "details": {
     "title": "Tiedot",
@@ -164,5 +165,31 @@
     "holder": "{description} · {name} · tilaus {reference}",
     "undo": "Kumoa sisäänkirjaus",
     "ready": "Valmis skannaamaan"
+  },
+  "orders": {
+    "title": "Tilaukset",
+    "empty": "Ei vielä tilauksia.",
+    "order": "Tilaus {reference}",
+    "buyer": "{name} · {email}",
+    "total": "Yhteensä {total}",
+    "refunded": "Hyvitetty {amount}",
+    "ticket": "{description}",
+    "valid": "Voimassa",
+    "void": "Mitätöity",
+    "checkedIn": "Kirjattu sisään",
+    "select": "Hyvitä {description}, lippu {number}",
+    "restock": "Palauta hyvitetyt liput myyntiin",
+    "refundSelected": "Hyvitä valitut liput",
+    "refundAll": "Hyvitä koko tilaus",
+    "confirm": "Hyvitetäänkö {amount} ostajalle {name}? Liput lakkaavat toimimasta heti.",
+    "done": "Hyvitys lähetetty.",
+    "pending": "Maksupalvelu hyväksyi hyvityksen; se valmistuu pian.",
+    "failed": "Hyvitys epäonnistui: {reason}. Liput mitätöitiin. Voit lähettää hyvityksen uudelleen.",
+    "refundFailed": "Hyvitys {amount} epäonnistui",
+    "refundOk": "Hyvitys {amount}",
+    "retry": "Lähetä hyvitys uudelleen",
+    "unfulfillable": "Maksettu liian myöhään: lippuja ei toimitettu, ja maksu hyvitetään automaattisesti.",
+    "adminOnly": "Vain organisaation ylläpitäjä voi hyvittää.",
+    "selectFirst": "Valitse vähintään yksi lippu."
   }
 }

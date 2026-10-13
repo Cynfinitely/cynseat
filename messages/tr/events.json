@@ -29,7 +29,8 @@
     "venue": "Mekân",
     "tickets": "Biletler",
     "back": "Tüm etkinlikler",
-    "checkin": "Giriş kontrolü"
+    "checkin": "Giriş kontrolü",
+    "orders": "Siparişler"
   },
   "details": {
     "title": "Ayrıntılar",
@@ -164,5 +165,31 @@
     "holder": "{description} · {name} · sipariş {reference}",
     "undo": "Girişi geri al",
     "ready": "Taramaya hazır"
+  },
+  "orders": {
+    "title": "Siparişler",
+    "empty": "Henüz sipariş yok.",
+    "order": "Sipariş {reference}",
+    "buyer": "{name} · {email}",
+    "total": "Toplam {total}",
+    "refunded": "İade edilen {amount}",
+    "ticket": "{description}",
+    "valid": "Geçerli",
+    "void": "Geçersiz",
+    "checkedIn": "Giriş yapıldı",
+    "select": "{description}, {number}. bileti iade et",
+    "restock": "İade edilen biletleri yeniden satışa koy",
+    "refundSelected": "Seçili biletleri iade et",
+    "refundAll": "Tüm siparişi iade et",
+    "confirm": "{name} adlı alıcıya {amount} iade edilsin mi? Biletleri hemen geçersiz olur.",
+    "done": "İade gönderildi.",
+    "pending": "İade ödeme sağlayıcısı tarafından kabul edildi; kısa süre içinde tamamlanacak.",
+    "failed": "İade başarısız oldu: {reason}. Biletler iptal edildi. İadeyi yeniden gönderebilirsiniz.",
+    "refundFailed": "{amount} tutarındaki iade başarısız",
+    "refundOk": "{amount} iade",
+    "retry": "İadeyi yeniden gönder",
+    "unfulfillable": "Geç ödendi: bilet düzenlenmedi ve ödeme otomatik olarak iade ediliyor.",
+    "adminOnly": "Yalnızca kuruluş yöneticisi iade yapabilir.",
+    "selectFirst": "En az bir bilet seçin."
   }
 }

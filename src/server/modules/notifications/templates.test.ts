@@ -20,6 +20,16 @@ const samples: EmailTemplate[] = [
   },
   { template: "orgSuspended", data: { organization: "Tiyatro", url: "https://x.test/d" } },
   {
+    template: "orderRefunded",
+    data: {
+      name: "Aino",
+      event: "Bir Masal",
+      reference: "K7QM2XWP",
+      amount: "€10.00",
+      url: "https://x.test/o",
+    },
+  },
+  {
     template: "orderConfirmation",
     data: {
       name: "Aino",

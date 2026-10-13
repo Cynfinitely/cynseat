@@ -65,6 +65,18 @@ export type PaymentGateway = {
   }): Promise<{ url: string }>;
   getAccount(accountId: string): Promise<AccountState | null>;
   /**
+   * Returns money for a payment. `idempotencyKey` makes repeating the call safe: the same
+   * key never refunds twice. "pending" means the provider accepted it and will finish later.
+   */
+  refund(input: {
+    accountId: string;
+    paymentIntentId: string;
+    amount: number;
+    idempotencyKey: string;
+    /** Also give back CynSeat's fee, in proportion. */
+    refundApplicationFee: boolean;
+  }): Promise<{ id: string; status: "succeeded" | "pending" | "failed"; failureReason?: string }>;
+  /**
    * Checks that a notification really comes from the provider and decodes it.
    * Throws if the signature does not verify.
    */

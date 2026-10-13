@@ -32,6 +32,10 @@ export type EmailTemplate =
       };
     }
   | {
+      template: "orderRefunded";
+      data: { name: string; event: string; reference: string; amount: string; url: string };
+    }
+  | {
       template: "orgApproved" | "orgRejected" | "orgSuspended";
       data: { organization: string; url: string; note?: string };
     };

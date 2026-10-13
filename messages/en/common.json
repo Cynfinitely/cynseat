@@ -79,7 +79,12 @@
     "not_found": "That no longer exists. Reload the page.",
     "image_type": "Choose a JPEG, PNG or WebP image.",
     "image_too_large": "The image is larger than 4 MB.",
-    "org_not_approved": "Your organization has not been approved yet."
+    "org_not_approved": "Your organization has not been approved yet.",
+    "tickets_not_refundable": "Some of those tickets have already been refunded. Reload the page.",
+    "nothing_to_refund": "There is nothing left to refund on this order.",
+    "order_not_paid": "Only paid orders can be refunded.",
+    "refund_exceeds_total": "That would refund more than was paid.",
+    "refund_not_retryable": "This refund cannot be sent again."
   },
   "categories": {
     "music": "Music",

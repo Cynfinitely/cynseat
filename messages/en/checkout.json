@@ -44,7 +44,8 @@
     "qrAlt": "QR code for ticket {number}",
     "eventCancelled": "This event has been cancelled.",
     "notFoundTitle": "Order not found",
-    "notFoundBody": "Check the link in your confirmation email."
+    "notFoundBody": "Check the link in your confirmation email.",
+    "refunded": "Refunded: {amount}"
   },
   "fake": {
     "title": "Test payment",

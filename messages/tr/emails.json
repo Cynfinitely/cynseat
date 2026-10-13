@@ -50,5 +50,11 @@
     "heading": "{event} biletleriniz",
     "body": "Merhaba {name}, {reference} numaralı siparişiniz için teşekkürler. {when} tarihindeki {event} etkinliği için {tickets} biletiniz var. Biletlerinizi aşağıdan açın ve kapıda QR kodlarını gösterin.",
     "action": "Biletlerimi aç"
+  },
+  "orderRefunded": {
+    "subject": "{reference} numaralı siparişiniz için iade",
+    "heading": "İadeniz yolda",
+    "body": "Merhaba {name}, {reference} numaralı siparişiniz ({event}) için {amount} iade ettik. Tutarın hesabınıza ulaşması birkaç iş günü sürebilir. İade edilen biletler artık geçerli değildir.",
+    "action": "Siparişi görüntüle"
   }
 }

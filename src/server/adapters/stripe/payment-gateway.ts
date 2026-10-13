@@ -144,6 +144,27 @@ export function createStripeGateway(options: {
       }
     },
 
+    async refund({ accountId, paymentIntentId, amount, idempotencyKey, refundApplicationFee }) {
+      const refund = await stripe.refunds.create(
+        {
+          payment_intent: paymentIntentId,
+          amount,
+          refund_application_fee: refundApplicationFee,
+        },
+        { stripeAccount: accountId, idempotencyKey },
+      );
+      return {
+        id: refund.id,
+        status:
+          refund.status === "succeeded"
+            ? "succeeded"
+            : refund.status === "failed"
+              ? "failed"
+              : "pending",
+        failureReason: refund.failure_reason ?? undefined,
+      };
+    },
+
     parseEvent(rawBody, signature) {
       const event = stripe.webhooks.constructEvent(rawBody, signature ?? "", options.webhookSecret);
       const object = event.data.object as unknown as Record<string, unknown>;

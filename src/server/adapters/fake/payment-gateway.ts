@@ -23,6 +23,15 @@ export function createFakePaymentGateway(options: {
   const sessions = new Map<string, Session>();
   const byOrder = new Map<string, string>();
   const accounts = new Map<string, AccountState>();
+  const refunds = new Map<
+    string,
+    {
+      paymentIntentId: string;
+      amount: number;
+      result: { id: string; status: "succeeded" | "failed"; failureReason?: string };
+    }
+  >();
+  let nextRefundFailure: string | undefined;
   const webhookSecret = options.webhookSecret ?? "fake-webhook-secret";
   const sign = (body: string) => createHmac("sha256", webhookSecret).update(body).digest();
 
@@ -38,6 +47,34 @@ export function createFakePaymentGateway(options: {
     },
     async getAccount(accountId) {
       return accounts.get(accountId) ?? null;
+    },
+    async refund({ accountId, paymentIntentId, amount, idempotencyKey }) {
+      const existing = refunds.get(idempotencyKey);
+      if (existing) return existing.result;
+      const session = [...sessions.values()].find(
+        (candidate) =>
+          candidate.paymentIntentId === paymentIntentId && candidate.accountId === accountId,
+      );
+      const refunded = [...refunds.values()]
+        .filter(
+          (entry) => entry.paymentIntentId === paymentIntentId && entry.result.status !== "failed",
+        )
+        .reduce((sum, entry) => sum + entry.amount, 0);
+      const failure = !session
+        ? "unknown_payment"
+        : refunded + amount > session.amountTotal
+          ? "amount_too_large"
+          : nextRefundFailure;
+      nextRefundFailure = undefined;
+      const result = failure
+        ? {
+            id: `re_fake_${randomBytes(8).toString("hex")}`,
+            status: "failed" as const,
+            failureReason: failure,
+          }
+        : { id: `re_fake_${randomBytes(8).toString("hex")}`, status: "succeeded" as const };
+      refunds.set(idempotencyKey, { paymentIntentId, amount, result });
+      return result;
     },
     parseEvent(rawBody, signature) {
       const given = Buffer.from(signature ?? "", "hex");
@@ -87,6 +124,11 @@ export function createFakePaymentGateway(options: {
     ...gateway,
     sessions,
     accounts,
+    refunds,
+    /** Makes the next refund fail, as when the organization's balance is too low. */
+    failNextRefund(reason = "insufficient_funds"): void {
+      nextRefundFailure = reason;
+    },
     /** The organization finishes (or loses) its onboarding. */
     setAccount(accountId: string, state: Partial<Omit<AccountState, "id">>): void {
       const account = accounts.get(accountId);
