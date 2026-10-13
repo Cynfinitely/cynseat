@@ -45,7 +45,11 @@
     "eventCancelled": "Bu etkinlik iptal edildi.",
     "notFoundTitle": "Sipariş bulunamadı",
     "notFoundBody": "Onay e-postanızdaki bağlantıyı kontrol edin.",
-    "refunded": "İade edilen: {amount}"
+    "refunded": "İade edilen: {amount}",
+    "download": "Biletleri indir (PDF)",
+    "pdfHolder": "Bilet sahibi",
+    "pdfOrder": "Sipariş",
+    "pdfOrganizer": "Düzenleyen"
   },
   "fake": {
     "title": "Test ödemesi",

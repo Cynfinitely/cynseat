@@ -62,6 +62,18 @@ test.describe("buying tickets", () => {
     await expect(page.getByText(title)).toBeVisible();
     await noViolations(page);
 
+    // The tickets can be downloaded as a PDF, in the page's language.
+    const pdfHref = await page
+      .getByRole("link", { name: "Download tickets (PDF)" })
+      .getAttribute("href");
+    const pdf = await page.request.get(pdfHref!);
+    expect(pdf.status()).toBe(200);
+    expect(pdf.headers()["content-type"]).toBe("application/pdf");
+    expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+    expect((await page.request.get(`/api/orders/${"a".repeat(43)}/tickets.pdf`)).status()).toBe(
+      404,
+    );
+
     // The emailed link opens the same order on a device that has never seen it.
     const link = await emailLink(email, "orderConfirmation");
     expect(new URL(link).pathname).toBe(new URL(page.url()).pathname);

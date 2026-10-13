@@ -41,6 +41,10 @@ const nextConfig: NextConfig = {
     // Posters (up to 4 MB) are uploaded through a server action.
     serverActions: { bodySizeLimit: "5mb" },
   },
+  // The ticket PDF embeds font files read from disk; make sure they ship with that route.
+  outputFileTracingIncludes: {
+    "/api/orders/[token]/tickets.pdf": ["./src/server/modules/tickets/fonts/*.ttf"],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

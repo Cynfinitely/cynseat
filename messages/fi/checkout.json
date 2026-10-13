@@ -45,7 +45,11 @@
     "eventCancelled": "Tämä tapahtuma on peruttu.",
     "notFoundTitle": "Tilausta ei löytynyt",
     "notFoundBody": "Tarkista vahvistusviestissäsi oleva linkki.",
-    "refunded": "Hyvitetty: {amount}"
+    "refunded": "Hyvitetty: {amount}",
+    "download": "Lataa liput (PDF)",
+    "pdfHolder": "Lipun haltija",
+    "pdfOrder": "Tilaus",
+    "pdfOrganizer": "Järjestäjä"
   },
   "fake": {
     "title": "Testimaksu",

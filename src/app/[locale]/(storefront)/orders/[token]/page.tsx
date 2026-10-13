@@ -119,6 +119,17 @@ export default async function OrderPage({ params }: Props) {
             <h2 id="tickets-title" className="text-ink text-xl font-semibold">
               {t("tickets")}
             </h2>
+            {order.tickets.some((ticket) => ticket.status === "valid") ? (
+              <p className="mt-3">
+                {/* A plain link, so the browser downloads the file. */}
+                <a
+                  href={`/api/orders/${token}/tickets.pdf?locale=${locale}`}
+                  className={buttonVariants({ variant: "secondary", size: "sm" })}
+                >
+                  {t("download")}
+                </a>
+              </p>
+            ) : null}
             <ul className="mt-4 grid gap-4 sm:grid-cols-2">
               {order.tickets.map((ticket) => (
                 <li key={ticket.id}>

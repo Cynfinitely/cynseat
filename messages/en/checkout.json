@@ -45,7 +45,11 @@
     "eventCancelled": "This event has been cancelled.",
     "notFoundTitle": "Order not found",
     "notFoundBody": "Check the link in your confirmation email.",
-    "refunded": "Refunded: {amount}"
+    "refunded": "Refunded: {amount}",
+    "download": "Download tickets (PDF)",
+    "pdfHolder": "Ticket holder",
+    "pdfOrder": "Order",
+    "pdfOrganizer": "Organizer"
   },
   "fake": {
     "title": "Test payment",
