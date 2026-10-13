@@ -4,6 +4,7 @@ import { requireOrgEvent } from "@/app/_lib/event";
 import { isContentLocale, type ContentLocale } from "@/domain/events/types";
 import { toZonedInput } from "@/domain/time/zoned";
 import { EventContentEditor, type TranslationValues } from "@/features/events/event-content-editor";
+import { CoverUploader } from "@/features/events/cover-uploader";
 import { EventDetailsForm } from "@/features/events/event-details-form";
 import { can } from "@/server/authz/permissions";
 
@@ -44,6 +45,17 @@ export default async function EventDetailsPage({ params }: Props) {
           eventId={event.id}
           defaultLocale={isContentLocale(event.defaultLocale) ? event.defaultLocale : "en"}
           translations={translations}
+          disabled={disabled}
+        />
+      </section>
+      <section aria-labelledby="cover-title">
+        <h2 id="cover-title" className="text-ink mb-3 text-lg font-semibold">
+          {t("cover.title")}
+        </h2>
+        <CoverUploader
+          orgSlug={orgSlug}
+          eventId={event.id}
+          coverImageUrl={event.coverImageUrl}
           disabled={disabled}
         />
       </section>

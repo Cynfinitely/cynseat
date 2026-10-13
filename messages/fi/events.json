@@ -129,5 +129,14 @@
     "deleteConfirm": "Poistetaanko tämä luonnos? Tätä ei voi kumota.",
     "done": "valmis",
     "todo": "tekemättä"
+  },
+  "cover": {
+    "title": "Juliste",
+    "hint": "JPEG, PNG tai WebP, enintään 4 Mt. Leveät kuvat (16:9) näyttävät parhailta.",
+    "choose": "Julistekuva",
+    "upload": "Lataa juliste",
+    "remove": "Poista juliste",
+    "saved": "Juliste tallennettu.",
+    "current": "Nykyinen juliste"
   }
 }

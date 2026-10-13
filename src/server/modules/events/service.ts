@@ -7,6 +7,7 @@ import type {
   UpdateEventInput,
 } from "../../../domain/events/schemas";
 import type { ContentLocale, PublishProblem } from "../../../domain/events/types";
+import { detectImageType, imageTypes, MAX_IMAGE_BYTES } from "../../../domain/images/detect";
 import { parseMoneyInput } from "../../../domain/money/money";
 import { slugify, SLUG_MAX_LENGTH } from "../../../domain/slug/slug";
 import { fromZonedInput } from "../../../domain/time/zoned";
@@ -14,7 +15,9 @@ import { authorizeOrg } from "../../authz/authorize";
 import type { Db } from "../../db/client";
 import type { VenueSnapshot } from "../../db/schema";
 import { conflict, invalid, notFound } from "../../errors";
+import { randomBytes } from "node:crypto";
 import type { Clock } from "../../ports/clock";
+import type { ObjectStore } from "../../ports/object-store";
 import { recordAudit } from "../audit/service";
 import type { DbOrTx } from "../notifications/service";
 import type { OrgContext } from "../orgs/service";
@@ -219,6 +222,48 @@ export async function setEventVenue(
       updatedAt: now,
     });
   });
+}
+
+// ---- Poster ------------------------------------------------------------------------------
+
+/** Replaces the event's poster. `bytes` must be a JPEG, PNG or WebP of at most 4 MB. */
+export async function setEventCover(
+  deps: Deps & { store: ObjectStore },
+  ctx: OrgContext,
+  eventId: string,
+  bytes: Uint8Array,
+): Promise<{ url: string }> {
+  authorizeOrg(ctx, "event.manage");
+  const event = await requireEvent(deps.db, ctx, eventId, { editable: true });
+  if (bytes.byteLength > MAX_IMAGE_BYTES)
+    throw invalid("image_too_large", { cover: "image_too_large" });
+  const type = detectImageType(bytes);
+  if (!type) throw invalid("image_type", { cover: "image_type" });
+
+  // A fresh, unguessable name per upload: stored files never change, so they cache forever.
+  const key = `events/${event.id}/${randomBytes(12).toString("hex")}.${imageTypes[type]}`;
+  const { url } = await deps.store.put({ key, body: bytes, contentType: type });
+  await repo.updateEvent(deps.db, ctx.organization.id, eventId, {
+    coverImageUrl: url,
+    updatedAt: deps.clock.now(),
+  });
+  if (event.coverImageUrl) await deps.store.delete(event.coverImageUrl).catch(() => {});
+  return { url };
+}
+
+export async function removeEventCover(
+  deps: Deps & { store: ObjectStore },
+  ctx: OrgContext,
+  eventId: string,
+): Promise<void> {
+  authorizeOrg(ctx, "event.manage");
+  const event = await requireEvent(deps.db, ctx, eventId, { editable: true });
+  if (!event.coverImageUrl) return;
+  await repo.updateEvent(deps.db, ctx.organization.id, eventId, {
+    coverImageUrl: null,
+    updatedAt: deps.clock.now(),
+  });
+  await deps.store.delete(event.coverImageUrl).catch(() => {});
 }
 
 // ---- Ticket types ------------------------------------------------------------------------

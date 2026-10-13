@@ -9,10 +9,13 @@ import { toEmailLocale, type EmailLocale } from "./modules/notifications/templat
 import { ensureOrgProfile, isPlatformAdmin, type CreateOrganization } from "./modules/orgs/service";
 import type { Clock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
+import type { ObjectStore } from "./ports/object-store";
 
 export type AppConfig = {
   db: Db;
   mailer: Mailer;
+  /** Where uploaded images go. */
+  store: ObjectStore;
   clock: Clock;
   /** Public origin, no trailing slash. */
   appUrl: string;

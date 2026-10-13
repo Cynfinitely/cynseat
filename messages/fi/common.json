@@ -76,7 +76,9 @@
     "cannot_publish": "Tee tarkistuslista valmiiksi ennen julkaisua.",
     "default_translation": "Tapahtuman pääkieltä ei voi poistaa.",
     "invalid_venue": "Valitse tapahtumapaikka.",
-    "not_found": "Tätä ei enää ole. Lataa sivu uudelleen."
+    "not_found": "Tätä ei enää ole. Lataa sivu uudelleen.",
+    "image_type": "Valitse JPEG-, PNG- tai WebP-kuva.",
+    "image_too_large": "Kuva on suurempi kuin 4 Mt."
   },
   "categories": {
     "music": "Musiikki",

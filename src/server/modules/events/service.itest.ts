@@ -20,9 +20,11 @@ import {
   getOrgEvent,
   listOrgEvents,
   publishEvent,
+  removeEventCover,
   removeTicketType,
   removeTranslation,
   saveTranslation,
+  setEventCover,
   setEventVenue,
   unpublishEvent,
   updateEvent,
@@ -214,6 +216,57 @@ describe("events", () => {
           }),
         ),
       ).toBe("NOT_FOUND");
+    });
+  });
+
+  describe("posters", () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3]);
+    const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 1, 2, 3]);
+
+    it("stores an image, replaces it, and removes it", async () => {
+      const app = getApp();
+      const org = await createOrg(app);
+      const ctx = await org.as(org.member);
+      const event = await createEvent(app, ctx, eventInput());
+
+      const first = await setEventCover(app, ctx, event.id, png);
+      expect(first.url).toMatch(new RegExp(`/events/${event.id}/[0-9a-f]{24}\\.png$`));
+      expect(app.store.files.get(first.url)?.contentType).toBe("image/png");
+
+      const second = await setEventCover(app, ctx, event.id, jpeg);
+      expect(second.url).toMatch(/\.jpg$/);
+      expect(app.store.files.has(first.url)).toBe(false);
+      expect((await getOrgEvent(app, ctx, event.id)).event.coverImageUrl).toBe(second.url);
+
+      await removeEventCover(app, ctx, event.id);
+      expect(app.store.files.has(second.url)).toBe(false);
+      expect((await getOrgEvent(app, ctx, event.id)).event.coverImageUrl).toBeNull();
+    });
+
+    it("accepts only real images of a sensible size, from people who may edit the event", async () => {
+      const app = getApp();
+      const [org, other] = await Promise.all([createOrg(app), createOrg(app)]);
+      const ctx = await org.as(org.admin);
+      const event = await createEvent(app, ctx, eventInput());
+      const before = app.store.files.size;
+
+      const svg = new TextEncoder().encode("<svg><script>alert(1)</script></svg>");
+      expect(await failure(() => setEventCover(app, ctx, event.id, svg))).toMatchObject({
+        code: "VALIDATION",
+        fields: { cover: "image_type" },
+      });
+      const huge = new Uint8Array(4 * 1024 * 1024 + 1);
+      huge.set(png);
+      expect(await failure(() => setEventCover(app, ctx, event.id, huge))).toMatchObject({
+        fields: { cover: "image_too_large" },
+      });
+      expect(
+        await codeOf(async () => setEventCover(app, await org.as(org.door), event.id, png)),
+      ).toBe("FORBIDDEN");
+      expect(
+        await codeOf(async () => setEventCover(app, await other.as(other.admin), event.id, png)),
+      ).toBe("NOT_FOUND");
+      expect(app.store.files.size).toBe(before);
     });
   });
 

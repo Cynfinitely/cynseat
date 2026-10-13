@@ -129,5 +129,14 @@
     "deleteConfirm": "Bu taslak silinsin mi? Bu işlem geri alınamaz.",
     "done": "tamam",
     "todo": "yapılacak"
+  },
+  "cover": {
+    "title": "Afiş",
+    "hint": "JPEG, PNG veya WebP, en fazla 4 MB. Geniş görseller (16:9) en iyi görünür.",
+    "choose": "Afiş görseli",
+    "upload": "Afişi yükle",
+    "remove": "Afişi kaldır",
+    "saved": "Afiş kaydedildi.",
+    "current": "Geçerli afiş"
   }
 }

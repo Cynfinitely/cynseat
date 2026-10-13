@@ -76,7 +76,9 @@
     "cannot_publish": "Finish the checklist before publishing.",
     "default_translation": "The event's main language cannot be removed.",
     "invalid_venue": "Choose a venue.",
-    "not_found": "That no longer exists. Reload the page."
+    "not_found": "That no longer exists. Reload the page.",
+    "image_type": "Choose a JPEG, PNG or WebP image.",
+    "image_too_large": "The image is larger than 4 MB."
   },
   "categories": {
     "music": "Music",

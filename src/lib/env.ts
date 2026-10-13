@@ -16,6 +16,9 @@ export const env = createEnv({
       }),
     // Shared secret for /api/cron/*. Vercel Cron sends it as a bearer token.
     CRON_SECRET: z.string().min(24).optional(),
+    // "local" keeps uploaded images on this machine's disk (development only).
+    STORAGE_DRIVER: z.enum(["local", "vercel-blob"]).default("local"),
+    BLOB_READ_WRITE_TOKEN: z.string().min(1).optional(),
     // "console" prints emails instead of sending them.
     MAIL_DRIVER: z.enum(["console", "resend"]).default("console"),
     RESEND_API_KEY: z.string().min(1).optional(),
@@ -30,6 +33,8 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     AUTH_RATE_LIMIT: process.env.AUTH_RATE_LIMIT,
     CRON_SECRET: process.env.CRON_SECRET,
+    STORAGE_DRIVER: process.env.STORAGE_DRIVER,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     MAIL_DRIVER: process.env.MAIL_DRIVER,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,

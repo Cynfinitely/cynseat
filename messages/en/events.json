@@ -129,5 +129,14 @@
     "deleteConfirm": "Delete this draft? This cannot be undone.",
     "done": "done",
     "todo": "to do"
+  },
+  "cover": {
+    "title": "Poster",
+    "hint": "JPEG, PNG or WebP, up to 4 MB. Wide images (16:9) look best.",
+    "choose": "Poster image",
+    "upload": "Upload poster",
+    "remove": "Remove poster",
+    "saved": "Poster saved.",
+    "current": "Current poster"
   }
 }

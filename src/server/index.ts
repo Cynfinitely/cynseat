@@ -1,12 +1,15 @@
 // The running application, built once per process from the validated environment.
 import { env } from "@/lib/env";
 import { createConsoleMailer } from "./adapters/fake/mailer";
+import { createLocalObjectStore, type LocalObjectStore } from "./adapters/local/object-store";
 import { createResendMailer } from "./adapters/resend/mailer";
+import { createVercelBlobStore } from "./adapters/vercel/object-store";
 import { createApp, type App } from "./app";
 import { getDb } from "./db/client";
 import { checkHealth, type HealthReport } from "./modules/health/service";
 import { systemClock } from "./ports/clock";
 import type { Mailer } from "./ports/mailer";
+import type { ObjectStore } from "./ports/object-store";
 
 const globalForApp = globalThis as unknown as { cynseatApp?: App };
 
@@ -18,12 +21,30 @@ function createMailer(): Mailer {
   return createConsoleMailer();
 }
 
+const appUrl = () => env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+
+/** The on-disk store, when that is the configured driver; the upload route reads from it. */
+export function getLocalStore(): LocalObjectStore | null {
+  if (env.STORAGE_DRIVER !== "local") return null;
+  return createLocalObjectStore({ directory: ".data/uploads", baseUrl: appUrl() });
+}
+
+function createStore(): ObjectStore {
+  const local = getLocalStore();
+  if (local) return local;
+  if (!env.BLOB_READ_WRITE_TOKEN) {
+    throw new Error("STORAGE_DRIVER=vercel-blob needs BLOB_READ_WRITE_TOKEN");
+  }
+  return createVercelBlobStore({ token: env.BLOB_READ_WRITE_TOKEN });
+}
+
 export function getApp(): App {
   globalForApp.cynseatApp ??= createApp({
     db: getDb().db,
     mailer: createMailer(),
+    store: createStore(),
     clock: systemClock,
-    appUrl: env.NEXT_PUBLIC_APP_URL.replace(/\/$/, ""),
+    appUrl: appUrl(),
     authSecret: env.BETTER_AUTH_SECRET,
     authRateLimit: env.AUTH_RATE_LIMIT === "on",
   });

@@ -3,6 +3,9 @@ import { expect, test, type Page } from "@playwright/test";
 import { approveOrganization } from "./support/db";
 import { registerOrganization, signUp, uniqueId } from "./support/users";
 
+const ONE_PIXEL_PNG =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+
 const noViolations = async (page: Page) => {
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
@@ -80,6 +83,24 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await expect(page.getByText("Text saved.")).toBeVisible();
   });
 
+  await test.step("upload a poster, and have a non-image refused", async () => {
+    await page.getByLabel("Poster image").setInputFiles({
+      name: "poster.png",
+      mimeType: "image/png",
+      buffer: Buffer.from("<script>alert(1)</script>"),
+    });
+    await page.getByRole("button", { name: "Upload poster" }).click();
+    await expect(page.getByText("Choose a JPEG, PNG or WebP image.")).toBeVisible();
+
+    await page.getByLabel("Poster image").setInputFiles({
+      name: "poster.png",
+      mimeType: "image/png",
+      buffer: Buffer.from(ONE_PIXEL_PNG, "base64"),
+    });
+    await page.getByRole("button", { name: "Upload poster" }).click();
+    await expect(page.getByRole("img", { name: "Current poster" })).toBeVisible();
+  });
+
   await test.step("a draft is not public, and cannot be published before approval", async () => {
     const anonymous = await (await browser.newContext()).newPage();
     const response = await anonymous.goto(`/en/o/${orgSlug}/e/kesakonsertti-${id}`);
@@ -106,6 +127,11 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await expect(visitor).toHaveURL(new RegExp(`/en${eventPath}$`));
     await expect(visitor.getByRole("heading", { level: 1, name: titleEn })).toBeVisible();
     await expect(visitor.getByText("An evening of summer music.")).toBeVisible();
+    // The poster is served and really is an image.
+    const poster = visitor.locator("article img").first();
+    await expect(poster).toBeVisible();
+    const served = await visitor.request.get((await poster.getAttribute("src"))!);
+    expect(served.headers()["content-type"]).toBe("image/png");
     await expect(visitor.getByText("Second paragraph.")).toBeVisible();
     await expect(visitor.getByText("Saturday, June 15, 2030")).toBeVisible();
     await expect(visitor.getByText("7:00 PM")).toBeVisible();

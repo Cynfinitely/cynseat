@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { createMemoryMailer } from "../../src/server/adapters/fake/mailer";
+import { createMemoryObjectStore } from "../../src/server/adapters/fake/object-store";
 import { createApp, type App } from "../../src/server/app";
 import type { OrgRole } from "../../src/server/auth/roles";
 import type { UserActor } from "../../src/server/authz/actor";
@@ -15,6 +16,7 @@ export type TestClock = { now(): Date; advance(ms: number): void };
 
 export type TestApp = App & {
   mailer: ReturnType<typeof createMemoryMailer>;
+  store: ReturnType<typeof createMemoryObjectStore>;
   clock: TestClock;
 };
 
@@ -33,16 +35,19 @@ export function setupTestApp(): () => TestApp {
         },
       };
       const mailer = createMemoryMailer();
+      const store = createMemoryObjectStore();
       app = {
         ...createApp({
           db: getDb().db,
           mailer,
+          store,
           clock,
           appUrl: TEST_APP_URL,
           authSecret: "test-secret-test-secret-test-secret-0123",
           authRateLimit: false,
         }),
         mailer,
+        store,
         clock,
       };
     }

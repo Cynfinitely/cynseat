@@ -13,6 +13,7 @@ import {
   updateEventSchema,
 } from "@/domain/events/schemas";
 import { contentLocales } from "@/domain/events/types";
+import { MAX_IMAGE_BYTES } from "@/domain/images/detect";
 import { venueSchema, venueSearchSchema } from "@/domain/venues/schemas";
 import { getApp } from "@/server";
 import type { App } from "@/server/app";
@@ -153,4 +154,30 @@ export async function deleteDraftEventAction(orgSlug: string, eventId: string) {
   return orgAction(orgSlug, nothing, undefined, (app, ctx) =>
     events.deleteDraftEvent(app, ctx, eventId),
   );
+}
+
+/** Receives the poster as form data, so the file is never serialized into JSON. */
+export async function setEventCoverAction(orgSlug: string, eventId: string, form: FormData) {
+  const file = form.get("cover");
+  return orgAction(
+    orgSlug,
+    z.instanceof(File, { error: "required" }),
+    file,
+    async (app, ctx, data) => {
+      // Refuse oversized files before reading them into memory.
+      const bytes =
+        data.size > MAX_IMAGE_BYTES + 1
+          ? new Uint8Array(MAX_IMAGE_BYTES + 1)
+          : new Uint8Array(await data.arrayBuffer());
+      await events.setEventCover(app, ctx, eventId, bytes);
+      revalidatePath("/[locale]", "layout");
+    },
+  );
+}
+
+export async function removeEventCoverAction(orgSlug: string, eventId: string) {
+  return orgAction(orgSlug, nothing, undefined, async (app, ctx) => {
+    await events.removeEventCover(app, ctx, eventId);
+    revalidatePath("/[locale]", "layout");
+  });
 }
