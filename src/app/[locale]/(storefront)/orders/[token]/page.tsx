@@ -23,6 +23,7 @@ export default async function OrderPage({ params }: Props) {
   const order = await getOrderByToken(getApp(), token, locale);
   const t = await getTranslations("checkout.order");
   const tStore = await getTranslations("storefront.event");
+  const tSeat = await getTranslations("seating.ticket");
 
   if (!order) {
     return (
@@ -123,6 +124,9 @@ export default async function OrderPage({ params }: Props) {
                 <li key={ticket.id}>
                   <Card className="flex h-full flex-col items-center gap-3 p-5 text-center">
                     <p className="text-ink font-semibold">{ticket.description}</p>
+                    {ticket.seat ? (
+                      <p className="text-ink text-sm font-medium">{tSeat("seat", ticket.seat)}</p>
+                    ) : null}
                     <p className="text-muted text-sm">
                       {t("ticket", { number: ticket.number, total: order.tickets.length })}
                     </p>

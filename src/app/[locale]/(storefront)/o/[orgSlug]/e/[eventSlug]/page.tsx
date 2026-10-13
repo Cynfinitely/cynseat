@@ -5,6 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { cache } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Badge, type BadgeTone } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { SaleState } from "@/domain/events/rules";
 import { formatMoney } from "@/domain/money/money";
@@ -49,12 +50,16 @@ export default async function EventPage({ params }: Props) {
   const event = await load(orgSlug, eventSlug, locale);
   if (!event) notFound();
   const t = await getTranslations("storefront.event");
+  const tSeating = await getTranslations("seating.picker");
   const tCategories = await getTranslations("common.categories");
   const format = await getFormatter();
   const inZone = { timeZone: event.timezone } as const;
   const time = (date: Date) => format.dateTime(date, { timeStyle: "short", ...inZone });
   const contentLang = event.contentLocale === locale ? undefined : event.contentLocale;
-  const onSale = event.ticketTypes.filter((type) => type.state === "on_sale");
+  const onSale = event.ticketTypes.filter((type) => type.state === "on_sale" && type.kind === "ga");
+  const seatsOnSale = event.ticketTypes.some(
+    (type) => type.state === "on_sale" && type.kind === "seated",
+  );
   const paragraphs = (event.description ?? "").split(/\n\s*\n/).filter((p) => p.trim() !== "");
 
   return (
@@ -193,6 +198,14 @@ export default async function EventPage({ params }: Props) {
                 ))}
               </ul>
             )}
+            {event.status === "published" && seatsOnSale ? (
+              <Link
+                href={`/o/${event.organization.slug}/e/${event.slug}/seats`}
+                className={buttonVariants({ className: "mt-3 w-full" })}
+              >
+                {tSeating("cta")}
+              </Link>
+            ) : null}
             {event.status === "published" ? (
               <TicketSelector
                 eventId={event.id}

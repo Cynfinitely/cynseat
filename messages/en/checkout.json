@@ -66,6 +66,7 @@
     "payments_unavailable": "The organizer cannot take payments at the moment. Please try again later.",
     "free_ticket_limit": "This email address already has the maximum number of free tickets for this event.",
     "invalid_quantity": "Choose a valid number of tickets.",
-    "try_again": "Something went wrong. Please try again."
+    "try_again": "Something went wrong. Please try again.",
+    "seats_taken": "Some of those seats are no longer available."
   }
 }

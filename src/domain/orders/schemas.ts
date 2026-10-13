@@ -11,6 +11,11 @@ export const cartSchema = z.object({
       }),
     )
     .max(20),
+  /** Reserved seats, each with the ticket type chosen for it. */
+  seats: z
+    .array(z.object({ seatId: z.uuid(), ticketTypeId: z.uuid() }))
+    .max(50)
+    .default([]),
 });
 export type CartInput = z.infer<typeof cartSchema>;
 

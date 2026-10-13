@@ -66,6 +66,7 @@
     "payments_unavailable": "Järjestäjä ei voi juuri nyt vastaanottaa maksuja. Yritä myöhemmin uudelleen.",
     "free_ticket_limit": "Tällä sähköpostiosoitteella on jo enimmäismäärä ilmaislippuja tähän tapahtumaan.",
     "invalid_quantity": "Valitse kelvollinen lippumäärä.",
-    "try_again": "Jokin meni vikaan. Yritä uudelleen."
+    "try_again": "Jokin meni vikaan. Yritä uudelleen.",
+    "seats_taken": "Osa paikoista ei ole enää saatavilla."
   }
 }

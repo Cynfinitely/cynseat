@@ -84,7 +84,15 @@
     "nothing_to_refund": "Bu siparişte iade edilecek bir şey kalmadı.",
     "order_not_paid": "Yalnızca ödenmiş siparişler iade edilebilir.",
     "refund_exceeds_total": "Bu, ödenenden fazlasını iade eder.",
-    "refund_not_retryable": "Bu iade yeniden gönderilemez."
+    "refund_not_retryable": "Bu iade yeniden gönderilemez.",
+    "seats_taken": "Bu koltukların bazıları artık müsait değil.",
+    "venue_mismatch": "Bu oturma planı başka bir mekân için.",
+    "seat_map_empty": "Bu oturma planında henüz koltuk yok.",
+    "invalid_sections": "En az bir bölüm seçin.",
+    "too_many_seats": "Bir oturma planında en fazla 5.000 koltuk olabilir.",
+    "duplicate_section_name": "İki bölümün adı aynı. Her birine ayrı bir ad verin.",
+    "invalid_layout": "Oturma planı kaydedilemedi. Değerleri kontrol edin.",
+    "invalid_name": "Bir ad girin."
   },
   "categories": {
     "music": "Müzik",

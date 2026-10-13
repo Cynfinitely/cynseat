@@ -13,6 +13,7 @@ export default async function EventLayout({ children, params }: Props) {
   const { orgSlug, eventId } = await params;
   const { ctx, detail } = await requireOrgEvent(orgSlug, eventId);
   const t = await getTranslations("events");
+  const tSeating = await getTranslations("seating.event");
   const { event } = detail;
   const base = `/dashboard/${orgSlug}/events/${event.id}`;
   const title =
@@ -39,6 +40,7 @@ export default async function EventLayout({ children, params }: Props) {
             { href: base, label: t("nav.details") },
             { href: `${base}/venue`, label: t("nav.venue") },
             { href: `${base}/tickets`, label: t("nav.tickets") },
+            { href: `${base}/seating`, label: tSeating("nav") },
             ...(can(ctx.role, "order.view")
               ? [{ href: `${base}/orders`, label: t("nav.orders") }]
               : []),

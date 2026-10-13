@@ -46,6 +46,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
   }
 
   const actor = await getActor();
+  const tSeat = await getTranslations("seating.ticket");
   const money = (amount: number) => formatMoney(amount, cart.currency, locale);
   const secondsLeft = Math.max(
     0,
@@ -80,6 +81,24 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
         <Card className="h-fit p-5">
           <h2 className="text-ink font-semibold">{t("summary")}</h2>
           <ul className="divide-line mt-2 divide-y text-sm">
+            {cart.seats.map((seat) => (
+              <li key={seat.seatId} className="flex justify-between gap-3 py-2">
+                <span>
+                  {seat.ticketTypeName}
+                  <br />
+                  <span className="text-muted">
+                    {tSeat("seat", {
+                      section: seat.sectionName,
+                      row: seat.rowLabel,
+                      seat: seat.seatLabel,
+                    })}
+                  </span>
+                </span>
+                <span className="whitespace-nowrap">
+                  {seat.unitPriceAmount === 0 ? t("free") : money(seat.unitPriceAmount)}
+                </span>
+              </li>
+            ))}
             {cart.lines.map((line) => (
               <li key={line.ticketTypeId} className="flex justify-between gap-3 py-2">
                 <span>

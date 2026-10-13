@@ -17,6 +17,7 @@ export type ScanResponse = {
     description: string;
     buyerName: string;
     reference: string;
+    seat: { section: string; row: string; seat: string } | null;
     checkedInAt: string | null;
   } | null;
   progress: { checkedIn: number; total: number };

@@ -84,7 +84,15 @@
     "nothing_to_refund": "There is nothing left to refund on this order.",
     "order_not_paid": "Only paid orders can be refunded.",
     "refund_exceeds_total": "That would refund more than was paid.",
-    "refund_not_retryable": "This refund cannot be sent again."
+    "refund_not_retryable": "This refund cannot be sent again.",
+    "seats_taken": "Some of those seats are no longer available.",
+    "venue_mismatch": "That seat map is for a different venue.",
+    "seat_map_empty": "That seat map has no seats yet.",
+    "invalid_sections": "Choose at least one section.",
+    "too_many_seats": "A seat map can have at most 5,000 seats.",
+    "duplicate_section_name": "Two sections have the same name. Give each its own name.",
+    "invalid_layout": "The seat map could not be saved. Check the highlighted values.",
+    "invalid_name": "Enter a name."
   },
   "categories": {
     "music": "Music",

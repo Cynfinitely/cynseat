@@ -33,6 +33,7 @@ const REPEAT_GUARD_MS = 4000;
 
 export function Scanner({ orgSlug, eventId, timezone, canUndo, initialProgress }: Props) {
   const t = useTranslations("events.checkin");
+  const tSeat = useTranslations("seating.ticket");
   const format = useFormatter();
   const video = useRef<HTMLVideoElement>(null);
   const last = useRef({ code: "", at: 0 });
@@ -144,6 +145,9 @@ export function Scanner({ orgSlug, eventId, timezone, canUndo, initialProgress }
                   reference: outcome.ticket.reference,
                 })}
               </p>
+            ) : null}
+            {outcome.ticket?.seat ? (
+              <p className="mt-1 text-lg font-semibold">{tSeat("seat", outcome.ticket.seat)}</p>
             ) : null}
             {outcome.result === "duplicate" && outcome.ticket?.checkedInAt ? (
               <p className="mt-1 text-sm font-semibold">

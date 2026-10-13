@@ -11,7 +11,7 @@ import { setCart } from "@/server/modules/inventory/service";
 /** Reserves the chosen tickets for this browser. */
 export async function setCartAction(input: unknown): Promise<ActionResult> {
   return runAction(cartSchema, input, async (data) => {
-    await setCart(getApp(), await ensureBuyer(), data.eventId, data.lines);
+    await setCart(getApp(), await ensureBuyer(), data.eventId, data.lines, data.seats);
     return undefined;
   });
 }

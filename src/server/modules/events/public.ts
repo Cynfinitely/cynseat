@@ -34,6 +34,8 @@ export type PublicEventCard = {
 
 export type PublicTicketType = {
   id: string;
+  /** "ga" is bought by number; "seated" by choosing seats on the map. */
+  kind: "ga" | "seated";
   name: string;
   description: string | null;
   priceAmount: number;
@@ -174,6 +176,7 @@ export async function getPublicEvent(
       const remaining = remainingOf(type);
       return {
         id: type.id,
+        kind: type.kind,
         name: type.name,
         description: type.description,
         priceAmount: type.priceAmount,

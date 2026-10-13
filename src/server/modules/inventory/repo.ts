@@ -365,22 +365,30 @@ export async function setHeldSeatType(
 
 /** The seats in a hold with what the buyer will pay for each. */
 export async function findHeldSeats(db: DbOrTx, holdId: string) {
-  return db
-    .select({
-      seatId: eventSeats.id,
-      sectionId: eventSeats.eventSectionId,
-      sectionName: eventSections.name,
-      rowLabel: eventSeats.rowLabel,
-      seatLabel: eventSeats.seatLabel,
-      ticketTypeId: ticketTypes.id,
-      ticketTypeName: ticketTypes.name,
-      unitPriceAmount: ticketTypes.priceAmount,
-    })
-    .from(eventSeats)
-    .innerJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
-    .innerJoin(ticketTypes, eq(ticketTypes.id, eventSeats.heldTicketTypeId))
-    .where(eq(eventSeats.holdId, holdId))
-    .orderBy(asc(eventSections.sortOrder), asc(eventSeats.rowLabel), asc(eventSeats.id));
+  return (
+    db
+      .select({
+        seatId: eventSeats.id,
+        sectionId: eventSeats.eventSectionId,
+        sectionName: eventSections.name,
+        rowLabel: eventSeats.rowLabel,
+        seatLabel: eventSeats.seatLabel,
+        ticketTypeId: ticketTypes.id,
+        ticketTypeName: ticketTypes.name,
+        unitPriceAmount: ticketTypes.priceAmount,
+      })
+      .from(eventSeats)
+      .innerJoin(eventSections, eq(eventSections.id, eventSeats.eventSectionId))
+      .innerJoin(ticketTypes, eq(ticketTypes.id, eventSeats.heldTicketTypeId))
+      .where(eq(eventSeats.holdId, holdId))
+      // In hall order: section, then row and seat by position. A seat's key ends in
+      // "<row>-<seat>" as numbers, which sorts correctly where labels ("A10" < "A2") do not.
+      .orderBy(
+        asc(eventSections.sortOrder),
+        sql`split_part(split_part(${eventSeats.seatKey}, ':', 2), '-', 1)::int`,
+        sql`split_part(split_part(${eventSeats.seatKey}, ':', 2), '-', 2)::int`,
+      )
+  );
 }
 
 /** Marks a hold's seats as sold. Returns how many there were. */

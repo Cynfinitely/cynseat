@@ -13,12 +13,18 @@ export default async function OrgLayout({ children, params }: Props) {
   const { orgSlug } = await params;
   const ctx = await requireOrgContext(orgSlug);
   const t = await getTranslations("dashboard");
+  const tSeating = await getTranslations("seating.maps");
   const base = `/dashboard/${ctx.organization.slug}`;
   const { approvalStatus, approvalNote } = ctx.profile;
 
   const items = [
     { href: base, label: t("nav.overview"), show: true },
     { href: `${base}/events`, label: t("nav.events"), show: can(ctx.role, "event.view") },
+    {
+      href: `${base}/seat-maps`,
+      label: tSeating("nav"),
+      show: can(ctx.role, "seatmap.manage"),
+    },
     { href: `${base}/members`, label: t("nav.members"), show: can(ctx.role, "org.members.view") },
     {
       href: `${base}/payments`,

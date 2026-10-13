@@ -4,6 +4,7 @@ import type checkout from "../../messages/en/checkout.json";
 import type common from "../../messages/en/common.json";
 import type dashboard from "../../messages/en/dashboard.json";
 import type events from "../../messages/en/events.json";
+import type seating from "../../messages/en/seating.json";
 import type storefront from "../../messages/en/storefront.json";
 import type { Locale } from "./routing";
 
@@ -17,6 +18,7 @@ export const namespaces = [
   "events",
   "storefront",
   "checkout",
+  "seating",
 ] as const;
 
 export type Messages = {
@@ -27,7 +29,15 @@ export type Messages = {
   events: typeof events;
   storefront: typeof storefront;
   checkout: typeof checkout;
+  seating: typeof seating;
 };
+
+// Fails to compile if a namespace is declared in `Messages` but missing from the list
+// above (its pages would render without text), or the other way round.
+type Unlisted = Exclude<keyof Messages, (typeof namespaces)[number]>;
+type Undeclared = Exclude<(typeof namespaces)[number], keyof Messages>;
+export const namespacesMatchMessages: [Unlisted, Undeclared] extends [never, never] ? true : never =
+  true;
 
 export async function loadMessages(locale: Locale): Promise<Messages> {
   const entries = await Promise.all(
