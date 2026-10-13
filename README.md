@@ -2,7 +2,7 @@
 
 Free ticketing for NGOs and event organizers. Organizations register, create events at new or existing venues, and sell tickets; buyers get QR-coded tickets by email.
 
-> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Finished so far: accounts, organizations with roles (admin, member, door staff), invitations and platform approval. Events, payments, seat maps and check-in follow in later phases.
+> **Status: rebuild in progress.** The single-event storefront that used to live here is being replaced by a multi-organization platform. Finished so far: accounts, organizations with roles (admin, member, door staff), invitations and platform approval, the shared venue directory, multilingual events with ticket types and posters, and the public storefront. Buying tickets, seat maps and check-in follow in later phases.
 
 ## Tech stack
 
@@ -22,12 +22,15 @@ pnpm install
 cp .env.example .env.local
 pnpm db:up        # Postgres in Docker on port 5433
 pnpm db:migrate
+pnpm db:seed      # optional: demo accounts, an approved organization and a published event
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). Set `BETTER_AUTH_SECRET` in `.env.local` first (`openssl rand -base64 32`).
 
 With `MAIL_DRIVER=console` (the default) emails are printed to the server log, so the confirmation link for a new account appears in the terminal running `pnpm dev`.
+
+`pnpm db:seed` prints two demo sign-ins: a platform admin and the admin of a demo organization. It refuses to run in production.
 
 New organizations wait for approval by a platform admin. To make yourself one, sign up and then run:
 
@@ -39,15 +42,17 @@ The approval queue is at `/en/admin/organizations`.
 
 ### Environment variables
 
-| Variable                       | Used for                                                   |
-| ------------------------------ | ---------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`          | Public base URL of the app                                 |
-| `DATABASE_URL`                 | Postgres connection string                                 |
-| `DATABASE_URL_UNPOOLED`        | Optional direct connection used for migrations             |
-| `BETTER_AUTH_SECRET`           | Signs sessions and tokens (32+ characters)                 |
-| `MAIL_DRIVER`                  | `console` (print emails) or `resend` (send them)           |
-| `RESEND_API_KEY`, `EMAIL_FROM` | Needed when `MAIL_DRIVER=resend`                           |
-| `CRON_SECRET`                  | Protects `/api/cron/*`; Vercel Cron sends it automatically |
+| Variable                       | Used for                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`          | Public base URL of the app                                                  |
+| `DATABASE_URL`                 | Postgres connection string                                                  |
+| `DATABASE_URL_UNPOOLED`        | Optional direct connection used for migrations                              |
+| `BETTER_AUTH_SECRET`           | Signs sessions and tokens (32+ characters)                                  |
+| `MAIL_DRIVER`                  | `console` (print emails) or `resend` (send them)                            |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Needed when `MAIL_DRIVER=resend`                                            |
+| `STORAGE_DRIVER`               | `local` (posters on this machine's disk, development only) or `vercel-blob` |
+| `BLOB_READ_WRITE_TOKEN`        | Needed when `STORAGE_DRIVER=vercel-blob`                                    |
+| `CRON_SECRET`                  | Protects `/api/cron/*`; Vercel Cron sends it automatically                  |
 
 Variables are validated at startup in `src/lib/env.ts`; the build fails if one is missing or malformed.
 
@@ -72,18 +77,19 @@ ESLint enforces the layering: `src/domain` imports nothing from the rest of the 
 
 ## Scripts
 
-| Command                                        | Description                                                         |
-| ---------------------------------------------- | ------------------------------------------------------------------- |
-| `pnpm dev`                                     | Start the development server                                        |
-| `pnpm build` / `pnpm start`                    | Production build and server                                         |
-| `pnpm lint` / `pnpm format` / `pnpm typecheck` | Static checks                                                       |
-| `pnpm check:messages`                          | Verify all locales have the same message keys                       |
-| `pnpm test`                                    | Unit tests                                                          |
-| `pnpm test:integration`                        | Integration tests against a real Postgres started by Testcontainers |
-| `pnpm test:e2e`                                | Playwright tests against a production build (needs `pnpm db:up`)    |
-| `pnpm db:up` / `db:down` / `db:reset`          | Start, stop or recreate the local Postgres container                |
-| `pnpm db:generate`                             | Generate a migration from schema changes                            |
-| `pnpm db:migrate`                              | Apply migrations                                                    |
+| Command                                        | Description                                                             |
+| ---------------------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm dev`                                     | Start the development server                                            |
+| `pnpm build` / `pnpm start`                    | Production build and server                                             |
+| `pnpm lint` / `pnpm format` / `pnpm typecheck` | Static checks                                                           |
+| `pnpm check:messages`                          | Verify all locales have the same message keys                           |
+| `pnpm test`                                    | Unit tests                                                              |
+| `pnpm test:integration`                        | Integration tests against a real Postgres started by Testcontainers     |
+| `pnpm test:e2e`                                | Playwright tests against a production build (needs `pnpm db:up`)        |
+| `pnpm db:up` / `db:down` / `db:reset`          | Start, stop or recreate the local Postgres container                    |
+| `pnpm db:generate`                             | Generate a migration from schema changes                                |
+| `pnpm db:migrate`                              | Apply migrations                                                        |
+| `pnpm db:seed`                                 | Create demo accounts, an organization and an event (not for production) |
 
 ## License
 
