@@ -19,7 +19,10 @@ export function OrgNav({
     >
       <ul className="flex gap-6 text-sm font-medium">
         {items.map((item) => {
-          const active = pathname === item.href;
+          // The first item is the section's root and matches exactly; the rest also match
+          // the pages beneath them.
+          const active =
+            pathname === item.href || (item !== items[0] && pathname.startsWith(`${item.href}/`));
           return (
             <li key={item.href}>
               <Link

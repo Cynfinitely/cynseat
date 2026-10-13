@@ -29,7 +29,8 @@
     "overview": "Overview",
     "members": "Members",
     "settings": "Settings",
-    "all": "All organizations"
+    "all": "All organizations",
+    "events": "Events"
   },
   "banner": {
     "pendingTitle": "Waiting for approval",
@@ -46,7 +47,8 @@
     "status": "Status",
     "publicAddress": "Public address",
     "comingTitle": "Events",
-    "comingBody": "Creating events and selling tickets arrives in the next release of this dashboard."
+    "comingBody": "Create an event, choose its venue and add ticket types.",
+    "eventsLink": "Go to events"
   },
   "members": {
     "title": "Members",

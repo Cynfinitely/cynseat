@@ -19,21 +19,7 @@
   },
   "home": {
     "title": "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille",
-    "subtitle": "Luo tapahtumia, valitse tapahtumapaikka ja myy lippuja. Maksut tilitetään suoraan organisaatiollesi.",
-    "features": {
-      "organizations": {
-        "title": "Tehty organisaatioille",
-        "description": "Kutsu tiimisi ja anna ylläpitäjille, jäsenille ja ovihenkilökunnalle heidän tarvitsemansa oikeudet."
-      },
-      "seating": {
-        "title": "Mikä tahansa tapahtuma ja paikka",
-        "description": "Myy numeroimattomia lippuja tai anna ostajien valita paikkansa salikartalta."
-      },
-      "tickets": {
-        "title": "Digitaaliset liput",
-        "description": "Ostajat saavat QR-koodilliset liput sähköpostiin, valmiina skannattaviksi ovella."
-      }
-    }
+    "subtitle": "Luo tapahtumia, valitse tapahtumapaikka ja myy lippuja. Maksut tilitetään suoraan organisaatiollesi."
   },
   "footer": {
     "rights": "Kaikki oikeudet pidätetään."
@@ -71,6 +57,46 @@
     "invalid_transition": "Organisaation tila on muuttunut. Lataa sivu uudelleen ja yritä uudelleen.",
     "forbidden": "Sinulla ei ole oikeutta tähän.",
     "email_not_verified": "Vahvista ensin sähköpostiosoitteesi.",
-    "invalid_input": "Tarkista korostetut kentät."
+    "invalid_input": "Tarkista korostetut kentät.",
+    "invalid_date": "Anna kelvollinen päivämäärä ja kellonaika. Kesäaikaan siirryttäessä ohitettuja aikoja ei ole olemassa.",
+    "ends_before_start": "Tämän on oltava alkamisen jälkeen.",
+    "doors_after_start": "Ovet eivät voi aueta tapahtuman alkamisen jälkeen.",
+    "invalid_price": "Anna hinta, esimerkiksi 12 tai 12,50.",
+    "capacity_below_sold": "Kapasiteetti ei voi olla pienempi kuin jo myytyjen tai varattujen lippujen määrä.",
+    "currency_locked": "Valuuttaa ei voi vaihtaa, kun tapahtuma on julkaistu.",
+    "venue_exists": "Tässä kaupungissa on jo tämänniminen tapahtumapaikka. Hae sitä.",
+    "invalid_time_zone": "Valitse aikavyöhyke.",
+    "invalid_number": "Anna kokonaisluku.",
+    "too_small": "Luku on liian pieni.",
+    "too_large": "Luku on liian suuri.",
+    "event_cancelled": "Tapahtuma on peruttu, eikä sitä voi enää muuttaa.",
+    "not_draft": "Tämä toimii vain luonnokselle.",
+    "not_published": "Tämä toimii vain julkaistulle tapahtumalle.",
+    "has_sales": "Lippuja on myyty tai ostetaan parhaillaan, joten tapahtumaa ei voi palauttaa luonnokseksi. Peru se sen sijaan.",
+    "cannot_publish": "Tee tarkistuslista valmiiksi ennen julkaisua.",
+    "default_translation": "Tapahtuman pääkieltä ei voi poistaa.",
+    "invalid_venue": "Valitse tapahtumapaikka.",
+    "not_found": "Tätä ei enää ole. Lataa sivu uudelleen."
+  },
+  "categories": {
+    "music": "Musiikki",
+    "theatre": "Teatteri",
+    "film": "Elokuva",
+    "sports": "Urheilu",
+    "festival": "Festivaali",
+    "conference": "Konferenssi",
+    "workshop": "Työpaja",
+    "community": "Yhteisö",
+    "other": "Muu"
+  },
+  "eventStatus": {
+    "draft": "Luonnos",
+    "published": "Julkaistu",
+    "cancelled": "Peruttu"
+  },
+  "contentLanguages": {
+    "en": "englanti",
+    "fi": "suomi",
+    "tr": "turkki"
   }
 }

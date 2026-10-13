@@ -27,3 +27,14 @@ export async function signUp(browser: Browser, name: string): Promise<E2EUser> {
 
   return { name, email, page };
 }
+
+/** Registers an organization through the UI for an already signed-in user. */
+export async function registerOrganization(page: Page, name: string): Promise<string> {
+  await page.goto("/en/dashboard/new");
+  await page.getByLabel("Organization name").fill(name);
+  await page.getByLabel("Country").selectOption("FI");
+  const slug = await page.getByLabel("Web address").inputValue();
+  await page.getByRole("button", { name: "Register organization" }).click();
+  await expect(page).toHaveURL(new RegExp(`/en/dashboard/${slug}$`));
+  return slug;
+}

@@ -19,21 +19,7 @@
   },
   "home": {
     "title": "STK'lar ve etkinlik düzenleyicileri için ücretsiz biletleme",
-    "subtitle": "Etkinlik oluşturun, mekân seçin ve bilet satın. Ödemeler doğrudan kuruluşunuza yapılır.",
-    "features": {
-      "organizations": {
-        "title": "Kuruluşlar için tasarlandı",
-        "description": "Ekibinizi davet edin; yöneticilere, üyelere ve kapı görevlilerine ihtiyaç duydukları yetkileri verin."
-      },
-      "seating": {
-        "title": "Her etkinlik, her mekân",
-        "description": "Numarasız bilet satın ya da alıcıların oturma planından kendi koltuklarını seçmesine izin verin."
-      },
-      "tickets": {
-        "title": "Dijital biletler",
-        "description": "Alıcılar QR kodlu biletlerini e-postayla alır; biletler kapıda taranmaya hazırdır."
-      }
-    }
+    "subtitle": "Etkinlik oluşturun, mekân seçin ve bilet satın. Ödemeler doğrudan kuruluşunuza yapılır."
   },
   "footer": {
     "rights": "Tüm hakları saklıdır."
@@ -71,6 +57,46 @@
     "invalid_transition": "Bu kuruluşun durumu değişti. Sayfayı yenileyip tekrar deneyin.",
     "forbidden": "Bunu yapma yetkiniz yok.",
     "email_not_verified": "Önce e-posta adresinizi doğrulayın.",
-    "invalid_input": "İşaretli alanları kontrol edin."
+    "invalid_input": "İşaretli alanları kontrol edin.",
+    "invalid_date": "Geçerli bir tarih ve saat girin. Yaz saatine geçişte atlanan saatler yoktur.",
+    "ends_before_start": "Bu, başlangıçtan sonra olmalıdır.",
+    "doors_after_start": "Kapılar etkinlik başladıktan sonra açılamaz.",
+    "invalid_price": "12 veya 12,50 gibi bir fiyat girin.",
+    "capacity_below_sold": "Kapasite, satılmış veya ayrılmış bilet sayısından düşük olamaz.",
+    "currency_locked": "Etkinlik yayınlandıktan sonra para birimi değiştirilemez.",
+    "venue_exists": "Bu şehirde aynı adla bir mekân zaten var. Onu arayın.",
+    "invalid_time_zone": "Bir saat dilimi seçin.",
+    "invalid_number": "Tam sayı girin.",
+    "too_small": "Bu sayı çok küçük.",
+    "too_large": "Bu sayı çok büyük.",
+    "event_cancelled": "Bu etkinlik iptal edildi ve artık değiştirilemez.",
+    "not_draft": "Bu yalnızca taslak etkinlikte çalışır.",
+    "not_published": "Bu yalnızca yayındaki etkinlikte çalışır.",
+    "has_sales": "Bilet satıldığı veya satın alınmakta olduğu için bu etkinlik taslağa döndürülemez. Bunun yerine iptal edin.",
+    "cannot_publish": "Yayınlamadan önce kontrol listesini tamamlayın.",
+    "default_translation": "Etkinliğin ana dili kaldırılamaz.",
+    "invalid_venue": "Bir mekân seçin.",
+    "not_found": "Bu artık yok. Sayfayı yenileyin."
+  },
+  "categories": {
+    "music": "Müzik",
+    "theatre": "Tiyatro",
+    "film": "Film",
+    "sports": "Spor",
+    "festival": "Festival",
+    "conference": "Konferans",
+    "workshop": "Atölye",
+    "community": "Topluluk",
+    "other": "Diğer"
+  },
+  "eventStatus": {
+    "draft": "Taslak",
+    "published": "Yayında",
+    "cancelled": "İptal edildi"
+  },
+  "contentLanguages": {
+    "en": "İngilizce",
+    "fi": "Fince",
+    "tr": "Türkçe"
   }
 }

@@ -29,7 +29,8 @@
     "overview": "Yleiskatsaus",
     "members": "Jäsenet",
     "settings": "Asetukset",
-    "all": "Kaikki organisaatiot"
+    "all": "Kaikki organisaatiot",
+    "events": "Tapahtumat"
   },
   "banner": {
     "pendingTitle": "Odottaa hyväksyntää",
@@ -46,7 +47,8 @@
     "status": "Tila",
     "publicAddress": "Julkinen osoite",
     "comingTitle": "Tapahtumat",
-    "comingBody": "Tapahtumien luominen ja lipunmyynti tulevat tämän hallintapaneelin seuraavaan versioon."
+    "comingBody": "Luo tapahtuma, valitse sen paikka ja lisää lipputyypit.",
+    "eventsLink": "Siirry tapahtumiin"
   },
   "members": {
     "title": "Jäsenet",

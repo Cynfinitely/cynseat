@@ -39,3 +39,12 @@ export async function grantPlatformAdmin(email: string): Promise<void> {
     [email],
   );
 }
+
+/** Approves an organization directly; the approval screens have their own test. */
+export async function approveOrganization(slug: string): Promise<void> {
+  await query(
+    `update org_profiles set approval_status = 'approved', reviewed_at = now()
+     where organization_id = (select id from organization where slug = $1)`,
+    [slug],
+  );
+}

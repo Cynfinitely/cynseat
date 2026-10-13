@@ -29,7 +29,8 @@
     "overview": "Genel bakış",
     "members": "Üyeler",
     "settings": "Ayarlar",
-    "all": "Tüm kuruluşlar"
+    "all": "Tüm kuruluşlar",
+    "events": "Etkinlikler"
   },
   "banner": {
     "pendingTitle": "Onay bekleniyor",
@@ -46,7 +47,8 @@
     "status": "Durum",
     "publicAddress": "Herkese açık adres",
     "comingTitle": "Etkinlikler",
-    "comingBody": "Etkinlik oluşturma ve bilet satışı bu panelin bir sonraki sürümünde geliyor."
+    "comingBody": "Bir etkinlik oluşturun, mekânını seçin ve bilet türleri ekleyin.",
+    "eventsLink": "Etkinliklere git"
   },
   "members": {
     "title": "Üyeler",

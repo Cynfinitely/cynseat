@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { requireOrgContext } from "@/app/_lib/session";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 
 type Props = { params: Promise<{ orgSlug: string }> };
 
@@ -35,6 +37,12 @@ export default async function OrgOverviewPage({ params }: Props) {
       <Card className="mt-6 p-6">
         <h2 className="text-ink font-semibold">{t("comingTitle")}</h2>
         <p className="text-muted mt-1 text-sm">{t("comingBody")}</p>
+        <Link
+          href={`/dashboard/${ctx.organization.slug}/events`}
+          className={buttonVariants({ variant: "secondary", size: "sm", className: "mt-4" })}
+        >
+          {t("eventsLink")}
+        </Link>
       </Card>
     </>
   );

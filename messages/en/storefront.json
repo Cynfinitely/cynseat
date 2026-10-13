@@ -1,0 +1,44 @@
+{
+  "home": {
+    "upcoming": "Upcoming events",
+    "empty": "No events are on sale right now. Check back soon.",
+    "organizersTitle": "Running an event?",
+    "organizersBody": "CynSeat is free for NGOs and event organizers. Register your organization and start selling tickets.",
+    "organizersAction": "Get started"
+  },
+  "card": {
+    "from": "From {price}",
+    "free": "Free",
+    "online": "Online",
+    "by": "by {organization}"
+  },
+  "event": {
+    "by": "Organized by",
+    "when": "When",
+    "where": "Where",
+    "online": "Online event",
+    "doors": "Doors open {time}",
+    "until": "until {time}",
+    "tickets": "Tickets",
+    "free": "Free",
+    "noTickets": "Tickets are not available for this event.",
+    "state": {
+      "on_sale": "On sale",
+      "sold_out": "Sold out",
+      "ended": "Sales closed",
+      "not_started": "On sale from {date}"
+    },
+    "remaining": "Only {count} left",
+    "salesSoon": "Online ticket sales open soon.",
+    "cancelledTitle": "This event has been cancelled",
+    "contact": "Questions? Contact the organizer at {email}.",
+    "about": "About this event",
+    "otherLanguage": "This text is not available in your language."
+  },
+  "org": {
+    "events": "Upcoming events",
+    "empty": "This organization has no upcoming events.",
+    "website": "Website",
+    "contact": "Contact"
+  }
+}

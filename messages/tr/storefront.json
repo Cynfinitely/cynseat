@@ -1,0 +1,44 @@
+{
+  "home": {
+    "upcoming": "Yaklaşan etkinlikler",
+    "empty": "Şu anda satışta etkinlik yok. Yakında tekrar bakın.",
+    "organizersTitle": "Etkinlik mi düzenliyorsunuz?",
+    "organizersBody": "CynSeat, STK'lar ve etkinlik düzenleyicileri için ücretsizdir. Kuruluşunuzu kaydedin ve bilet satmaya başlayın.",
+    "organizersAction": "Başlayın"
+  },
+  "card": {
+    "from": "{price} fiyatından başlayan",
+    "free": "Ücretsiz",
+    "online": "Çevrimiçi",
+    "by": "düzenleyen: {organization}"
+  },
+  "event": {
+    "by": "Düzenleyen",
+    "when": "Ne zaman",
+    "where": "Nerede",
+    "online": "Çevrimiçi etkinlik",
+    "doors": "Kapı açılışı {time}",
+    "until": "{time} saatine kadar",
+    "tickets": "Biletler",
+    "free": "Ücretsiz",
+    "noTickets": "Bu etkinlik için bilet yok.",
+    "state": {
+      "on_sale": "Satışta",
+      "sold_out": "Tükendi",
+      "ended": "Satış kapandı",
+      "not_started": "{date} tarihinden itibaren satışta"
+    },
+    "remaining": "Yalnızca {count} kaldı",
+    "salesSoon": "Çevrimiçi bilet satışı yakında açılıyor.",
+    "cancelledTitle": "Bu etkinlik iptal edildi",
+    "contact": "Sorularınız mı var? Düzenleyiciyle iletişime geçin: {email}.",
+    "about": "Etkinlik hakkında",
+    "otherLanguage": "Bu metin sizin dilinizde mevcut değil."
+  },
+  "org": {
+    "events": "Yaklaşan etkinlikler",
+    "empty": "Bu kuruluşun yaklaşan etkinliği yok.",
+    "website": "Web sitesi",
+    "contact": "İletişim"
+  }
+}
