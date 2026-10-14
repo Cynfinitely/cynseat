@@ -57,6 +57,7 @@ The approval queue is at `/en/admin/organizations`.
 | `STORAGE_DRIVER`                                     | `local` (posters on this machine's disk, development only) or `vercel-blob`                                                 |
 | `BLOB_READ_WRITE_TOKEN`                              | Needed when `STORAGE_DRIVER=vercel-blob`                                                                                    |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Optional shared counters for rate limiting; without them each server instance counts on its own                             |
+| `RETENTION_PERSONAL_DATA_DAYS` and related           | How long buyers' personal data is kept after an event (default 365 days); confirm against your legal obligations            |
 | `CRON_SECRET`                                        | Protects `/api/cron/*`; Vercel Cron sends it automatically                                                                  |
 
 Variables are validated at startup in `src/lib/env.ts`; the build fails if one is missing or malformed.

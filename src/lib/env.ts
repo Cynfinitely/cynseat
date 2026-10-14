@@ -39,6 +39,10 @@ export const env = createEnv({
       .refine((value) => value === "on" || process.env.VERCEL_ENV !== "production", {
         error: "RATE_LIMIT cannot be off in production",
       }),
+    // How long personal data is kept. Confirm these against your legal obligations.
+    RETENTION_PERSONAL_DATA_DAYS: z.coerce.number().int().min(30).default(365),
+    RETENTION_SENT_EMAIL_DAYS: z.coerce.number().int().min(1).default(30),
+    RETENTION_PAYMENT_EVENT_DAYS: z.coerce.number().int().min(30).default(90),
     // Shared secret for /api/cron/*. Vercel Cron sends it as a bearer token.
     CRON_SECRET: z.string().min(24).optional(),
     // "local" keeps uploaded images on this machine's disk (development only).
@@ -66,6 +70,9 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     RATE_LIMIT: process.env.RATE_LIMIT,
+    RETENTION_PERSONAL_DATA_DAYS: process.env.RETENTION_PERSONAL_DATA_DAYS,
+    RETENTION_SENT_EMAIL_DAYS: process.env.RETENTION_SENT_EMAIL_DAYS,
+    RETENTION_PAYMENT_EVENT_DAYS: process.env.RETENTION_PAYMENT_EVENT_DAYS,
     CRON_SECRET: process.env.CRON_SECRET,
     STORAGE_DRIVER: process.env.STORAGE_DRIVER,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
