@@ -17,5 +17,39 @@
     "suspend": "Askıya al",
     "reinstate": "Yeniden etkinleştir",
     "filter": "Duruma göre filtrele"
+  },
+  "nav": {
+    "label": "Platform yönetimi",
+    "organizations": "Kuruluşlar",
+    "venues": "Mekânlar",
+    "audit": "Denetim kaydı"
+  },
+  "venues": {
+    "title": "Mekânlar",
+    "intro": "Kuruluşlara sunulmaması gereken mekânları gizleyin ve kopyaları birleştirin. Etkinlikler yayınlandıkları adresi korur.",
+    "search": "Mekân ara",
+    "searchSubmit": "Ara",
+    "empty": "Eşleşen mekân yok.",
+    "by": "Ekleyen: {organization}",
+    "events": "{count, plural, one {# etkinlik} other {# etkinlik}}",
+    "hide": "Gizle",
+    "restore": "Yeniden göster",
+    "hidden": "Gizli",
+    "mergeInto": "Şununla birleştir",
+    "mergeChoose": "Saklanacak mekânı seçin",
+    "merge": "Birleştir",
+    "mergeConfirm": "{duplicate}, {keep} ile birleştirilsin mi? Etkinlikleri ve oturma planları {keep} mekânına taşınır. Bu işlem geri alınamaz.",
+    "merged": "Birleştirildi: {events} etkinlik ve {maps} oturma planı taşındı."
+  },
+  "audit": {
+    "title": "Denetim kaydı",
+    "intro": "Platformdaki hassas işlemler, en yenisi önce.",
+    "when": "Ne zaman",
+    "who": "Kim",
+    "action": "İşlem",
+    "what": "Konu",
+    "organization": "Kuruluş",
+    "empty": "Henüz kayıt yok.",
+    "system": "Sistem"
   }
 }

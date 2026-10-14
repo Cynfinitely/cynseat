@@ -17,5 +17,39 @@
     "suspend": "Suspend",
     "reinstate": "Reinstate",
     "filter": "Filter by status"
+  },
+  "nav": {
+    "label": "Platform admin",
+    "organizations": "Organizations",
+    "venues": "Venues",
+    "audit": "Audit log"
+  },
+  "venues": {
+    "title": "Venues",
+    "intro": "Hide venues that should not be offered to organizations, and merge duplicates. Events keep the address they were published with.",
+    "search": "Search venues",
+    "searchSubmit": "Search",
+    "empty": "No venues match.",
+    "by": "Added by {organization}",
+    "events": "{count, plural, one {# event} other {# events}}",
+    "hide": "Hide",
+    "restore": "Show again",
+    "hidden": "Hidden",
+    "mergeInto": "Merge into",
+    "mergeChoose": "Choose the venue to keep",
+    "merge": "Merge",
+    "mergeConfirm": "Merge {duplicate} into {keep}? Its events and seat maps move to {keep}. This cannot be undone.",
+    "merged": "Merged: {events} event(s) and {maps} seat map(s) moved."
+  },
+  "audit": {
+    "title": "Audit log",
+    "intro": "Sensitive actions across the platform, newest first.",
+    "when": "When",
+    "who": "Who",
+    "action": "Action",
+    "what": "Subject",
+    "organization": "Organization",
+    "empty": "Nothing recorded yet.",
+    "system": "System"
   }
 }

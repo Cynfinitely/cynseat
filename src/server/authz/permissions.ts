@@ -26,7 +26,11 @@ export const orgPermissions = {
 export type OrgAction = keyof typeof orgPermissions;
 
 /** Actions on the platform itself, open to platform admins only. */
-export const platformActions = ["platform.orgs.review", "platform.audit.view"] as const;
+export const platformActions = [
+  "platform.orgs.review",
+  "platform.venues.moderate",
+  "platform.audit.view",
+] as const;
 export type PlatformAction = (typeof platformActions)[number];
 
 export function can(role: OrgRole, action: OrgAction): boolean {
