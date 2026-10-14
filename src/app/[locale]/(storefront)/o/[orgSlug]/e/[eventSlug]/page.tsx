@@ -62,8 +62,57 @@ export default async function EventPage({ params }: Props) {
   );
   const paragraphs = (event.description ?? "").split(/\n\s*\n/).filter((p) => p.trim() !== "");
 
+  // Structured data, so search engines can show the date, place and price.
+  const structured = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.summary ?? undefined,
+    startDate: event.startsAt.toISOString(),
+    endDate: event.endsAt?.toISOString(),
+    eventStatus:
+      event.status === "cancelled"
+        ? "https://schema.org/EventCancelled"
+        : "https://schema.org/EventScheduled",
+    eventAttendanceMode: event.isOnline
+      ? "https://schema.org/OnlineEventAttendanceMode"
+      : "https://schema.org/OfflineEventAttendanceMode",
+    location: event.venue
+      ? {
+          "@type": "Place",
+          name: event.venue.name,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: event.venue.addressLine1,
+            postalCode: event.venue.postalCode ?? undefined,
+            addressLocality: event.venue.city,
+            addressCountry: event.venue.country,
+          },
+        }
+      : { "@type": "VirtualLocation" },
+    image: event.coverImageUrl ? [event.coverImageUrl] : undefined,
+    organizer: { "@type": "Organization", name: event.organization.name },
+    offers: event.ticketTypes.map((type) => ({
+      "@type": "Offer",
+      name: type.name,
+      price: (type.priceAmount / 100).toFixed(2),
+      priceCurrency: event.currency.toUpperCase(),
+      availability:
+        type.state === "on_sale"
+          ? "https://schema.org/InStock"
+          : type.state === "sold_out"
+            ? "https://schema.org/SoldOut"
+            : "https://schema.org/OutOfStock",
+    })),
+  };
+
   return (
     <article className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+      <script
+        type="application/ld+json"
+        // Escaped so organizer text can never close the script element.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structured).replace(/</g, "\\u003c") }}
+      />
       {event.status === "cancelled" ? (
         <Alert tone="danger" title={t("cancelledTitle")} className="mb-6">
           {event.cancellationReason}

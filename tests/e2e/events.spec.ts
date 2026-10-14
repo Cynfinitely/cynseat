@@ -142,6 +142,19 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await expect(visitor.getByText("On sale", { exact: true })).toBeVisible();
     await noViolations(visitor);
 
+    const structured = JSON.parse(
+      (await visitor.locator('script[type="application/ld+json"]').textContent())!,
+    );
+    expect(structured).toMatchObject({
+      "@type": "Event",
+      name: titleEn,
+      offers: [
+        { price: "12.50", priceCurrency: "EUR", availability: "https://schema.org/InStock" },
+      ],
+    });
+    const sitemap = await (await visitor.request.get("/sitemap.xml")).text();
+    expect(sitemap).toContain(`/fi${eventPath}`);
+
     await visitor.goto(`/fi${eventPath}`);
     await expect(visitor.getByRole("heading", { level: 1, name: titleFi })).toBeVisible();
     await expect(visitor.getByText("12,50 €")).toBeVisible();

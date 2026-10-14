@@ -80,3 +80,11 @@ test("pages are sent with security headers", async ({ request }) => {
   expect(headers["permissions-policy"]).toContain("camera=(self)");
   expect(headers["x-powered-by"]).toBeUndefined();
 });
+
+test("robots.txt keeps private pages out of search engines", async ({ request }) => {
+  const robots = await (await request.get("/robots.txt")).text();
+  for (const path of ["/api/", "/*/dashboard", "/*/orders", "/*/checkout", "/*/admin"]) {
+    expect(robots).toContain(`Disallow: ${path}`);
+  }
+  expect(robots).toContain("Sitemap: http://localhost:3100/sitemap.xml");
+});
