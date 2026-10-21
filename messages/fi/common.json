@@ -22,7 +22,9 @@
     "subtitle": "Luo tapahtumia, valitse tapahtumapaikka ja myy lippuja. Maksut tilitetään suoraan organisaatiollesi."
   },
   "footer": {
-    "rights": "Kaikki oikeudet pidätetään."
+    "rights": "Kaikki oikeudet pidätetään.",
+    "privacy": "Tietosuoja",
+    "terms": "Käyttöehdot"
   },
   "notFound": {
     "title": "Sivua ei löytynyt",

@@ -10,7 +10,8 @@ import type storefront from "../../messages/en/storefront.json";
 import type { Locale } from "./routing";
 
 // One file per feature under messages/<locale>/. Add the namespace here and in `Messages`.
-// (emails.json is read by the server's email templates, not by the UI.)
+// (emails.json is read by the server's email templates, and legal.json by the privacy and
+// terms pages, not through next-intl.)
 export const namespaces = [
   "common",
   "auth",

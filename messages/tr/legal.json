@@ -1,0 +1,87 @@
+{
+  "draft": "Taslak: bu metin henüz bir avukat tarafından incelenmedi ve değişebilir.",
+  "updated": "Son güncelleme: 21 Ekim 2026",
+  "notSet": "[belirlenmedi]",
+  "privacy": {
+    "title": "Gizlilik politikası",
+    "description": "CynSeat'in hangi kişisel verileri, neden ve ne kadar süre sakladığı ve haklarınız.",
+    "intro": "CynSeat bir biletleme platformudur. Kuruluşlar etkinliklerinin biletlerini burada satar, insanlar da bu biletleri satın alır. Bu politika, bu süreçte kişisel verilerle ne yaptığımızı açıklar.",
+    "sections": {
+      "controller": {
+        "heading": "Sorumlu kim",
+        "body": "CynSeat'i {operator}, {country} işletir. CynSeat hesaplarındaki kişisel verilerden ve hizmetin işletilmesinden biz sorumluyuz.\n\nBir bilet satın aldığınızda, bileti satan kuruluş da adınızı, e-posta adresinizi ve siparişinizi alır. Bunları etkinliğini yürütmek için kullanır ve bu kullanımdan kendisi sorumludur.\n\nBu politika veya verileriniz hakkındaki sorular için: {contact}."
+      },
+      "collected": {
+        "heading": "Neleri saklıyoruz",
+        "body": "Hesaplar: adınız, e-posta adresiniz, şifrenizin özeti (hash) ve oturumlarınız. Her oturum, oluşturulduğu IP adresini ve tarayıcıyı kaydeder.\n\nSiparişler: ödeme sırasında verdiğiniz ad ve e-posta adresi, etkinlik, biletleriniz ve koltuklarınız, tutarlar ile ödeme ve iade durumu.\n\nKapıda: biletin ne zaman ve hangi görevli hesabıyla okutulduğu.\n\nKuruluşlar: kuruluş bilgileri, üyeleri ve rolleri, ayrıca üyeler ve yöneticiler tarafından yapılan önemli değişikliklerin kaydı.\n\nE-postalar: sipariş onayları gibi gönderdiğimiz her e-postanın bir kopyası; teslim edilemezse yeniden gönderilebilmesi için.\n\nGüvenlik: örneğin giriş sırasında tekrarlanan denemeleri sınırlayan, IP adresi başına kısa ömürlü sayaçlar.\n\nKart bilgilerini asla görmeyiz ve saklamayız. Bunları doğrudan ödeme sağlayıcımız Stripe'a girersiniz."
+      },
+      "purposes": {
+        "heading": "Neden kullanıyoruz",
+        "body": "İstediğiniz hizmeti sunmak için: hesabınızı oluşturmak, biletleri satmak ve teslim etmek, kapıda okutmak ve iadeleri işlemek. Bu, sizinle yaptığımız sözleşme için gereklidir.\n\nYasaların gerektirdiği şekilde satışların muhasebe kayıtlarını tutmak için.\n\nHizmeti güvenli ve çalışır durumda tutmak için: kötüye kullanımı önlemek, tekrarlanan denemeleri sınırlamak ve hataları incelemek. Bu, meşru menfaatimize dayanır.\n\nVerilerinizi reklam için kullanmayız, satmayız ve pazarlama profili oluşturmayız."
+      },
+      "sharing": {
+        "heading": "Başka kimler alır",
+        "body": "Bilet aldığınız etkinliğin kuruluşu adınızı, e-posta adresinizi ve siparişinizi görür.\n\nŞu hizmet sağlayıcıları, her birini yalnızca belirtilen iş için kullanırız: Vercel (barındırma ve dosya depolama), Neon (veritabanı), Stripe (ödemeler ve kuruluşlara yapılan aktarımlar), Resend (e-posta gönderimi), Upstash (deneme sayaçları) ve Sentry (ad, e-posta adresi veya istek ayrıntısı içermeden gönderilen hata raporları).\n\nBu sağlayıcıların bazıları verileri Avrupa Ekonomik Alanı dışında işler. Bu durumda aktarım, Avrupa Komisyonu'nun standart sözleşme maddelerine veya bir yeterlilik kararına dayanır."
+      },
+      "retention": {
+        "heading": "Ne kadar süre saklıyoruz",
+        "body": "Alıcıların adları ve e-posta adresleri, etkinlik bittikten {personalDays} gün sonra siparişlerden silinir. Muhasebe için gerekli olduklarından tutarlar ve biletler kalır, ancak artık kimin satın aldığını göstermezler.\n\nGönderilen e-postaların kopyaları {emailDays} gün sonra silinir. Ödeme sağlayıcısından gelen ham bildirimler {paymentDays} gün sonra silinir. Deneme sayaçları dakikalar veya saatler içinde sona erer.\n\nHesabınız, silinmesini isteyene kadar saklanır."
+      },
+      "cookies": {
+        "heading": "Çerezler",
+        "body": "Yalnızca sitenin çalışması için gereken çerezleri kullanırız: biri oturumunuzu açık tutar, biri hesapsız ödeme yaparken biletlerinizi hatırlar, biri de seçtiğiniz dili hatırlar. Analiz, takip veya reklam çerezi yoktur; bu nedenle bunlar için onay istemeyiz."
+      },
+      "rights": {
+        "heading": "Haklarınız",
+        "body": "Hakkınızda tuttuğumuz kişisel verileri görmeyi, düzeltilmesini veya silinmesini, kullanımının kısıtlanmasını veya kullanımına itiraz etmeyi ve taşınabilir bir biçimde almayı talep edebilirsiniz. {contact} adresine yazın. Bir ay içinde yanıt veririz.\n\nSilme talebinden sonra bile, örneğin muhasebe kayıtları gibi bazı verileri saklamamız gerekebilir.\n\nAyrıca ülkenizdeki veri koruma otoritesine şikâyette bulunabilirsiniz."
+      },
+      "changes": {
+        "heading": "Değişiklikler",
+        "body": "Bu politikayı değiştirirsek en üstteki tarihi güncelleriz. Önemli değişiklikleri önce hesap sahiplerine e-postayla bildiririz."
+      }
+    }
+  },
+  "terms": {
+    "title": "Kullanım koşulları",
+    "description": "CynSeat'te etkinlik düzenleme ve bilet satın alma kuralları.",
+    "intro": "Bu koşullar, ister bilet satın ister satın alın, CynSeat'i kullandığınızda geçerlidir. Hizmeti kullanarak bunları kabul etmiş olursunuz.",
+    "sections": {
+      "service": {
+        "heading": "CynSeat nedir",
+        "body": "CynSeat'i {operator}, {country} işletir. Kuruluşların etkinlik yayınlayıp bilet satmasını, insanların da bu biletleri satın almasını sağlar.\n\nCynSeat, listelenen etkinliklerin düzenleyicisi değildir. Bir bilet satın aldığınızda, etkinliğin kendisiyle ilgili sözleşmeniz bileti satan kuruluşladır."
+      },
+      "accounts": {
+        "heading": "Hesaplar",
+        "body": "Doğru bilgi verin ve şifrenizi kimseyle paylaşmayın. Hesabınızda olanlardan siz sorumlusunuz. Başka birinin hesabınızı kullandığını düşünüyorsanız {contact} adresine bildirin."
+      },
+      "organizers": {
+        "heading": "Kuruluşlar için",
+        "body": "Kuruluşların etkinliklerinin satışa çıkabilmesi için önce onaylanması gerekir. Onay vermeyebilir veya onayı geri alabiliriz.\n\nEtkinliklerinizden siz sorumlusunuz: anlatıldığı gibi gerçekleşmelerinden, yasal olmalarından ve gerekli izinlerden, vergilerden ve erişilebilirlik bilgilerinden. Etkinlik ayrıntıları, fiyatlar ve iade politikaları size aittir.\n\nÜcretli satışlar Stripe üzerinden yapılır. Stripe'ın koşullarını kabul etmeniz ve hesap kontrollerini tamamlamanız gerekir; bilet satış gelirleri size Stripe tarafından ödenir. Stripe'ın işlem ücretleri ve satıştan önce panelinizde gösterilen CynSeat ücreti (varsa) uygulanır."
+      },
+      "buying": {
+        "heading": "Bilet satın alma",
+        "body": "Fiyatlar ödemeden önce gösterilir. Seçtiğiniz biletler, ödemeyi tamamlamanız için birkaç dakika ayrılır; tamamlamazsanız serbest bırakılır.\n\nBiletleriniz e-postayla gönderilir ve sipariş bağlantınızdan her zaman erişilebilir. Her biletin bir kez okutulabilen bir QR kodu vardır. Kodu olan herkes onu kullanabilir; bu yüzden sipariş bağlantınızı veya biletlerinizi paylaşmayın."
+      },
+      "refunds": {
+        "heading": "İptaller ve iadeler",
+        "body": "İadelere, kendi politikası ve yasalar çerçevesinde düzenleyici karar verir. Bir etkinlik iptal edilirse ücretli siparişler otomatik olarak ilk ödeme yöntemine iade edilir.\n\nBiletler belirli bir tarihteki etkinlik için olduğundan, mesafeli satışlardaki yasal cayma hakkı uygulanmayabilir. Emredici tüketici mevzuatından doğan haklarınız saklıdır."
+      },
+      "use": {
+        "heading": "Kabul edilebilir kullanım",
+        "body": "CynSeat'i yasa dışı etkinlikler veya içerikler için, alıcıları yanıltmak, biletleri düzenleyicinin koşullarına aykırı olarak yeniden satmak, başkalarının verilerini toplamak veya hizmeti aksatmak için kullanmayın; örneğin otomatik toplu isteklerle ya da güvenliği aşmaya çalışarak."
+      },
+      "liability": {
+        "heading": "Erişilebilirlik ve sorumluluk",
+        "body": "CynSeat'i erişilebilir ve doğru tutmak için çalışırız, ancak her zaman kesintisiz veya hatasız olacağını garanti edemeyiz.\n\nEtkinliklerin kendisinden veya bir düzenleyicinin eylem ya da ihmallerinden sorumlu değiliz. Yasaların izin verdiği ölçüde dolaylı zararlardan sorumlu değiliz. Bu koşullardaki hiçbir şey, yasa gereği sınırlanamayan sorumluluğu sınırlamaz."
+      },
+      "ending": {
+        "heading": "Askıya alma",
+        "body": "Bu koşulları ihlal eden veya alıcıları riske atan hesapları ya da kuruluşları askıya alabiliriz. Mümkün olduğunda nedenini önceden açıklarız. CynSeat'i istediğiniz zaman kullanmayı bırakabilir ve hesabınızın silinmesini isteyebilirsiniz."
+      },
+      "law": {
+        "heading": "Uygulanacak hukuk",
+        "body": "Bu koşullara {country} hukuku uygulanır. Tüketiciyseniz, yaşadığınız ülkenin emredici yasalarının sağladığı korumayı da korursunuz.\n\nBu koşulları değiştirirsek en üstteki tarihi güncelleriz. Önemli değişiklikleri önce hesap sahiplerine e-postayla bildiririz.\n\nİletişim: {contact}."
+      }
+    }
+  }
+}

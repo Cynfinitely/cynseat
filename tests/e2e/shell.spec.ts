@@ -24,6 +24,26 @@ for (const [locale, title] of Object.entries(titles)) {
   });
 }
 
+for (const [path, heading] of [
+  ["/en/privacy", "Privacy policy"],
+  ["/fi/terms", "Käyttöehdot"],
+] as const) {
+  test(`${path} is linked from the footer with no accessibility violations`, async ({ page }) => {
+    await page.goto(`/${path.split("/")[1]}`);
+    await page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: /Privacy|Käyttöehdot/ })
+      .click();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+    // Retention periods are filled in from the configuration, not left as placeholders.
+    await expect(page.getByRole("main")).not.toContainText("{");
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+}
+
 test("language switcher keeps the current path", async ({ page }) => {
   await page.goto("/en/does-not-exist");
   await page.getByRole("link", { name: "Suomi" }).click();

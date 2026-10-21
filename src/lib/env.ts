@@ -52,9 +52,15 @@ export const env = createEnv({
     MAIL_DRIVER: z.enum(["console", "resend"]).default("console"),
     RESEND_API_KEY: z.string().min(1).optional(),
     EMAIL_FROM: z.string().min(3).default("CynSeat <no-reply@localhost>"),
+    // Who runs this CynSeat, shown in the privacy policy and terms.
+    LEGAL_OPERATOR_NAME: z.string().min(1).optional(),
+    LEGAL_COUNTRY: z.string().min(1).optional(),
+    LEGAL_CONTACT_EMAIL: z.email().optional(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.url(),
+    // Where errors are reported, from the server and the browser. Unset turns reporting off.
+    NEXT_PUBLIC_SENTRY_DSN: z.url().optional(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -79,7 +85,11 @@ export const env = createEnv({
     MAIL_DRIVER: process.env.MAIL_DRIVER,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
+    LEGAL_OPERATOR_NAME: process.env.LEGAL_OPERATOR_NAME,
+    LEGAL_COUNTRY: process.env.LEGAL_COUNTRY,
+    LEGAL_CONTACT_EMAIL: process.env.LEGAL_CONTACT_EMAIL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },
   emptyStringAsUndefined: true,
   skipValidation: process.env.SKIP_ENV_VALIDATION === "1",

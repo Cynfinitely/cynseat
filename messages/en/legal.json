@@ -1,0 +1,87 @@
+{
+  "draft": "Draft: this text has not been reviewed by a lawyer yet and may change.",
+  "updated": "Last updated: 21 October 2026",
+  "notSet": "[not set]",
+  "privacy": {
+    "title": "Privacy policy",
+    "description": "What personal data CynSeat keeps, why, for how long, and your rights.",
+    "intro": "CynSeat is a ticketing platform. Organizations use it to sell tickets to their events, and people use it to buy them. This policy explains what we do with personal data while that happens.",
+    "sections": {
+      "controller": {
+        "heading": "Who is responsible",
+        "body": "CynSeat is run by {operator}, {country}. We are responsible for the personal data in CynSeat accounts and for running the service.\n\nWhen you buy a ticket, the organization selling it also receives your name, email address and order. It uses them to run its event and is responsible for that use itself.\n\nQuestions about this policy or your data: {contact}."
+      },
+      "collected": {
+        "heading": "What we keep",
+        "body": "Accounts: your name, email address, a hashed password, and your sign-in sessions. Each session records the IP address and browser it was created from.\n\nOrders: the name and email address you give at checkout, the event, your tickets and seats, amounts, and the payment and refund status.\n\nAt the door: when a ticket is checked in, and by which staff account.\n\nOrganizations: their details, their members and roles, and a log of important changes made by members and administrators.\n\nEmails: a copy of each email we send, such as order confirmations, so it can be sent again if delivery fails.\n\nSecurity: short-lived counters per IP address that limit repeated attempts, for example at sign-in.\n\nWe never see or store card details. You enter them directly with our payment provider, Stripe."
+      },
+      "purposes": {
+        "heading": "Why we use it",
+        "body": "To provide what you asked for: creating your account, selling and delivering tickets, checking them in, and processing refunds. This is necessary for our contract with you.\n\nTo keep accounting records of sales, as the law requires.\n\nTo keep the service secure and working: preventing abuse, limiting repeated attempts, and investigating errors. This is our legitimate interest.\n\nWe do not use your data for advertising, we do not sell it, and we do not build marketing profiles."
+      },
+      "sharing": {
+        "heading": "Who else receives it",
+        "body": "The organization whose event you buy tickets for sees your name, email address and order.\n\nWe use these service providers, each only for the task listed: Vercel (hosting and file storage), Neon (database), Stripe (payments and payouts to organizations), Resend (sending email), Upstash (attempt counters), and Sentry (error reports, sent without names, email addresses or request details).\n\nSome of these providers process data outside the European Economic Area. Where they do, the transfer is covered by the European Commission's standard contractual clauses or an adequacy decision."
+      },
+      "retention": {
+        "heading": "How long we keep it",
+        "body": "Buyers' names and email addresses are removed from orders {personalDays} days after the event ends. The amounts and tickets stay, because accounting needs them, but no longer say who bought them.\n\nCopies of sent emails are deleted after {emailDays} days. Raw notifications from the payment provider are deleted after {paymentDays} days. Attempt counters expire within minutes or hours.\n\nYour account is kept until you ask us to delete it."
+      },
+      "cookies": {
+        "heading": "Cookies",
+        "body": "We only use cookies the site needs to work: one that keeps you signed in, one that keeps track of your tickets while you check out without an account, and one that remembers a language you chose. There are no analytics, tracking or advertising cookies, so we do not ask for consent to them."
+      },
+      "rights": {
+        "heading": "Your rights",
+        "body": "You can ask to see the personal data we hold about you, to correct it, to delete it, to restrict or object to how we use it, and to receive it in a portable format. Write to {contact}. We answer within one month.\n\nWe may need to keep some data even after a deletion request, for example accounting records.\n\nYou can also complain to the data protection authority in your country."
+      },
+      "changes": {
+        "heading": "Changes",
+        "body": "If we change this policy, we update the date at the top. If the change is significant, we tell account holders by email first."
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of use",
+    "description": "The rules for organizing events and buying tickets on CynSeat.",
+    "intro": "These terms apply when you use CynSeat, whether you sell tickets or buy them. By using the service you accept them.",
+    "sections": {
+      "service": {
+        "heading": "What CynSeat is",
+        "body": "CynSeat is run by {operator}, {country}. It lets organizations publish events and sell tickets, and lets people buy them.\n\nCynSeat is not the organizer of the events listed. When you buy a ticket, your agreement for the event itself is with the organization selling it."
+      },
+      "accounts": {
+        "heading": "Accounts",
+        "body": "Give accurate information and keep your password to yourself. You are responsible for what happens in your account. Tell us at {contact} if you think someone else is using it."
+      },
+      "organizers": {
+        "heading": "For organizations",
+        "body": "Organizations must be approved before their events can go on sale. We may decline or withdraw approval.\n\nYou are responsible for your events: that they take place as described, that they are lawful, and for any permits, taxes and accessibility information. Event details, prices and refund policies are your own.\n\nPaid sales go through Stripe. You need to accept Stripe's terms and complete its account checks, and money from ticket sales is paid out to you by Stripe. Stripe's processing fees apply, as does any CynSeat fee shown in your dashboard before you sell."
+      },
+      "buying": {
+        "heading": "Buying tickets",
+        "body": "Prices are shown before you pay. Tickets you pick are held for a few minutes while you complete checkout, and released if you do not.\n\nYour tickets are sent by email and are always available from your order link. Each ticket has a QR code that can be checked in once. Anyone who has the code can use it, so do not share your order link or tickets."
+      },
+      "refunds": {
+        "heading": "Cancellations and refunds",
+        "body": "Refunds are decided by the organizer, following their own policy and the law. If an event is cancelled, paid orders are refunded automatically to the original payment method.\n\nBecause tickets are for an event on a specific date, a legal right of withdrawal for distance purchases may not apply. Rights you have under mandatory consumer law are not affected."
+      },
+      "use": {
+        "heading": "Acceptable use",
+        "body": "Do not use CynSeat for unlawful events or content, to mislead buyers, to resell tickets in breach of the organizer's terms, to collect other people's data, or to interfere with the service, for example by automated mass requests or attempts to get around security."
+      },
+      "liability": {
+        "heading": "Availability and liability",
+        "body": "We work to keep CynSeat available and correct, but cannot promise it will always be free of interruptions or errors.\n\nWe are not responsible for the events themselves, or for an organizer's acts or omissions. To the extent the law allows, we are not liable for indirect losses. Nothing in these terms limits liability that cannot be limited by law."
+      },
+      "ending": {
+        "heading": "Suspension",
+        "body": "We may suspend accounts or organizations that break these terms or put buyers at risk. Where possible, we explain why first. You can stop using CynSeat at any time and ask for your account to be deleted."
+      },
+      "law": {
+        "heading": "Applicable law",
+        "body": "These terms are governed by the laws of {country}. If you are a consumer, you also keep the protection of the mandatory laws of the country where you live.\n\nIf we change these terms, we update the date at the top. Significant changes are announced to account holders by email first.\n\nContact: {contact}."
+      }
+    }
+  }
+}

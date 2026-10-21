@@ -22,7 +22,9 @@
     "subtitle": "Etkinlik oluşturun, mekân seçin ve bilet satın. Ödemeler doğrudan kuruluşunuza yapılır."
   },
   "footer": {
-    "rights": "Tüm hakları saklıdır."
+    "rights": "Tüm hakları saklıdır.",
+    "privacy": "Gizlilik",
+    "terms": "Kullanım koşulları"
   },
   "notFound": {
     "title": "Sayfa bulunamadı",

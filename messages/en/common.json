@@ -22,7 +22,9 @@
     "subtitle": "Create events, choose a venue and sell tickets. Your organization is paid directly."
   },
   "footer": {
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
   },
   "notFound": {
     "title": "Page not found",

@@ -7,7 +7,8 @@ import { listUpcomingEvents } from "@/server/modules/events/public";
 // Built when asked for: it lists what is on sale now.
 export const dynamic = "force-dynamic";
 
-/** Public pages in every language: the home page, organizers with events, and the events. */
+/** Public pages in every language: the home page, organizers with events, the events, and
+ * the privacy policy and terms. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
   const events = await listUpcomingEvents(getApp(), { locale: routing.defaultLocale, limit: 1000 });
@@ -26,6 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const organizations = [...new Set(events.map((event) => event.organization.slug))];
   return [
     ...entry("", 1),
+    ...entry("/privacy", 0.2),
+    ...entry("/terms", 0.2),
     ...organizations.flatMap((slug) => entry(`/o/${slug}`, 0.6)),
     ...events.flatMap((event) => entry(`/o/${event.organization.slug}/e/${event.slug}`, 0.8)),
   ];
