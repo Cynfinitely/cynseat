@@ -1,0 +1,23 @@
+{
+  "find": {
+    "nav": "Etsi lippuni",
+    "title": "Etsi lippuni",
+    "intro": "Anna sähköpostiosoite, jota käytit ostaessasi. Lähetämme sinulle linkin jokaiseen tilaukseesi.",
+    "email": "Sähköposti",
+    "submit": "Lähetä lippuni",
+    "sentTitle": "Tarkista sähköpostisi",
+    "sentBody": "Jos osoitteella {email} on tilauksia, linkit ovat matkalla. Niiden saapuminen voi kestää hetken."
+  },
+  "orders": {
+    "nav": "Lippuni",
+    "title": "Lippuni",
+    "empty": "Sinulla ei ole vielä lippuja.",
+    "emptyHint": "Osoitteella {email} ostetut liput näkyvät täällä, myös kirjautumatta ostetut.",
+    "verify": "Vahvista sähköpostiosoitteesi nähdäksesi sillä ostetut liput. Vahvistuslinkki on sähköpostissasi.",
+    "open": "Avaa liput",
+    "tickets": "{count, plural, one {# lippu} other {# lippua}}",
+    "order": "Tilaus {reference}",
+    "past": "Menneet tapahtumat",
+    "upcoming": "Tulevat"
+  }
+}

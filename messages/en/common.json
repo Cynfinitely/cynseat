@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "title": "CynSeat",
+    "description": "Free ticketing for NGOs and event organizers."
+  },
+  "nav": {
+    "home": "CynSeat home",
+    "language": "Language",
+    "skipToContent": "Skip to content",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "dashboard": "Dashboard",
+    "account": "Account menu"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "tr": "Türkçe"
+  },
+  "home": {
+    "title": "Free ticketing for NGOs and event organizers",
+    "subtitle": "Create events, choose a venue and sell tickets. Your organization is paid directly."
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "That page does not exist.",
+    "home": "Back to home"
+  },
+  "roles": {
+    "admin": "Admin",
+    "member": "Member",
+    "door_staff": "Door staff"
+  },
+  "status": {
+    "pending": "Pending review",
+    "approved": "Approved",
+    "rejected": "Not approved",
+    "suspended": "Suspended"
+  },
+  "optional": "optional",
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "required": "This field is required.",
+    "too_short": "This is too short.",
+    "too_long": "This is too long.",
+    "invalid_email": "Enter a valid email address.",
+    "invalid_country": "Choose a country.",
+    "invalid_url": "Enter a full web address, starting with https://.",
+    "password_too_short": "Use at least 10 characters.",
+    "invalid_characters": "Use lowercase letters, numbers and single hyphens only.",
+    "reserved": "This address is reserved. Choose another.",
+    "slug_taken": "This address is already in use.",
+    "organization_limit": "You have reached the limit of organizations for one account.",
+    "invalid_transition": "This organization's status has changed. Reload the page and try again.",
+    "forbidden": "You do not have permission to do that.",
+    "email_not_verified": "Confirm your email address first.",
+    "invalid_input": "Check the highlighted fields.",
+    "invalid_date": "Enter a valid date and time. Times skipped by a daylight-saving change do not exist.",
+    "ends_before_start": "This must be after the start.",
+    "doors_after_start": "Doors cannot open after the event starts.",
+    "invalid_price": "Enter a price such as 12 or 12.50.",
+    "capacity_below_sold": "Capacity cannot be lower than the tickets already sold or reserved.",
+    "currency_locked": "The currency cannot change after the event has been published.",
+    "venue_exists": "A venue with this name already exists in this city. Search for it instead.",
+    "invalid_time_zone": "Choose a time zone.",
+    "invalid_number": "Enter a whole number.",
+    "too_small": "This number is too small.",
+    "too_large": "This number is too large.",
+    "event_cancelled": "This event is cancelled and can no longer be changed.",
+    "not_draft": "This only works on a draft event.",
+    "not_published": "This only works on a published event.",
+    "has_sales": "Tickets have been sold or are being bought, so this event cannot go back to draft. Cancel it instead.",
+    "cannot_publish": "Finish the checklist before publishing.",
+    "default_translation": "The event's main language cannot be removed.",
+    "invalid_venue": "Choose a venue.",
+    "not_found": "That no longer exists. Reload the page.",
+    "image_type": "Choose a JPEG, PNG or WebP image.",
+    "image_too_large": "The image is larger than 4 MB.",
+    "org_not_approved": "Your organization has not been approved yet.",
+    "tickets_not_refundable": "Some of those tickets have already been refunded. Reload the page.",
+    "nothing_to_refund": "There is nothing left to refund on this order.",
+    "order_not_paid": "Only paid orders can be refunded.",
+    "refund_exceeds_total": "That would refund more than was paid.",
+    "refund_not_retryable": "This refund cannot be sent again.",
+    "seats_taken": "Some of those seats are no longer available.",
+    "venue_mismatch": "That seat map is for a different venue.",
+    "seat_map_empty": "That seat map has no seats yet.",
+    "invalid_sections": "Choose at least one section.",
+    "too_many_seats": "A seat map can have at most 5,000 seats.",
+    "duplicate_section_name": "Two sections have the same name. Give each its own name.",
+    "invalid_layout": "The seat map could not be saved. Check the highlighted values.",
+    "invalid_name": "Enter a name.",
+    "too_many_requests": "Too many attempts. Please wait a minute and try again.",
+    "same_venue": "Choose two different venues."
+  },
+  "categories": {
+    "music": "Music",
+    "theatre": "Theatre",
+    "film": "Film",
+    "sports": "Sports",
+    "festival": "Festival",
+    "conference": "Conference",
+    "workshop": "Workshop",
+    "community": "Community",
+    "other": "Other"
+  },
+  "eventStatus": {
+    "draft": "Draft",
+    "published": "Published",
+    "cancelled": "Cancelled"
+  },
+  "contentLanguages": {
+    "en": "English",
+    "fi": "Finnish",
+    "tr": "Turkish"
+  }
+}

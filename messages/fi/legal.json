@@ -1,0 +1,87 @@
+{
+  "draft": "Luonnos: juristi ei ole vielä tarkistanut tätä tekstiä, ja se voi muuttua.",
+  "updated": "Päivitetty viimeksi 21.10.2026",
+  "notSet": "[ei asetettu]",
+  "privacy": {
+    "title": "Tietosuojaseloste",
+    "description": "Mitä henkilötietoja CynSeat säilyttää, miksi ja kuinka kauan, sekä oikeutesi.",
+    "intro": "CynSeat on lipunmyyntipalvelu. Organisaatiot myyvät sen kautta lippuja tapahtumiinsa, ja ihmiset ostavat niitä. Tässä selosteessa kerrotaan, mitä teemme henkilötiedoilla sillä välin.",
+    "sections": {
+      "controller": {
+        "heading": "Rekisterinpitäjä",
+        "body": "CynSeatia ylläpitää {operator}, {country}. Vastaamme CynSeat-tilien henkilötiedoista ja palvelun toiminnasta.\n\nKun ostat lipun, sen myyvä organisaatio saa myös nimesi, sähköpostiosoitteesi ja tilauksesi. Se käyttää niitä tapahtumansa järjestämiseen ja vastaa itse tästä käytöstä.\n\nKysymykset tästä selosteesta tai tiedoistasi: {contact}."
+      },
+      "collected": {
+        "heading": "Mitä tietoja säilytämme",
+        "body": "Tilit: nimesi, sähköpostiosoitteesi, salasanasi tiivisteenä ja kirjautumisistuntosi. Kustakin istunnosta tallennetaan IP-osoite ja selain, joilla se luotiin.\n\nTilaukset: kassalla antamasi nimi ja sähköpostiosoite, tapahtuma, lippusi ja paikkasi, summat sekä maksun ja hyvityksen tila.\n\nOvella: milloin lippu on tarkastettu ja minkä henkilökunnan tilin toimesta.\n\nOrganisaatiot: niiden tiedot, jäsenet ja roolit sekä loki jäsenten ja ylläpitäjien tekemistä tärkeistä muutoksista.\n\nSähköpostit: kopio jokaisesta lähettämästämme viestistä, kuten tilausvahvistuksista, jotta viesti voidaan lähettää uudelleen, jos toimitus epäonnistuu.\n\nTietoturva: lyhytaikaiset IP-osoitekohtaiset laskurit, jotka rajoittavat toistuvia yrityksiä esimerkiksi kirjautumisessa.\n\nEmme koskaan näe tai tallenna korttitietoja. Syötät ne suoraan maksupalveluntarjoajallemme Stripelle."
+      },
+      "purposes": {
+        "heading": "Miksi käytämme tietoja",
+        "body": "Tarjotaksemme sen, mitä pyysit: tilisi luominen, lippujen myynti ja toimitus, niiden tarkastaminen ja hyvitysten käsittely. Tämä on välttämätöntä kanssasi tehdyn sopimuksen täyttämiseksi.\n\nMyynnin kirjanpitoa varten, kuten laki edellyttää.\n\nPalvelun turvallisuuden ja toimivuuden ylläpitämiseksi: väärinkäytösten estäminen, toistuvien yritysten rajoittaminen ja virheiden selvittäminen. Tämä perustuu oikeutettuun etuumme.\n\nEmme käytä tietojasi mainontaan, emme myy niitä emmekä muodosta niistä markkinointiprofiileja."
+      },
+      "sharing": {
+        "heading": "Kenelle tietoja luovutetaan",
+        "body": "Organisaatio, jonka tapahtumaan ostat lippuja, näkee nimesi, sähköpostiosoitteesi ja tilauksesi.\n\nKäytämme seuraavia palveluntarjoajia, kutakin vain mainittuun tehtävään: Vercel (palvelin ja tiedostojen tallennus), Neon (tietokanta), Stripe (maksut ja tilitykset organisaatioille), Resend (sähköpostien lähetys), Upstash (yrityslaskurit) ja Sentry (virheraportit, jotka lähetetään ilman nimiä, sähköpostiosoitteita tai pyyntöjen tietoja).\n\nOsa näistä palveluntarjoajista käsittelee tietoja Euroopan talousalueen ulkopuolella. Tällöin siirto perustuu Euroopan komission vakiosopimuslausekkeisiin tai tietosuojan riittävyyttä koskevaan päätökseen."
+      },
+      "retention": {
+        "heading": "Kuinka kauan säilytämme tietoja",
+        "body": "Ostajien nimet ja sähköpostiosoitteet poistetaan tilauksista {personalDays} päivän kuluttua tapahtuman päättymisestä. Summat ja liput säilyvät kirjanpitoa varten, mutta niistä ei enää näe, kuka ne osti.\n\nKopiot lähetetyistä sähköposteista poistetaan {emailDays} päivän kuluttua. Maksupalveluntarjoajan raa'at ilmoitukset poistetaan {paymentDays} päivän kuluttua. Yrityslaskurit vanhenevat minuuteissa tai tunneissa.\n\nTilisi säilytetään, kunnes pyydät meitä poistamaan sen."
+      },
+      "cookies": {
+        "heading": "Evästeet",
+        "body": "Käytämme vain evästeitä, joita sivusto tarvitsee toimiakseen: yksi pitää sinut kirjautuneena, yksi muistaa lippusi, kun maksat ilman tiliä, ja yksi muistaa valitsemasi kielen. Analytiikka-, seuranta- tai mainosevästeitä ei ole, joten emme pyydä niihin suostumusta."
+      },
+      "rights": {
+        "heading": "Oikeutesi",
+        "body": "Voit pyytää nähtäväksesi sinusta säilyttämämme henkilötiedot, pyytää niiden oikaisemista tai poistamista, rajoittaa niiden käyttöä tai vastustaa sitä sekä saada ne siirrettävässä muodossa. Kirjoita osoitteeseen {contact}. Vastaamme kuukauden kuluessa.\n\nVoimme joutua säilyttämään osan tiedoista poistopyynnön jälkeenkin, esimerkiksi kirjanpitoaineiston.\n\nVoit myös tehdä valituksen oman maasi tietosuojaviranomaiselle."
+      },
+      "changes": {
+        "heading": "Muutokset",
+        "body": "Jos muutamme tätä selostetta, päivitämme yläreunan päivämäärän. Merkittävistä muutoksista kerromme tilinhaltijoille ensin sähköpostilla."
+      }
+    }
+  },
+  "terms": {
+    "title": "Käyttöehdot",
+    "description": "Säännöt tapahtumien järjestämiseen ja lippujen ostamiseen CynSeatissa.",
+    "intro": "Näitä ehtoja sovelletaan, kun käytät CynSeatia, myitpä tai ostitpa lippuja. Käyttämällä palvelua hyväksyt ne.",
+    "sections": {
+      "service": {
+        "heading": "Mikä CynSeat on",
+        "body": "CynSeatia ylläpitää {operator}, {country}. Sen avulla organisaatiot julkaisevat tapahtumia ja myyvät lippuja, ja ihmiset ostavat niitä.\n\nCynSeat ei ole listattujen tapahtumien järjestäjä. Kun ostat lipun, itse tapahtumaa koskeva sopimuksesi on lipun myyvän organisaation kanssa."
+      },
+      "accounts": {
+        "heading": "Tilit",
+        "body": "Anna oikeat tiedot äläkä kerro salasanaasi muille. Vastaat siitä, mitä tililläsi tapahtuu. Ilmoita osoitteeseen {contact}, jos epäilet jonkun muun käyttävän tiliäsi."
+      },
+      "organizers": {
+        "heading": "Organisaatioille",
+        "body": "Organisaatiot on hyväksyttävä ennen kuin niiden tapahtumat voivat tulla myyntiin. Voimme jättää hyväksymättä tai perua hyväksynnän.\n\nVastaat tapahtumistasi: että ne toteutuvat kuvatulla tavalla ja ovat laillisia, sekä tarvittavista luvista, veroista ja saavutettavuustiedoista. Tapahtumien tiedot, hinnat ja hyvityskäytännöt ovat omiasi.\n\nMaksullinen myynti kulkee Stripen kautta. Sinun on hyväksyttävä Stripen ehdot ja läpäistävä sen tilitarkastukset, ja Stripe tilittää lipputulot sinulle. Stripen käsittelymaksut koskevat myyntiä, kuten myös mahdollinen CynSeatin maksu, joka näytetään hallintapaneelissasi ennen myyntiä."
+      },
+      "buying": {
+        "heading": "Lippujen ostaminen",
+        "body": "Hinnat näytetään ennen maksua. Valitsemasi liput varataan sinulle muutamaksi minuutiksi kassan ajaksi, ja ne vapautuvat, jos et viimeistele ostoa.\n\nLiput lähetetään sähköpostilla, ja ne ovat aina saatavilla tilauslinkistäsi. Jokaisessa lipussa on QR-koodi, jonka voi tarkastaa kerran. Kuka tahansa koodin haltija voi käyttää sen, joten älä jaa tilauslinkkiäsi tai lippujasi."
+      },
+      "refunds": {
+        "heading": "Peruutukset ja hyvitykset",
+        "body": "Hyvityksistä päättää järjestäjä oman käytäntönsä ja lain mukaisesti. Jos tapahtuma perutaan, maksetut tilaukset hyvitetään automaattisesti alkuperäiselle maksutavalle.\n\nKoska liput koskevat tiettynä päivänä järjestettävää tapahtumaa, etämyynnin lakisääteinen peruuttamisoikeus ei välttämättä koske niitä. Tämä ei vaikuta pakottavan kuluttajansuojalainsäädännön mukaisiin oikeuksiisi."
+      },
+      "use": {
+        "heading": "Hyväksyttävä käyttö",
+        "body": "Älä käytä CynSeatia laittomiin tapahtumiin tai sisältöön, ostajien harhaanjohtamiseen, lippujen jälleenmyyntiin järjestäjän ehtojen vastaisesti, muiden ihmisten tietojen keräämiseen tai palvelun häiritsemiseen, esimerkiksi automaattisilla massapyynnöillä tai yrittämällä kiertää tietoturvaa."
+      },
+      "liability": {
+        "heading": "Saatavuus ja vastuu",
+        "body": "Pyrimme pitämään CynSeatin saatavilla ja virheettömänä, mutta emme voi luvata, että se toimii aina ilman katkoja tai virheitä.\n\nEmme vastaa itse tapahtumista emmekä järjestäjän toimista tai laiminlyönneistä. Lain sallimissa rajoissa emme vastaa välillisistä vahingoista. Mikään näissä ehdoissa ei rajoita vastuuta, jota ei lain mukaan voi rajoittaa."
+      },
+      "ending": {
+        "heading": "Käytön keskeyttäminen",
+        "body": "Voimme keskeyttää tilit tai organisaatiot, jotka rikkovat näitä ehtoja tai vaarantavat ostajia. Kerromme syyn etukäteen aina kun mahdollista. Voit lopettaa CynSeatin käytön milloin tahansa ja pyytää tilisi poistamista."
+      },
+      "law": {
+        "heading": "Sovellettava laki",
+        "body": "Näihin ehtoihin sovelletaan seuraavan maan lakia: {country}. Jos olet kuluttaja, sinulla säilyy myös asuinmaasi pakottavan lainsäädännön suoja.\n\nJos muutamme näitä ehtoja, päivitämme yläreunan päivämäärän. Merkittävistä muutoksista kerromme tilinhaltijoille ensin sähköpostilla.\n\nYhteystiedot: {contact}."
+      }
+    }
+  }
+}

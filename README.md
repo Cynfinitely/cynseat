@@ -1,94 +1,104 @@
 # CynSeat
 
-Free ticketing for NGOs and event organizers: a single-event ticket storefront with a short path from the event page to checkout.
+Free ticketing for NGOs and event organizers. Organizations register, create events at new or existing venues, and sell tickets; buyers get QR-coded tickets by email.
 
-**[Live site](https://cynseat.vercel.app)**
-
-## Features
-
-- **Ticket storefront** for one event, with a live count of remaining tickets and a low-stock notice
-- **Stripe Checkout** for guests and signed-in users, up to 5 tickets per purchase
-- **Atomic seat allocation** — seats are reserved in a Firestore transaction, so two buyers can never get the same seat
-- **PDF tickets** generated per seat with `pdf-lib` and stored in Firebase Storage
-- **My tickets** page for signed-in users
-- **Admin view** with a downloadable ticket list
-- **English, Finnish, and Turkish** localization with a language switcher
+> **Status: first version complete on the `rebuild` branch, not yet deployed.** Accounts; organizations with roles (admin, member, door staff), invitations and platform approval; a shared venue directory with moderation; multilingual events with ticket types and posters; general-admission and reserved-seat sales (seat-map editor, seat picker, reservations, checkout, QR tickets on the page, by email and as PDF); each organization's own Stripe account; refunds, including automatic refunds on cancellation; door check-in; attendee exports; buyer accounts; data retention. The Stripe integration is written and unit-tested but has not yet been run against Stripe itself; by default payments use a built-in test gateway.
 
 ## Tech stack
 
-- [Next.js 14](https://nextjs.org/) (Pages Router) + TypeScript
-- Tailwind CSS
-- Firebase Authentication, Firestore, and Storage (client SDK + Admin SDK)
-- Stripe Checkout
-- i18next / react-i18next
-- Deployed on Vercel
+- [Next.js 16](https://nextjs.org/) (App Router), React 19, TypeScript
+- Tailwind CSS 4
+- PostgreSQL with [Drizzle ORM](https://orm.drizzle.team/)
+- [Better Auth](https://www.better-auth.com/) for accounts, organizations and invitations
+- [next-intl](https://next-intl.dev/) with English, Finnish and Turkish under `/en`, `/fi`, `/tr`
+- Vitest, Testcontainers and Playwright for tests
 
 ## Getting started
 
-Requirements: Node.js 18.17+, a Firebase project, and a Stripe account.
+Requirements: Node.js 22.12 or newer, [pnpm](https://pnpm.io/), and Docker (Docker Desktop, Colima or similar).
 
 ```bash
-npm install
-npm run dev
+pnpm install
+cp .env.example .env.local
+pnpm db:up        # Postgres in Docker on port 5433
+pnpm db:migrate
+pnpm db:seed      # optional: demo accounts, an approved organization and a published event
+pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). Set `BETTER_AUTH_SECRET` and `SIGNING_SECRET` in `.env.local` first (`openssl rand -base64 32` for each).
+
+With `MAIL_DRIVER=console` (the default) emails are printed to the server log, so the confirmation link for a new account appears in the terminal running `pnpm dev`.
+
+`pnpm db:seed` prints two demo sign-ins: a platform admin and the admin of a demo organization. It refuses to run in production.
+
+New organizations wait for approval by a platform admin. To make yourself one, sign up and then run:
+
+```bash
+pnpm admin:grant you@example.com
+```
+
+The approval queue is at `/en/admin/organizations`.
 
 ### Environment variables
 
-Create `.env.local` in the project root:
+| Variable                                                      | Used for                                                                                                                                                                                       |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                                         | Public base URL of the app                                                                                                                                                                     |
+| `DATABASE_URL`                                                | Postgres connection string                                                                                                                                                                     |
+| `DATABASE_URL_UNPOOLED`                                       | Optional direct connection used for migrations                                                                                                                                                 |
+| `BETTER_AUTH_SECRET`                                          | Signs sessions and tokens (32+ characters)                                                                                                                                                     |
+| `SIGNING_SECRET`                                              | Signs order links and ticket QR codes (32+ characters). Changing it invalidates those already issued                                                                                           |
+| `PAYMENTS_DRIVER`                                             | `fake` (built-in test payment page; refused in production) or `stripe`                                                                                                                         |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`                  | Needed when `PAYMENTS_DRIVER=stripe`. Point a Stripe webhook that listens to connected accounts at `/api/webhooks/payments`                                                                    |
+| `PLATFORM_FEE_BPS`, `PLATFORM_FEE_FIXED_MINOR`                | CynSeat's fee on paid orders; both default to 0                                                                                                                                                |
+| `MAIL_DRIVER`                                                 | `console` (print emails) or `resend` (send them)                                                                                                                                               |
+| `RESEND_API_KEY`, `EMAIL_FROM`                                | Needed when `MAIL_DRIVER=resend`                                                                                                                                                               |
+| `STORAGE_DRIVER`                                              | `local` (posters on this machine's disk, development only) or `vercel-blob`                                                                                                                    |
+| `BLOB_READ_WRITE_TOKEN`                                       | Needed when `STORAGE_DRIVER=vercel-blob`                                                                                                                                                       |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`          | Optional shared counters for rate limiting; without them each server instance counts on its own                                                                                                |
+| `RETENTION_PERSONAL_DATA_DAYS` and related                    | How long buyers' personal data is kept after an event (default 365 days); confirm against your legal obligations                                                                               |
+| `CRON_SECRET`                                                 | Protects `/api/cron/*`. Vercel Cron sends it for the daily retention job; `.github/workflows/cron.yml` sends it for the 5-minute jobs (set the `CRON_SECRET` and `APP_URL` repository secrets) |
+| `NEXT_PUBLIC_SENTRY_DSN`                                      | Optional error reporting to Sentry, from the server and the browser. Reports leave out request details, and order tokens are removed from URLs                                                 |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`           | Optional, build time only: upload source maps to Sentry                                                                                                                                        |
+| `LEGAL_OPERATOR_NAME`, `LEGAL_COUNTRY`, `LEGAL_CONTACT_EMAIL` | Who runs the service, shown on `/privacy` and `/terms` (text in `messages/*/legal.json`)                                                                                                       |
 
-| Variable | Used for |
-| --- | --- |
-| `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_APP_ID` | Firebase web app config |
-| `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | Firebase Analytics (optional) |
-| `FIREBASE_PROJECT_ID` | Firebase Admin SDK (server) |
-| `FIREBASE_CLIENT_EMAIL` | Firebase Admin SDK (server) |
-| `FIREBASE_PRIVATE_KEY` | Firebase Admin SDK (server) |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe.js in the browser |
-| `NEXT_PUBLIC_STRIPE_TEST_KEY` | Stripe secret key, read by the API routes only |
-
-## Configuring the event
-
-Event settings live in `lib/constants.ts`:
-
-| Constant | Default | Meaning |
-| --- | --- | --- |
-| `TICKET_PRICE_EUR` | `5` | Price per ticket, in euros |
-| `MAX_TICKETS_PER_PURCHASE` | `5` | Largest order allowed |
-| `MAX_EVENT_TICKETS` | `300` | Total seats for the event |
-| `LOW_REMAINING_THRESHOLD` | `20` | When to show the "few left" notice |
-| `EVENT_POSTER_SRC` | `/masal.jpeg` | Poster image in `public/` |
-
-Admin accounts are listed in `lib/admin.ts`. Event copy is in `locales/{en,fi,tr}/common.json`.
+Variables are validated at startup in `src/lib/env.ts`; the build fails if one is missing or malformed.
 
 ## Project structure
 
 ```
-pages/            routes: storefront, sign in/up, tickets, admin, success/cancel
-pages/api/        create-checkout-session, retrieve-checkout-session, handlePurchase
-components/       header, footer, checkout button, ticket card, language switcher
-contexts/         auth context
-firebase/         client and Admin SDK setup
-lib/              constants, admin check, auth error mapping, return-URL helper
-locales/          en, fi, tr translations
-assets/           PDF ticket template
-scripts/          database cleanup and Firestore test scripts (see scripts/README_CLEANUP.md)
+src/app/            routes; pages live under [locale]/, API routes under api/
+src/components/     shared UI
+src/features/       forms and server actions, one folder per feature
+src/domain/         pure business rules, no I/O
+src/server/         database, use-cases (modules/*/service.ts) and integrations; no Next.js imports
+src/i18n/           locale routing and message loading
+src/lib/            environment validation and small helpers
+messages/           UI strings, one JSON file per feature and locale
+tests/              end-to-end tests and the integration-test database harness
+scripts/            local database, migrations, message checks
 ```
+
+Who may do what inside an organization is defined in one table, `src/server/authz/permissions.ts`. Every use-case checks it, and the UI reads the same table to decide what to show.
+
+ESLint enforces the layering: `src/domain` imports nothing from the rest of the app, `src/server` does not import Next.js, and pages do not import the database directly.
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the development server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | Run ESLint |
+| Command                                        | Description                                                             |
+| ---------------------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm dev`                                     | Start the development server                                            |
+| `pnpm build` / `pnpm start`                    | Production build and server                                             |
+| `pnpm lint` / `pnpm format` / `pnpm typecheck` | Static checks                                                           |
+| `pnpm check:messages`                          | Verify all locales have the same message keys                           |
+| `pnpm test`                                    | Unit tests                                                              |
+| `pnpm test:integration`                        | Integration tests against a real Postgres started by Testcontainers     |
+| `pnpm test:e2e`                                | Playwright tests against a production build (needs `pnpm db:up`)        |
+| `pnpm db:up` / `db:down` / `db:reset`          | Start, stop or recreate the local Postgres container                    |
+| `pnpm db:generate`                             | Generate a migration from schema changes                                |
+| `pnpm db:migrate`                              | Apply migrations                                                        |
+| `pnpm db:seed`                                 | Create demo accounts, an organization and an event (not for production) |
 
 ## License
 

@@ -1,0 +1,55 @@
+{
+  "orgs": {
+    "title": "Organisaatiot",
+    "empty": "Ei organisaatioita tässä tilassa.",
+    "registered": "Rekisteröity {date}",
+    "contact": "Yhteystieto",
+    "country": "Maa",
+    "legalName": "Rekisteröity nimi",
+    "businessId": "Y-tunnus",
+    "website": "Verkkosivusto",
+    "description": "Kuvaus",
+    "note": "Viesti organisaatiolle",
+    "noteHint": "Sisällytetään ylläpitäjille lähetettävään sähköpostiin.",
+    "previousNote": "Viimeisin viesti: {note}",
+    "approve": "Hyväksy",
+    "reject": "Hylkää",
+    "suspend": "Jäädytä",
+    "reinstate": "Palauta",
+    "filter": "Suodata tilan mukaan"
+  },
+  "nav": {
+    "label": "Alustan ylläpito",
+    "organizations": "Organisaatiot",
+    "venues": "Tapahtumapaikat",
+    "audit": "Tapahtumaloki"
+  },
+  "venues": {
+    "title": "Tapahtumapaikat",
+    "intro": "Piilota paikat, joita ei pidä tarjota organisaatioille, ja yhdistä kaksoiskappaleet. Tapahtumat säilyttävät osoitteen, jolla ne julkaistiin.",
+    "search": "Hae paikkoja",
+    "searchSubmit": "Hae",
+    "empty": "Ei osumia.",
+    "by": "Lisääjä: {organization}",
+    "events": "{count, plural, one {# tapahtuma} other {# tapahtumaa}}",
+    "hide": "Piilota",
+    "restore": "Näytä taas",
+    "hidden": "Piilotettu",
+    "mergeInto": "Yhdistä paikkaan",
+    "mergeChoose": "Valitse säilytettävä paikka",
+    "merge": "Yhdistä",
+    "mergeConfirm": "Yhdistetäänkö {duplicate} paikkaan {keep}? Sen tapahtumat ja salikartat siirtyvät paikkaan {keep}. Tätä ei voi kumota.",
+    "merged": "Yhdistetty: {events} tapahtumaa ja {maps} salikarttaa siirretty."
+  },
+  "audit": {
+    "title": "Tapahtumaloki",
+    "intro": "Arkaluonteiset toimet koko alustalla, uusimmat ensin.",
+    "when": "Milloin",
+    "who": "Kuka",
+    "action": "Toimi",
+    "what": "Kohde",
+    "organization": "Organisaatio",
+    "empty": "Ei vielä kirjauksia.",
+    "system": "Järjestelmä"
+  }
+}

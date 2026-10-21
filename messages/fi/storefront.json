@@ -1,0 +1,43 @@
+{
+  "home": {
+    "upcoming": "Tulevat tapahtumat",
+    "empty": "Yhtään tapahtumaa ei ole juuri nyt myynnissä. Palaa pian.",
+    "organizersTitle": "Järjestätkö tapahtumaa?",
+    "organizersBody": "CynSeat on maksuton järjestöille ja tapahtumanjärjestäjille. Rekisteröi organisaatiosi ja aloita lipunmyynti.",
+    "organizersAction": "Aloita"
+  },
+  "card": {
+    "from": "Alkaen {price}",
+    "free": "Ilmainen",
+    "online": "Verkossa",
+    "by": "järjestäjä {organization}"
+  },
+  "event": {
+    "by": "Järjestäjä",
+    "when": "Milloin",
+    "where": "Missä",
+    "online": "Verkkotapahtuma",
+    "doors": "Ovet avautuvat {time}",
+    "until": "{time} asti",
+    "tickets": "Liput",
+    "free": "Ilmainen",
+    "noTickets": "Tähän tapahtumaan ei ole lippuja saatavilla.",
+    "state": {
+      "on_sale": "Myynnissä",
+      "sold_out": "Loppuunmyyty",
+      "ended": "Myynti päättynyt",
+      "not_started": "Myynnissä {date} alkaen"
+    },
+    "remaining": "Vain {count} jäljellä",
+    "cancelledTitle": "Tämä tapahtuma on peruttu",
+    "contact": "Kysyttävää? Ota yhteyttä järjestäjään: {email}.",
+    "about": "Tietoa tapahtumasta",
+    "otherLanguage": "Tätä tekstiä ei ole saatavilla kielelläsi."
+  },
+  "org": {
+    "events": "Tulevat tapahtumat",
+    "empty": "Tällä organisaatiolla ei ole tulevia tapahtumia.",
+    "website": "Verkkosivusto",
+    "contact": "Yhteystiedot"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "orgs": {
+    "title": "Your organizations",
+    "emptyTitle": "You are not part of an organization yet",
+    "emptyBody": "Register your organization to start creating events. A CynSeat admin reviews each new organization before it can publish.",
+    "register": "Register an organization",
+    "open": "Open",
+    "platformAdmin": "Platform admin"
+  },
+  "register": {
+    "title": "Register an organization",
+    "subtitle": "You can prepare events straight away. Publishing opens once CynSeat has approved the organization.",
+    "name": "Organization name",
+    "slug": "Web address",
+    "slugHint": "Your public page will be at cynseat.com/o/{slug}",
+    "contactEmail": "Contact email",
+    "contactEmailHint": "Shown to ticket buyers who need to reach you.",
+    "country": "Country",
+    "countryPlaceholder": "Choose a country",
+    "legalName": "Registered name",
+    "businessId": "Business or association ID",
+    "website": "Website",
+    "description": "What does your organization do?",
+    "descriptionHint": "A sentence or two helps us review your registration.",
+    "submit": "Register organization"
+  },
+  "nav": {
+    "label": "Organization",
+    "overview": "Overview",
+    "members": "Members",
+    "settings": "Settings",
+    "all": "All organizations",
+    "events": "Events",
+    "payments": "Payments"
+  },
+  "banner": {
+    "pendingTitle": "Waiting for approval",
+    "pendingBody": "CynSeat is reviewing this organization. You can prepare events now and publish them once it is approved.",
+    "rejectedTitle": "This organization was not approved",
+    "rejectedBody": "You cannot publish events. Contact CynSeat if you think this is a mistake.",
+    "suspendedTitle": "This organization is suspended",
+    "suspendedBody": "Its events are not on sale. Contact CynSeat for details.",
+    "note": "Note from CynSeat: {note}"
+  },
+  "overview": {
+    "title": "Overview",
+    "yourRole": "Your role",
+    "status": "Status",
+    "publicAddress": "Public address",
+    "comingTitle": "Events",
+    "comingBody": "Create an event, choose its venue and add ticket types.",
+    "eventsLink": "Go to events"
+  },
+  "members": {
+    "title": "Members",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "you": "you",
+    "remove": "Remove",
+    "removeConfirm": "Remove {name} from this organization?",
+    "roleFor": "Role for {name}",
+    "inviteTitle": "Invite someone",
+    "inviteEmail": "Email",
+    "inviteRole": "Role",
+    "inviteSubmit": "Send invitation",
+    "inviteSent": "Invitation sent to {email}.",
+    "pendingTitle": "Pending invitations",
+    "cancel": "Cancel invitation",
+    "expires": "Expires {date}",
+    "roleHelpAdmin": "Admins manage members, settings, publishing and refunds.",
+    "roleHelpMember": "Members create and edit events and see orders.",
+    "roleHelpDoorStaff": "Door staff can only scan tickets at the door.",
+    "lastAdmin": "An organization needs at least one admin.",
+    "actions": "Actions"
+  },
+  "settings": {
+    "title": "Settings",
+    "submit": "Save changes",
+    "saved": "Changes saved."
+  },
+  "payments": {
+    "title": "Payments",
+    "intro": "Ticket money is paid straight into your organization's own Stripe account. CynSeat never holds it.",
+    "noneTitle": "Not connected",
+    "noneBody": "Connect a Stripe account to sell paid tickets. Free events do not need one.",
+    "incompleteTitle": "Almost there",
+    "incompleteBody": "Stripe still needs some details before you can take payments.",
+    "readyTitle": "Ready to take payments",
+    "readyBody": "Your Stripe account is connected and can accept payments.",
+    "connect": "Connect with Stripe",
+    "resume": "Continue with Stripe",
+    "needsApproval": "Your organization has to be approved by CynSeat before it can connect a payment account.",
+    "adminOnly": "Only an organization admin can manage payments.",
+    "fee": "CynSeat's fee on paid tickets: {fee}. Stripe's own card fees apply separately.",
+    "noFee": "none"
+  }
+}

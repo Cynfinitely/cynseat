@@ -1,0 +1,66 @@
+{
+  "layout": {
+    "footer": "You are receiving this email because of activity on CynSeat. If this was not you, you can ignore it.",
+    "linkHelp": "If the button does not work, copy this link into your browser:"
+  },
+  "roles": {
+    "admin": "admin",
+    "member": "member",
+    "door_staff": "door staff"
+  },
+  "verifyEmail": {
+    "subject": "Confirm your email address",
+    "heading": "Confirm your email address",
+    "body": "Hi {name}, confirm this email address to finish setting up your CynSeat account.",
+    "action": "Confirm email"
+  },
+  "resetPassword": {
+    "subject": "Reset your password",
+    "heading": "Reset your password",
+    "body": "Hi {name}, use the button below to choose a new password. The link expires in one hour.",
+    "action": "Choose a new password"
+  },
+  "orgInvitation": {
+    "subject": "{inviter} invited you to {organization} on CynSeat",
+    "heading": "Join {organization}",
+    "body": "{inviter} invited you to join {organization} on CynSeat as {role}.",
+    "action": "View invitation"
+  },
+  "orgApproved": {
+    "subject": "{organization} is approved",
+    "heading": "{organization} is approved",
+    "body": "Your organization has been approved. You can now publish events on CynSeat.",
+    "action": "Open dashboard"
+  },
+  "orgRejected": {
+    "subject": "{organization} was not approved",
+    "heading": "{organization} was not approved",
+    "body": "We could not approve your organization.",
+    "action": "Open dashboard"
+  },
+  "orgSuspended": {
+    "subject": "{organization} has been suspended",
+    "heading": "{organization} has been suspended",
+    "body": "Your organization has been suspended. Its events are no longer on sale.",
+    "action": "Open dashboard"
+  },
+  "note": "Note from the CynSeat team: {note}",
+  "orderConfirmation": {
+    "subject": "Your tickets for {event}",
+    "heading": "Your tickets for {event}",
+    "body": "Hi {name}, thank you for your order {reference}. You have {tickets} ticket(s) for {event} on {when}. Open your tickets below and show the QR codes at the door.",
+    "action": "Open my tickets"
+  },
+  "orderRefunded": {
+    "subject": "Refund for your order {reference}",
+    "heading": "Your refund is on its way",
+    "body": "Hi {name}, we have refunded {amount} for your order {reference} ({event}). It can take a few working days to reach your account. Refunded tickets are no longer valid.",
+    "action": "View order"
+  },
+  "orderLink": {
+    "subject": "Your tickets for {event}",
+    "heading": "Here are your tickets",
+    "body": "You asked for the link to your order {reference} for {event}. Open it to see your tickets.",
+    "action": "Open my tickets"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "title": "CynSeat",
+    "description": "STK'lar ve etkinlik düzenleyicileri için ücretsiz biletleme."
+  },
+  "nav": {
+    "home": "CynSeat ana sayfa",
+    "language": "Dil",
+    "skipToContent": "İçeriğe geç",
+    "signIn": "Giriş yap",
+    "signOut": "Çıkış yap",
+    "dashboard": "Panel",
+    "account": "Hesap menüsü"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "tr": "Türkçe"
+  },
+  "home": {
+    "title": "STK'lar ve etkinlik düzenleyicileri için ücretsiz biletleme",
+    "subtitle": "Etkinlik oluşturun, mekân seçin ve bilet satın. Ödemeler doğrudan kuruluşunuza yapılır."
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır.",
+    "privacy": "Gizlilik",
+    "terms": "Kullanım koşulları"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Bu sayfa yok.",
+    "home": "Ana sayfaya dön"
+  },
+  "roles": {
+    "admin": "Yönetici",
+    "member": "Üye",
+    "door_staff": "Kapı görevlisi"
+  },
+  "status": {
+    "pending": "İnceleme bekliyor",
+    "approved": "Onaylandı",
+    "rejected": "Onaylanmadı",
+    "suspended": "Askıya alındı"
+  },
+  "optional": "isteğe bağlı",
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "required": "Bu alan zorunludur.",
+    "too_short": "Bu çok kısa.",
+    "too_long": "Bu çok uzun.",
+    "invalid_email": "Geçerli bir e-posta adresi girin.",
+    "invalid_country": "Bir ülke seçin.",
+    "invalid_url": "https:// ile başlayan tam bir web adresi girin.",
+    "password_too_short": "En az 10 karakter kullanın.",
+    "invalid_characters": "Yalnızca küçük harf, rakam ve tekli kısa çizgi kullanın.",
+    "reserved": "Bu adres ayrılmış. Başka bir adres seçin.",
+    "slug_taken": "Bu adres zaten kullanılıyor.",
+    "organization_limit": "Bir hesap için kuruluş sınırına ulaştınız.",
+    "invalid_transition": "Bu kuruluşun durumu değişti. Sayfayı yenileyip tekrar deneyin.",
+    "forbidden": "Bunu yapma yetkiniz yok.",
+    "email_not_verified": "Önce e-posta adresinizi doğrulayın.",
+    "invalid_input": "İşaretli alanları kontrol edin.",
+    "invalid_date": "Geçerli bir tarih ve saat girin. Yaz saatine geçişte atlanan saatler yoktur.",
+    "ends_before_start": "Bu, başlangıçtan sonra olmalıdır.",
+    "doors_after_start": "Kapılar etkinlik başladıktan sonra açılamaz.",
+    "invalid_price": "12 veya 12,50 gibi bir fiyat girin.",
+    "capacity_below_sold": "Kapasite, satılmış veya ayrılmış bilet sayısından düşük olamaz.",
+    "currency_locked": "Etkinlik yayınlandıktan sonra para birimi değiştirilemez.",
+    "venue_exists": "Bu şehirde aynı adla bir mekân zaten var. Onu arayın.",
+    "invalid_time_zone": "Bir saat dilimi seçin.",
+    "invalid_number": "Tam sayı girin.",
+    "too_small": "Bu sayı çok küçük.",
+    "too_large": "Bu sayı çok büyük.",
+    "event_cancelled": "Bu etkinlik iptal edildi ve artık değiştirilemez.",
+    "not_draft": "Bu yalnızca taslak etkinlikte çalışır.",
+    "not_published": "Bu yalnızca yayındaki etkinlikte çalışır.",
+    "has_sales": "Bilet satıldığı veya satın alınmakta olduğu için bu etkinlik taslağa döndürülemez. Bunun yerine iptal edin.",
+    "cannot_publish": "Yayınlamadan önce kontrol listesini tamamlayın.",
+    "default_translation": "Etkinliğin ana dili kaldırılamaz.",
+    "invalid_venue": "Bir mekân seçin.",
+    "not_found": "Bu artık yok. Sayfayı yenileyin.",
+    "image_type": "JPEG, PNG veya WebP görsel seçin.",
+    "image_too_large": "Görsel 4 MB'den büyük.",
+    "org_not_approved": "Kuruluşunuz henüz onaylanmadı.",
+    "tickets_not_refundable": "Bu biletlerin bir kısmı zaten iade edilmiş. Sayfayı yenileyin.",
+    "nothing_to_refund": "Bu siparişte iade edilecek bir şey kalmadı.",
+    "order_not_paid": "Yalnızca ödenmiş siparişler iade edilebilir.",
+    "refund_exceeds_total": "Bu, ödenenden fazlasını iade eder.",
+    "refund_not_retryable": "Bu iade yeniden gönderilemez.",
+    "seats_taken": "Bu koltukların bazıları artık müsait değil.",
+    "venue_mismatch": "Bu oturma planı başka bir mekân için.",
+    "seat_map_empty": "Bu oturma planında henüz koltuk yok.",
+    "invalid_sections": "En az bir bölüm seçin.",
+    "too_many_seats": "Bir oturma planında en fazla 5.000 koltuk olabilir.",
+    "duplicate_section_name": "İki bölümün adı aynı. Her birine ayrı bir ad verin.",
+    "invalid_layout": "Oturma planı kaydedilemedi. Değerleri kontrol edin.",
+    "invalid_name": "Bir ad girin.",
+    "too_many_requests": "Çok fazla deneme yapıldı. Lütfen bir dakika bekleyip tekrar deneyin.",
+    "same_venue": "İki farklı mekân seçin."
+  },
+  "categories": {
+    "music": "Müzik",
+    "theatre": "Tiyatro",
+    "film": "Film",
+    "sports": "Spor",
+    "festival": "Festival",
+    "conference": "Konferans",
+    "workshop": "Atölye",
+    "community": "Topluluk",
+    "other": "Diğer"
+  },
+  "eventStatus": {
+    "draft": "Taslak",
+    "published": "Yayında",
+    "cancelled": "İptal edildi"
+  },
+  "contentLanguages": {
+    "en": "İngilizce",
+    "fi": "Fince",
+    "tr": "Türkçe"
+  }
+}

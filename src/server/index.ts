@@ -1,0 +1,107 @@
+// The running application, built once per process from the validated environment.
+import { env } from "@/lib/env";
+import { createConsoleMailer } from "./adapters/fake/mailer";
+import { createFakePaymentGateway, type FakePaymentGateway } from "./adapters/fake/payment-gateway";
+import { createLocalObjectStore, type LocalObjectStore } from "./adapters/local/object-store";
+import { createResendMailer } from "./adapters/resend/mailer";
+import { createStripeGateway } from "./adapters/stripe/payment-gateway";
+import { createMemoryRateLimiter } from "./adapters/local/rate-limiter";
+import { createUpstashRateLimiter } from "./adapters/upstash/rate-limiter";
+import { createVercelBlobStore } from "./adapters/vercel/object-store";
+import { createApp, type App } from "./app";
+import { getDb } from "./db/client";
+import { checkHealth, type HealthReport } from "./modules/health/service";
+import { systemClock } from "./ports/clock";
+import type { Mailer } from "./ports/mailer";
+import type { ObjectStore } from "./ports/object-store";
+import type { RateLimiter } from "./ports/rate-limiter";
+
+const globalForApp = globalThis as unknown as { cynseatApp?: App };
+
+function createMailer(): Mailer {
+  if (env.MAIL_DRIVER === "resend") {
+    if (!env.RESEND_API_KEY) throw new Error("MAIL_DRIVER=resend needs RESEND_API_KEY");
+    return createResendMailer({ apiKey: env.RESEND_API_KEY, from: env.EMAIL_FROM });
+  }
+  return createConsoleMailer();
+}
+
+const appUrl = () => env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+
+/** The on-disk store, when that is the configured driver; the upload route reads from it. */
+export function getLocalStore(): LocalObjectStore | null {
+  if (env.STORAGE_DRIVER !== "local") return null;
+  return createLocalObjectStore({ directory: ".data/uploads", baseUrl: appUrl() });
+}
+
+function createStore(): ObjectStore {
+  const local = getLocalStore();
+  if (local) return local;
+  if (!env.BLOB_READ_WRITE_TOKEN) {
+    throw new Error("STORAGE_DRIVER=vercel-blob needs BLOB_READ_WRITE_TOKEN");
+  }
+  return createVercelBlobStore({ token: env.BLOB_READ_WRITE_TOKEN });
+}
+
+const globalForGateway = globalThis as unknown as { cynseatFakeGateway?: FakePaymentGateway };
+
+/**
+ * The stand-in payment provider, when that is the configured driver. Its "payment page"
+ * is a page of this app, which needs to reach it.
+ */
+export function getFakeGateway(): FakePaymentGateway | null {
+  if (env.PAYMENTS_DRIVER !== "fake") return null;
+  globalForGateway.cynseatFakeGateway ??= createFakePaymentGateway({
+    payUrl: (sessionId) => `${appUrl()}/en/dev/pay/${sessionId}`,
+    onboardingUrl: (accountId, returnUrl) =>
+      `${appUrl()}/en/dev/connect/${accountId}?return=${encodeURIComponent(returnUrl)}`,
+    webhookSecret: env.SIGNING_SECRET,
+  });
+  return globalForGateway.cynseatFakeGateway;
+}
+
+function createGateway() {
+  const fake = getFakeGateway();
+  if (fake) return fake;
+  if (!env.STRIPE_SECRET_KEY || !env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error("PAYMENTS_DRIVER=stripe needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET");
+  }
+  return createStripeGateway({
+    secretKey: env.STRIPE_SECRET_KEY,
+    webhookSecret: env.STRIPE_WEBHOOK_SECRET,
+  });
+}
+
+function createRateLimiter(): RateLimiter {
+  if (env.RATE_LIMIT === "off") {
+    return { check: async () => ({ allowed: true, retryAfterSeconds: 0 }) };
+  }
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
+    return createUpstashRateLimiter({
+      url: env.UPSTASH_REDIS_REST_URL,
+      token: env.UPSTASH_REDIS_REST_TOKEN,
+    });
+  }
+  return createMemoryRateLimiter(systemClock);
+}
+
+export function getApp(): App {
+  globalForApp.cynseatApp ??= createApp({
+    db: getDb().db,
+    mailer: createMailer(),
+    store: createStore(),
+    clock: systemClock,
+    appUrl: appUrl(),
+    authSecret: env.BETTER_AUTH_SECRET,
+    authRateLimit: env.AUTH_RATE_LIMIT === "on",
+    gateway: createGateway(),
+    rateLimiter: createRateLimiter(),
+    signingSecret: env.SIGNING_SECRET,
+    platformFee: { bps: env.PLATFORM_FEE_BPS, fixedMinor: env.PLATFORM_FEE_FIXED_MINOR },
+  });
+  return globalForApp.cynseatApp;
+}
+
+export function getHealth(): Promise<HealthReport> {
+  return checkHealth(getDb().db);
+}

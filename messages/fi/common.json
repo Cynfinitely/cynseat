@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "title": "CynSeat",
+    "description": "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille."
+  },
+  "nav": {
+    "home": "CynSeat-etusivu",
+    "language": "Kieli",
+    "skipToContent": "Siirry sisältöön",
+    "signIn": "Kirjaudu sisään",
+    "signOut": "Kirjaudu ulos",
+    "dashboard": "Hallintapaneeli",
+    "account": "Tilivalikko"
+  },
+  "languages": {
+    "en": "English",
+    "fi": "Suomi",
+    "tr": "Türkçe"
+  },
+  "home": {
+    "title": "Maksuton lipunmyynti järjestöille ja tapahtumanjärjestäjille",
+    "subtitle": "Luo tapahtumia, valitse tapahtumapaikka ja myy lippuja. Maksut tilitetään suoraan organisaatiollesi."
+  },
+  "footer": {
+    "rights": "Kaikki oikeudet pidätetään.",
+    "privacy": "Tietosuoja",
+    "terms": "Käyttöehdot"
+  },
+  "notFound": {
+    "title": "Sivua ei löytynyt",
+    "description": "Tätä sivua ei ole olemassa.",
+    "home": "Takaisin etusivulle"
+  },
+  "roles": {
+    "admin": "Ylläpitäjä",
+    "member": "Jäsen",
+    "door_staff": "Ovihenkilökunta"
+  },
+  "status": {
+    "pending": "Odottaa tarkistusta",
+    "approved": "Hyväksytty",
+    "rejected": "Ei hyväksytty",
+    "suspended": "Jäädytetty"
+  },
+  "optional": "valinnainen",
+  "errors": {
+    "generic": "Jokin meni vikaan. Yritä uudelleen.",
+    "required": "Tämä kenttä on pakollinen.",
+    "too_short": "Tämä on liian lyhyt.",
+    "too_long": "Tämä on liian pitkä.",
+    "invalid_email": "Anna kelvollinen sähköpostiosoite.",
+    "invalid_country": "Valitse maa.",
+    "invalid_url": "Anna koko verkko-osoite, joka alkaa https://.",
+    "password_too_short": "Käytä vähintään 10 merkkiä.",
+    "invalid_characters": "Käytä vain pieniä kirjaimia, numeroita ja yksittäisiä yhdysmerkkejä.",
+    "reserved": "Tämä osoite on varattu. Valitse toinen.",
+    "slug_taken": "Tämä osoite on jo käytössä.",
+    "organization_limit": "Olet saavuttanut yhden tilin organisaatioiden enimmäismäärän.",
+    "invalid_transition": "Organisaation tila on muuttunut. Lataa sivu uudelleen ja yritä uudelleen.",
+    "forbidden": "Sinulla ei ole oikeutta tähän.",
+    "email_not_verified": "Vahvista ensin sähköpostiosoitteesi.",
+    "invalid_input": "Tarkista korostetut kentät.",
+    "invalid_date": "Anna kelvollinen päivämäärä ja kellonaika. Kesäaikaan siirryttäessä ohitettuja aikoja ei ole olemassa.",
+    "ends_before_start": "Tämän on oltava alkamisen jälkeen.",
+    "doors_after_start": "Ovet eivät voi aueta tapahtuman alkamisen jälkeen.",
+    "invalid_price": "Anna hinta, esimerkiksi 12 tai 12,50.",
+    "capacity_below_sold": "Kapasiteetti ei voi olla pienempi kuin jo myytyjen tai varattujen lippujen määrä.",
+    "currency_locked": "Valuuttaa ei voi vaihtaa, kun tapahtuma on julkaistu.",
+    "venue_exists": "Tässä kaupungissa on jo tämänniminen tapahtumapaikka. Hae sitä.",
+    "invalid_time_zone": "Valitse aikavyöhyke.",
+    "invalid_number": "Anna kokonaisluku.",
+    "too_small": "Luku on liian pieni.",
+    "too_large": "Luku on liian suuri.",
+    "event_cancelled": "Tapahtuma on peruttu, eikä sitä voi enää muuttaa.",
+    "not_draft": "Tämä toimii vain luonnokselle.",
+    "not_published": "Tämä toimii vain julkaistulle tapahtumalle.",
+    "has_sales": "Lippuja on myyty tai ostetaan parhaillaan, joten tapahtumaa ei voi palauttaa luonnokseksi. Peru se sen sijaan.",
+    "cannot_publish": "Tee tarkistuslista valmiiksi ennen julkaisua.",
+    "default_translation": "Tapahtuman pääkieltä ei voi poistaa.",
+    "invalid_venue": "Valitse tapahtumapaikka.",
+    "not_found": "Tätä ei enää ole. Lataa sivu uudelleen.",
+    "image_type": "Valitse JPEG-, PNG- tai WebP-kuva.",
+    "image_too_large": "Kuva on suurempi kuin 4 Mt.",
+    "org_not_approved": "Organisaatiotasi ei ole vielä hyväksytty.",
+    "tickets_not_refundable": "Osa lipuista on jo hyvitetty. Lataa sivu uudelleen.",
+    "nothing_to_refund": "Tässä tilauksessa ei ole enää hyvitettävää.",
+    "order_not_paid": "Vain maksetut tilaukset voidaan hyvittää.",
+    "refund_exceeds_total": "Tämä hyvittäisi enemmän kuin maksettiin.",
+    "refund_not_retryable": "Tätä hyvitystä ei voi lähettää uudelleen.",
+    "seats_taken": "Osa paikoista ei ole enää saatavilla.",
+    "venue_mismatch": "Tämä salikartta kuuluu toiseen tapahtumapaikkaan.",
+    "seat_map_empty": "Tässä salikartassa ei ole vielä paikkoja.",
+    "invalid_sections": "Valitse vähintään yksi lohko.",
+    "too_many_seats": "Salikartassa voi olla enintään 5 000 paikkaa.",
+    "duplicate_section_name": "Kahdella lohkolla on sama nimi. Anna jokaiselle oma nimi.",
+    "invalid_layout": "Salikarttaa ei voitu tallentaa. Tarkista arvot.",
+    "invalid_name": "Anna nimi.",
+    "too_many_requests": "Liian monta yritystä. Odota hetki ja yritä uudelleen.",
+    "same_venue": "Valitse kaksi eri paikkaa."
+  },
+  "categories": {
+    "music": "Musiikki",
+    "theatre": "Teatteri",
+    "film": "Elokuva",
+    "sports": "Urheilu",
+    "festival": "Festivaali",
+    "conference": "Konferenssi",
+    "workshop": "Työpaja",
+    "community": "Yhteisö",
+    "other": "Muu"
+  },
+  "eventStatus": {
+    "draft": "Luonnos",
+    "published": "Julkaistu",
+    "cancelled": "Peruttu"
+  },
+  "contentLanguages": {
+    "en": "englanti",
+    "fi": "suomi",
+    "tr": "turkki"
+  }
+}

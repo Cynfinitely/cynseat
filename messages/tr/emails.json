@@ -1,0 +1,66 @@
+{
+  "layout": {
+    "footer": "Bu e-postayı CynSeat hesabınızdaki bir işlem nedeniyle alıyorsunuz. Bu işlemi siz yapmadıysanız e-postayı yok sayabilirsiniz.",
+    "linkHelp": "Düğme çalışmıyorsa bu bağlantıyı tarayıcınıza kopyalayın:"
+  },
+  "roles": {
+    "admin": "yönetici",
+    "member": "üye",
+    "door_staff": "kapı görevlisi"
+  },
+  "verifyEmail": {
+    "subject": "E-posta adresinizi doğrulayın",
+    "heading": "E-posta adresinizi doğrulayın",
+    "body": "Merhaba {name}, CynSeat hesabınızın kurulumunu tamamlamak için bu e-posta adresini doğrulayın.",
+    "action": "E-postayı doğrula"
+  },
+  "resetPassword": {
+    "subject": "Şifrenizi sıfırlayın",
+    "heading": "Şifrenizi sıfırlayın",
+    "body": "Merhaba {name}, yeni bir şifre belirlemek için aşağıdaki düğmeyi kullanın. Bağlantı bir saat içinde geçerliliğini yitirir.",
+    "action": "Yeni şifre belirle"
+  },
+  "orgInvitation": {
+    "subject": "{inviter} sizi CynSeat'te {organization} kuruluşuna davet etti",
+    "heading": "{organization} kuruluşuna katılın",
+    "body": "{inviter} sizi CynSeat'te {organization} kuruluşuna davet etti. Rolünüz: {role}.",
+    "action": "Daveti görüntüle"
+  },
+  "orgApproved": {
+    "subject": "{organization} onaylandı",
+    "heading": "{organization} onaylandı",
+    "body": "Kuruluşunuz onaylandı. Artık CynSeat'te etkinlik yayınlayabilirsiniz.",
+    "action": "Paneli aç"
+  },
+  "orgRejected": {
+    "subject": "{organization} onaylanmadı",
+    "heading": "{organization} onaylanmadı",
+    "body": "Kuruluşunuzu onaylayamadık.",
+    "action": "Paneli aç"
+  },
+  "orgSuspended": {
+    "subject": "{organization} askıya alındı",
+    "heading": "{organization} askıya alındı",
+    "body": "Kuruluşunuz askıya alındı. Etkinlikleri artık satışta değil.",
+    "action": "Paneli aç"
+  },
+  "note": "CynSeat ekibinden not: {note}",
+  "orderConfirmation": {
+    "subject": "{event} biletleriniz",
+    "heading": "{event} biletleriniz",
+    "body": "Merhaba {name}, {reference} numaralı siparişiniz için teşekkürler. {when} tarihindeki {event} etkinliği için {tickets} biletiniz var. Biletlerinizi aşağıdan açın ve kapıda QR kodlarını gösterin.",
+    "action": "Biletlerimi aç"
+  },
+  "orderRefunded": {
+    "subject": "{reference} numaralı siparişiniz için iade",
+    "heading": "İadeniz yolda",
+    "body": "Merhaba {name}, {reference} numaralı siparişiniz ({event}) için {amount} iade ettik. Tutarın hesabınıza ulaşması birkaç iş günü sürebilir. İade edilen biletler artık geçerli değildir.",
+    "action": "Siparişi görüntüle"
+  },
+  "orderLink": {
+    "subject": "{event} biletleriniz",
+    "heading": "Biletleriniz burada",
+    "body": "{event} etkinliği için {reference} numaralı siparişinizin bağlantısını istediniz. Biletlerinizi görmek için açın.",
+    "action": "Biletlerimi aç"
+  }
+}
