@@ -21,7 +21,7 @@
       },
       "sharing": {
         "heading": "Kenelle tietoja luovutetaan",
-        "body": "Organisaatio, jonka tapahtumaan ostat lippuja, näkee nimesi, sähköpostiosoitteesi ja tilauksesi.\n\nKäytämme seuraavia palveluntarjoajia, kutakin vain mainittuun tehtävään: Vercel (palvelin ja tiedostojen tallennus), Neon (tietokanta), Stripe (maksut ja tilitykset organisaatioille), Resend (sähköpostien lähetys), Upstash (yrityslaskurit) ja Sentry (virheraportit, jotka lähetetään ilman nimiä, sähköpostiosoitteita tai pyyntöjen tietoja).\n\nOsa näistä palveluntarjoajista käsittelee tietoja Euroopan talousalueen ulkopuolella. Tällöin siirto perustuu Euroopan komission vakiosopimuslausekkeisiin tai tietosuojan riittävyyttä koskevaan päätökseen."
+        "body": "Organisaatio, jonka tapahtumaan ostat lippuja, näkee nimesi, sähköpostiosoitteesi ja tilauksesi.\n\nKäytämme seuraavia palveluntarjoajia, kutakin vain mainittuun tehtävään: Vercel (palvelin ja tiedostojen tallennus), Neon (tietokanta), Stripe (maksut ja tilitykset organisaatioille), Resend (sähköpostien lähetys) ja Upstash (yrityslaskurit).\n\nOsa näistä palveluntarjoajista käsittelee tietoja Euroopan talousalueen ulkopuolella. Tällöin siirto perustuu Euroopan komission vakiosopimuslausekkeisiin tai tietosuojan riittävyyttä koskevaan päätökseen."
       },
       "retention": {
         "heading": "Kuinka kauan säilytämme tietoja",

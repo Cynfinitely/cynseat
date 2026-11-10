@@ -59,8 +59,6 @@ The approval queue is at `/en/admin/organizations`.
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`          | Optional shared counters for rate limiting; without them each server instance counts on its own                                                                                                |
 | `RETENTION_PERSONAL_DATA_DAYS` and related                    | How long buyers' personal data is kept after an event (default 365 days); confirm against your legal obligations                                                                               |
 | `CRON_SECRET`                                                 | Protects `/api/cron/*`. Vercel Cron sends it for the daily retention job; `.github/workflows/cron.yml` sends it for the 5-minute jobs (set the `CRON_SECRET` and `APP_URL` repository secrets) |
-| `NEXT_PUBLIC_SENTRY_DSN`                                      | Optional error reporting to Sentry, from the server and the browser. Reports leave out request details, and order tokens are removed from URLs                                                 |
-| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`           | Optional, build time only: upload source maps to Sentry                                                                                                                                        |
 | `LEGAL_OPERATOR_NAME`, `LEGAL_COUNTRY`, `LEGAL_CONTACT_EMAIL` | Who runs the service, shown on `/privacy` and `/terms` (text in `messages/*/legal.json`)                                                                                                       |
 
 Variables are validated at startup in `src/lib/env.ts`; the build fails if one is missing or malformed.

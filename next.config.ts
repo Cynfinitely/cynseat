@@ -1,4 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs/config";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -16,8 +15,8 @@ const contentSecurityPolicy = [
   // Posters are served from object storage on another origin.
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  // The QR reader fetches its WebAssembly module from this CDN; browser errors go to Sentry.
-  `connect-src 'self' https://fastly.jsdelivr.net https://*.sentry.io${isDevelopment ? " ws:" : ""}`,
+  // The QR reader fetches its WebAssembly module from this CDN.
+  `connect-src 'self' https://fastly.jsdelivr.net${isDevelopment ? " ws:" : ""}`,
   "media-src 'self' blob:",
   "worker-src 'self' blob:",
   "object-src 'none'",
@@ -51,13 +50,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Source maps are uploaded to Sentry only when SENTRY_AUTH_TOKEN is set at build time, so
-// local and CI builds are unaffected.
-export default withSentryConfig(withNextIntl(nextConfig), {
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-  silent: !process.env.SENTRY_AUTH_TOKEN,
-  telemetry: false,
-  sourcemaps: { disable: !process.env.SENTRY_AUTH_TOKEN },
-});
+export default withNextIntl(nextConfig);

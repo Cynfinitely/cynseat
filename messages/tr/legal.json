@@ -21,7 +21,7 @@
       },
       "sharing": {
         "heading": "Başka kimler alır",
-        "body": "Bilet aldığınız etkinliğin kuruluşu adınızı, e-posta adresinizi ve siparişinizi görür.\n\nŞu hizmet sağlayıcıları, her birini yalnızca belirtilen iş için kullanırız: Vercel (barındırma ve dosya depolama), Neon (veritabanı), Stripe (ödemeler ve kuruluşlara yapılan aktarımlar), Resend (e-posta gönderimi), Upstash (deneme sayaçları) ve Sentry (ad, e-posta adresi veya istek ayrıntısı içermeden gönderilen hata raporları).\n\nBu sağlayıcıların bazıları verileri Avrupa Ekonomik Alanı dışında işler. Bu durumda aktarım, Avrupa Komisyonu'nun standart sözleşme maddelerine veya bir yeterlilik kararına dayanır."
+        "body": "Bilet aldığınız etkinliğin kuruluşu adınızı, e-posta adresinizi ve siparişinizi görür.\n\nŞu hizmet sağlayıcıları, her birini yalnızca belirtilen iş için kullanırız: Vercel (barındırma ve dosya depolama), Neon (veritabanı), Stripe (ödemeler ve kuruluşlara yapılan aktarımlar), Resend (e-posta gönderimi) ve Upstash (deneme sayaçları).\n\nBu sağlayıcıların bazıları verileri Avrupa Ekonomik Alanı dışında işler. Bu durumda aktarım, Avrupa Komisyonu'nun standart sözleşme maddelerine veya bir yeterlilik kararına dayanır."
       },
       "retention": {
         "heading": "Ne kadar süre saklıyoruz",

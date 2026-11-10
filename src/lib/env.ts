@@ -60,7 +60,6 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_URL: z.url(),
     // Where errors are reported, from the server and the browser. Unset turns reporting off.
-    NEXT_PUBLIC_SENTRY_DSN: z.url().optional(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
@@ -89,7 +88,6 @@ export const env = createEnv({
     LEGAL_COUNTRY: process.env.LEGAL_COUNTRY,
     LEGAL_CONTACT_EMAIL: process.env.LEGAL_CONTACT_EMAIL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },
   emptyStringAsUndefined: true,
   skipValidation: process.env.SKIP_ENV_VALIDATION === "1",

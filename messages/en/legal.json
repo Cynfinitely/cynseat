@@ -21,7 +21,7 @@
       },
       "sharing": {
         "heading": "Who else receives it",
-        "body": "The organization whose event you buy tickets for sees your name, email address and order.\n\nWe use these service providers, each only for the task listed: Vercel (hosting and file storage), Neon (database), Stripe (payments and payouts to organizations), Resend (sending email), Upstash (attempt counters), and Sentry (error reports, sent without names, email addresses or request details).\n\nSome of these providers process data outside the European Economic Area. Where they do, the transfer is covered by the European Commission's standard contractual clauses or an adequacy decision."
+        "body": "The organization whose event you buy tickets for sees your name, email address and order.\n\nWe use these service providers, each only for the task listed: Vercel (hosting and file storage), Neon (database), Stripe (payments and payouts to organizations), Resend (sending email), and Upstash (attempt counters).\n\nSome of these providers process data outside the European Economic Area. Where they do, the transfer is covered by the European Commission's standard contractual clauses or an adequacy decision."
       },
       "retention": {
         "heading": "How long we keep it",
