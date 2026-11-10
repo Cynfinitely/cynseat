@@ -55,6 +55,9 @@ describe("renderEmail", () => {
           expect(part).not.toMatch(/\{\w+\}/);
         }
         expect(email.text).toContain(sample.data.url);
+        const links = [...email.html.matchAll(/<a\b[^>]*>/g)].map(([tag]) => tag);
+        expect(links).toHaveLength(2);
+        for (const link of links) expect(link).toContain("ses:no-track");
         expect(email.html).toContain(`lang="${locale}"`);
       });
     }
