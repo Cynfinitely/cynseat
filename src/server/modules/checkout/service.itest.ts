@@ -92,11 +92,13 @@ describe("checkout", () => {
       expect(await typeRow(event.ticketTypeId)).toMatchObject({ qtySold: 3, qtyHeld: 0 });
 
       const [email] = await confirmationEmails(started.orderId);
-      expect(email!.payload).toMatchObject({
-        to: "free@example.com",
-        template: "orderConfirmation",
-        data: { tickets: "3", event: "Bir Masal Gibi Anlat" },
-      });
+      expect(email!.payload).toEqual({});
+      expect(app.mailer.sent.filter((mail) => mail.to === "free@example.com")).toEqual([
+        expect.objectContaining({
+          subject: "Your tickets for Bir Masal Gibi Anlat",
+          text: expect.stringContaining("3 ticket(s)"),
+        }),
+      ]);
       await expectInventoryConsistent(app, event.id);
     });
 

@@ -104,10 +104,15 @@ describe("refunds", () => {
         .select()
         .from(outboxJobs)
         .where(eq(outboxJobs.dedupeKey, `order-refunded:${outcome.refundId}`));
-      expect(email!.payload).toMatchObject({
-        template: "orderRefunded",
-        data: { amount: "€25.00" },
-      });
+      expect(email!.payload).toEqual({});
+      const refunded = await orderRow(order.orderId);
+      expect(app.mailer.sent).toContainEqual(
+        expect.objectContaining({
+          to: refunded.email,
+          subject: `Refund for your order ${view.reference}`,
+          text: expect.stringContaining("€25.00"),
+        }),
+      );
       await expectInventoryConsistent(app, event.id);
     });
 
