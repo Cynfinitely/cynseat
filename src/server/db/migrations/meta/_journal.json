@@ -64,6 +64,13 @@
       "when": 1791907123794,
       "tag": "0008_seat_references",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795514760488,
+      "tag": "0009_minimize_notification_data",
+      "breakpoints": true
     }
   ]
 }

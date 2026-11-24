@@ -149,8 +149,8 @@ export async function cancelEventAction(orgSlug: string, eventId: string, input:
   return orgAction(orgSlug, cancelEventSchema, input, async (app, ctx, data) => {
     await events.cancelEvent(app, ctx, eventId, data.reason);
     // Refund buyers straight away. If this is interrupted, the scheduler finishes the job.
-    await refundCancelledEvent(app, eventId).catch((error) => {
-      console.error("refunding cancelled event failed; the scheduler will retry", eventId, error);
+    await refundCancelledEvent(app, eventId).catch(() => {
+      console.error("refunding cancelled event failed; the scheduler will retry", eventId);
     });
     revalidatePath("/[locale]", "layout");
   });

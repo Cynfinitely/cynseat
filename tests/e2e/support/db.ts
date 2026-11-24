@@ -21,8 +21,8 @@ async function query<Row extends Record<string, unknown>>(
 export async function emailLink(to: string, template: string): Promise<string> {
   for (let attempt = 0; attempt < 40; attempt += 1) {
     const rows = await query<{ url: string }>(
-      `select payload->'data'->>'url' as url from outbox_jobs
-       where kind = 'email' and payload->>'to' = $1 and payload->>'template' = $2
+      `select payload->'data'->>'url' as url from e2e_mailbox
+       where payload->>'to' = $1 and payload->>'template' = $2
        order by created_at desc limit 1`,
       [to, template],
     );

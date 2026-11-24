@@ -4,6 +4,10 @@ import type { MailMessage, Mailer } from "../../ports/mailer";
 export function createConsoleMailer(log: (line: string) => void = console.log): Mailer {
   return {
     async send(message) {
+      if (process.env.VERCEL) {
+        log("[mail] Simulated delivery");
+        return;
+      }
       log(`[mail] to=${message.to} subject=${JSON.stringify(message.subject)}\n${message.text}`);
     },
   };

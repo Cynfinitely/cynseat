@@ -154,7 +154,7 @@ export async function handleGatewayEvent(deps: Deps, event: GatewayEvent): Promi
       id: event.id,
       type: event.type,
       accountId: event.accountId,
-      payload: event.payload,
+      payload: { checkoutSessionId: event.checkoutSessionId, orderId: event.orderId },
       receivedAt: now,
     })
     .onConflictDoNothing();

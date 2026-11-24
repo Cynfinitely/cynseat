@@ -7,6 +7,7 @@ export const DATABASE_URL =
   process.env.DATABASE_URL ?? "postgres://cynseat:cynseat@localhost:5433/cynseat";
 
 export default defineConfig({
+  globalSetup: "./tests/e2e/mailbox-setup.ts",
   testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
