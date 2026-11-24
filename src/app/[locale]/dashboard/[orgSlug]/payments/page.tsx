@@ -25,14 +25,23 @@ export default async function PaymentsPage({ params, searchParams }: Props) {
   if (!can(ctx.role, "org.payments.manage")) notFound();
   const app = getApp();
 
+  const direct = app.gateway.directMerchant;
+  const setupPending =
+    direct &&
+    (!direct.configured ||
+      direct.organizationId !== ctx.organization.id ||
+      (ctx.profile.stripeAccountId && ctx.profile.stripeAccountId !== direct.accountId));
   // Back from the provider's form, or still waiting on it: ask the provider where things stand.
-  if ((await searchParams).returned || paymentStatusOf(ctx.profile).state === "incomplete") {
+  if (
+    !setupPending &&
+    ((await searchParams).returned || paymentStatusOf(ctx.profile).state === "incomplete")
+  ) {
     await refreshPaymentStatus(app, ctx);
     ctx = await getOrgContext(app.db, ctx.actor, orgSlug);
   }
 
   const t = await getTranslations("dashboard.payments");
-  const { state } = paymentStatusOf(ctx.profile);
+  const state = setupPending ? "none" : paymentStatusOf(ctx.profile).state;
   const approved = ctx.profile.approvalStatus === "approved";
   const fee = [
     app.platformFee.bps > 0 ? `${app.platformFee.bps / 100} %` : null,
@@ -56,15 +65,20 @@ export default async function PaymentsPage({ params, searchParams }: Props) {
 
       {state !== "ready" ? (
         <div className="mt-6">
-          {approved ? (
-            <ConnectButton orgSlug={orgSlug} label={t(state === "none" ? "connect" : "resume")} />
+          {setupPending ? (
+            <p>{t("directPending")}</p>
+          ) : approved ? (
+            <ConnectButton
+              orgSlug={orgSlug}
+              label={t(direct ? "directVerify" : state === "none" ? "connect" : "resume")}
+            />
           ) : (
             <p className="text-muted text-sm">{t("needsApproval")}</p>
           )}
         </div>
       ) : null}
 
-      <p className="text-muted mt-8 text-sm">{t("fee", { fee: fee || t("noFee") })}</p>
+      <p className="text-muted mt-8 text-sm">{t("fee", { fee: (!direct && fee) || t("noFee") })}</p>
     </div>
   );
 }

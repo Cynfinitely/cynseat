@@ -63,6 +63,19 @@ export function getFakeGateway(): FakePaymentGateway | null {
 function createGateway() {
   const fake = getFakeGateway();
   if (fake) return fake;
+  if (env.PAYMENTS_DRIVER === "stripe-direct") {
+    if (!env.DIRECT_STRIPE_ORG_ID || !env.DIRECT_STRIPE_ACCOUNT_ID)
+      throw new Error("Missing direct merchant identity");
+    return createStripeGateway({
+      secretKey: env.DIRECT_STRIPE_KEY,
+      webhookSecret: env.DIRECT_STRIPE_WEBHOOK_SECRET,
+      directMerchant: {
+        organizationId: env.DIRECT_STRIPE_ORG_ID,
+        accountId: env.DIRECT_STRIPE_ACCOUNT_ID,
+        configured: Boolean(env.DIRECT_STRIPE_KEY && env.DIRECT_STRIPE_WEBHOOK_SECRET),
+      },
+    });
+  }
   if (!env.STRIPE_SECRET_KEY || !env.STRIPE_WEBHOOK_SECRET) {
     throw new Error("PAYMENTS_DRIVER=stripe needs STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET");
   }

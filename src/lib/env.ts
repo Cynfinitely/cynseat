@@ -18,11 +18,22 @@ export const env = createEnv({
     SIGNING_SECRET: z.string().min(32),
     // "fake" replaces the payment provider with a local stand-in. Never in production.
     PAYMENTS_DRIVER: z
-      .enum(["fake", "stripe"])
+      .enum(["fake", "stripe", "stripe-direct"])
       .default("fake")
       .refine((value) => value !== "fake" || process.env.VERCEL_ENV !== "production", {
         error: "PAYMENTS_DRIVER cannot be fake in production",
       }),
+    DIRECT_STRIPE_ORG_ID: z.string().min(1).optional(),
+    DIRECT_STRIPE_ACCOUNT_ID: z.string().startsWith("acct_").optional(),
+    DIRECT_STRIPE_KEY: z
+      .string()
+      .regex(/^(sk|rk)_(live|test)_/)
+      .refine(
+        (key) => process.env.VERCEL_ENV !== "production" || /^(sk|rk)_live_/.test(key),
+        "Production requires a live merchant key",
+      )
+      .optional(),
+    DIRECT_STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
     STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
     // Signing secret of the Stripe webhook endpoint that listens to connected accounts.
     STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
@@ -68,6 +79,10 @@ export const env = createEnv({
     AUTH_RATE_LIMIT: process.env.AUTH_RATE_LIMIT,
     SIGNING_SECRET: process.env.SIGNING_SECRET,
     PAYMENTS_DRIVER: process.env.PAYMENTS_DRIVER,
+    DIRECT_STRIPE_ORG_ID: process.env.DIRECT_STRIPE_ORG_ID,
+    DIRECT_STRIPE_ACCOUNT_ID: process.env.DIRECT_STRIPE_ACCOUNT_ID,
+    DIRECT_STRIPE_KEY: process.env.DIRECT_STRIPE_KEY,
+    DIRECT_STRIPE_WEBHOOK_SECRET: process.env.DIRECT_STRIPE_WEBHOOK_SECRET,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     PLATFORM_FEE_BPS: process.env.PLATFORM_FEE_BPS,

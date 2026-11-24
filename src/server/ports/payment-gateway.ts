@@ -49,7 +49,10 @@ export type GatewayEvent = {
   payload: Record<string, unknown>;
 };
 
+export type DirectMerchant = { organizationId: string; accountId: string; configured: boolean };
+
 export type PaymentGateway = {
+  directMerchant?: DirectMerchant;
   /** Opens a payment account for an organization. Money for its tickets goes there. */
   createAccount(input: {
     organizationId: string;

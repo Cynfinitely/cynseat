@@ -90,6 +90,8 @@
     "readyBody": "Stripe hesabınız bağlandı ve ödeme kabul edebilir.",
     "connect": "Stripe ile bağlan",
     "resume": "Stripe ile devam et",
+    "directPending": "Doğrudan ödemeleri site yöneticisinin yapılandırması gerekir.",
+    "directVerify": "Satıcı hesabını doğrula",
     "needsApproval": "Bir ödeme hesabı bağlayabilmesi için kuruluşunuzun CynSeat tarafından onaylanması gerekir.",
     "adminOnly": "Ödemeleri yalnızca kuruluş yöneticisi yönetebilir.",
     "fee": "CynSeat'in ücretli biletlerdeki komisyonu: {fee}. Stripe'ın kendi kart ücretleri ayrıca uygulanır.",

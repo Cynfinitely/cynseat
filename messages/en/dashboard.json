@@ -90,6 +90,8 @@
     "readyBody": "Your Stripe account is connected and can accept payments.",
     "connect": "Connect with Stripe",
     "resume": "Continue with Stripe",
+    "directPending": "Direct payments require setup by the site administrator.",
+    "directVerify": "Verify merchant account",
     "needsApproval": "Your organization has to be approved by CynSeat before it can connect a payment account.",
     "adminOnly": "Only an organization admin can manage payments.",
     "fee": "CynSeat's fee on paid tickets: {fee}. Stripe's own card fees apply separately.",

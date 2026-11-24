@@ -8,7 +8,7 @@ const signer = new Stripe("sk_test_unused");
 type Call = { method: string; args: unknown[] };
 
 /** A stand-in for the SDK client that records calls and returns canned answers. */
-function stubClient(answers: Record<string, (...args: unknown[]) => unknown>) {
+function stubClient(answers: Record<string, (...args: unknown[]) => unknown>, direct = false) {
   const calls: Call[] = [];
   const method =
     (name: string) =>
@@ -33,7 +33,14 @@ function stubClient(answers: Record<string, (...args: unknown[]) => unknown>) {
   } as unknown as Stripe;
   return {
     calls,
-    gateway: createStripeGateway({ secretKey: "sk", webhookSecret: WEBHOOK_SECRET, client }),
+    gateway: createStripeGateway({
+      secretKey: "sk",
+      webhookSecret: WEBHOOK_SECRET,
+      directMerchant: direct
+        ? { organizationId: "org", accountId: "acct_org", configured: true }
+        : undefined,
+      client,
+    }),
   };
 }
 
@@ -81,6 +88,66 @@ describe("Stripe gateway", () => {
     });
     // No platform fee: the field must be absent, since Stripe rejects a zero fee.
     expect(params.payment_intent_data).toEqual({ metadata: { order_id: request.orderId } });
+  });
+
+  it("uses only the bound merchant credential for direct checkout and refunds", async () => {
+    const { calls, gateway } = stubClient(
+      {
+        "accounts.retrieve": () => ({ id: "acct_org" }),
+        "sessions.create": () => ({ id: "cs_1", url: "https://example.test" }),
+        "refunds.create": () => ({ id: "re_1", status: "succeeded" }),
+      },
+      true,
+    );
+    await expect(gateway.createCheckout({ ...request, accountId: "acct_other" })).rejects.toThrow();
+    await expect(
+      gateway.createCheckout({ ...request, applicationFeeAmount: 12 }),
+    ).rejects.toThrow();
+    await expect(
+      gateway.createAccount({
+        organizationId: "other",
+        name: "Other",
+        email: "test@example.com",
+        country: "FI",
+      }),
+    ).rejects.toThrow();
+    expect(calls).toHaveLength(0);
+    await gateway.createCheckout(request);
+    expect(calls[0]).toEqual({ method: "accounts.retrieve", args: [null] });
+    expect(calls[1]?.args[1]).toEqual({ idempotencyKey: `order:${request.orderId}:checkout` });
+    await gateway.refund({
+      accountId: "acct_org",
+      amount: 1250,
+      paymentIntentId: "pi_1",
+      refundApplicationFee: false,
+      idempotencyKey: "refund:1",
+    });
+    expect(calls.at(-1)?.args).toEqual([
+      { payment_intent: "pi_1", amount: 1250 },
+      { idempotencyKey: "refund:1" },
+    ]);
+    const wrong = stubClient({ "accounts.retrieve": () => ({ id: "acct_wrong" }) }, true);
+    await expect(wrong.gateway.createCheckout(request)).rejects.toThrow("different account");
+  });
+
+  it("binds a signed merchant webhook to the configured seller and checks its mode", () => {
+    const { gateway } = stubClient({}, true);
+    const parse = (fields: Record<string, unknown>) => {
+      const payload = JSON.stringify({
+        id: "evt_1",
+        type: "checkout.session.completed",
+        livemode: false,
+        data: { object: { id: "cs_1", metadata: { order_id: request.orderId } } },
+        ...fields,
+      });
+      return gateway.parseEvent(
+        payload,
+        signer.webhooks.generateTestHeaderString({ payload, secret: WEBHOOK_SECRET }),
+      );
+    };
+    expect(parse({})).toMatchObject({ accountId: "acct_org", orderId: request.orderId });
+    expect(() => parse({ account: "acct_other" })).toThrow();
+    expect(() => parse({ livemode: true })).toThrow();
   });
 
   it("adds the platform fee when there is one", async () => {
