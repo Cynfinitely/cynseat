@@ -114,6 +114,8 @@ describe("Stripe gateway", () => {
     expect(calls).toHaveLength(0);
     await gateway.createCheckout(request);
     expect(calls[0]).toEqual({ method: "accounts.retrieve", args: [null] });
+    expect(calls[1]?.args[0]).toMatchObject({ allowed_payment_method_types: ["card"] });
+    expect(calls[1]?.args[0]).not.toHaveProperty("payment_method_types");
     expect(calls[1]?.args[1]).toEqual({ idempotencyKey: `order:${request.orderId}:checkout` });
     await gateway.refund({
       accountId: "acct_org",
