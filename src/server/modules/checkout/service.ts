@@ -215,12 +215,20 @@ export async function startCheckout(
       seats.reduce((sum, seat) => sum + seat.unitPriceAmount, 0);
     const profile = await repo.findPaymentProfile(tx, event.organizationId);
 
+    const direct = deps.gateway.directMerchant;
     if (totalAmount === 0) {
       const already = await repo.countFreeTickets(tx, event.id, input.email);
       if (already + quantity > FREE_TICKETS_PER_EMAIL) {
         throw conflict("free_ticket_limit", { max: String(FREE_TICKETS_PER_EMAIL) });
       }
-    } else if (!profile?.accountId || !profile.chargesEnabled) {
+    } else if (
+      !profile?.accountId ||
+      !profile.chargesEnabled ||
+      (direct &&
+        (!direct.configured ||
+          direct.organizationId !== event.organizationId ||
+          direct.accountId !== profile.accountId))
+    ) {
       throw conflict("payments_unavailable");
     }
 
@@ -237,10 +245,12 @@ export async function startCheckout(
       locale: input.locale,
       currency: event.currency,
       totalAmount,
-      applicationFeeAmount: applicationFee(totalAmount, quantity, {
-        bps: profile?.feeBps ?? deps.platformFee.bps,
-        fixedMinor: profile?.feeFixedMinor ?? deps.platformFee.fixedMinor,
-      }),
+      applicationFeeAmount: direct
+        ? 0
+        : applicationFee(totalAmount, quantity, {
+            bps: profile?.feeBps ?? deps.platformFee.bps,
+            fixedMinor: profile?.feeFixedMinor ?? deps.platformFee.fixedMinor,
+          }),
       paymentProvider: totalAmount === 0 ? "none" : "stripe",
       stripeAccountId: totalAmount === 0 ? null : profile!.accountId,
       checkoutExpiresAt: totalAmount === 0 ? null : plusSeconds(now, CHECKOUT_SESSION_SECONDS),

@@ -90,6 +90,8 @@
     "readyBody": "Stripe-tilisi on yhdistetty ja voi vastaanottaa maksuja.",
     "connect": "Yhdistä Stripeen",
     "resume": "Jatka Stripessä",
+    "directPending": "Sivuston ylläpitäjän on määritettävä suorat maksut.",
+    "directVerify": "Tarkista maksutili",
     "needsApproval": "CynSeatin on hyväksyttävä organisaatiosi, ennen kuin se voi yhdistää maksutilin.",
     "adminOnly": "Vain organisaation ylläpitäjä voi hallita maksuja.",
     "fee": "CynSeatin palkkio maksullisista lipuista: {fee}. Stripen omat korttimaksut veloitetaan erikseen.",

@@ -37,6 +37,14 @@ export async function startPaymentOnboarding(
   authorizeOrg(ctx, "org.payments.manage");
   if (ctx.profile.approvalStatus !== "approved") throw conflict("org_not_approved");
 
+  const direct = deps.gateway.directMerchant;
+  if (
+    direct &&
+    (!direct.configured ||
+      direct.organizationId !== ctx.organization.id ||
+      (ctx.profile.stripeAccountId && ctx.profile.stripeAccountId !== direct.accountId))
+  )
+    throw conflict("payments_unavailable");
   let accountId = ctx.profile.stripeAccountId;
   if (!accountId) {
     const created = await deps.gateway.createAccount({
@@ -60,7 +68,7 @@ export async function startPaymentOnboarding(
       await recordAudit(tx, {
         organizationId: ctx.organization.id,
         actorUserId: ctx.actor.userId,
-        action: "payments.account_created",
+        action: direct ? "payments.account_linked" : "payments.account_created",
         entityType: "organization",
         entityId: ctx.organization.id,
       });
@@ -117,6 +125,28 @@ export async function refreshPaymentStatus(deps: Deps, ctx: OrgContext): Promise
  * failed half-way is simply processed again when the provider retries it.
  */
 export async function handleGatewayEvent(deps: Deps, event: GatewayEvent): Promise<void> {
+  const direct = deps.gateway.directMerchant;
+  if (direct && event.type.startsWith("checkout.session.")) {
+    // This endpoint also receives the merchant's sales made outside CynSeat.
+    if (
+      event.accountId !== direct.accountId ||
+      !event.checkoutSessionId ||
+      !event.orderId ||
+      !/^[0-9a-f-]{36}$/.test(event.orderId)
+    )
+      return;
+    const [order] = await deps.db
+      .select({ id: orders.id })
+      .from(orders)
+      .where(
+        and(
+          eq(orders.id, event.orderId),
+          eq(orders.organizationId, direct.organizationId),
+          eq(orders.stripeAccountId, direct.accountId),
+        ),
+      );
+    if (!order) return;
+  }
   const now = deps.clock.now();
   await deps.db
     .insert(paymentEvents)

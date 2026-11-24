@@ -60,6 +60,28 @@ describe("payments", () => {
     );
 
   describe("connecting a payment account", () => {
+    it("allows only the configured direct merchant to start payment setup", async () => {
+      const app = getApp();
+      const org = await createOrg(app, { payments: false });
+      const ctx = await org.as(org.admin);
+      const gateway = {
+        ...app.gateway,
+        directMerchant: { organizationId: "other", accountId: "acct_direct", configured: true },
+      };
+      await expect(startPaymentOnboarding({ ...app, gateway }, ctx, "en")).rejects.toThrow(
+        "payments_unavailable",
+      );
+      gateway.directMerchant = {
+        ...gateway.directMerchant,
+        organizationId: org.id,
+        configured: false,
+      };
+      await expect(startPaymentOnboarding({ ...app, gateway }, ctx, "en")).rejects.toThrow(
+        "payments_unavailable",
+      );
+      expect((await org.as(org.admin)).profile.stripeAccountId).toBeNull();
+    });
+
     it("takes an approved organization from nothing to ready", async () => {
       const app = getApp();
       const org = await createOrg(app, { payments: false });
