@@ -34,7 +34,8 @@ describe("email outbox", () => {
     const sent = app.mailer.sent.filter((mail) => mail.to === "one@example.com");
     expect(sent).toHaveLength(1);
     expect(sent[0]!.subject).toBe("Confirm your email address");
-    expect((await getJob(id!)).status).toBe("done");
+    expect(await getJob(id!)).toMatchObject({ status: "done" });
+    expect((await getJob(id!)).payload).toEqual({});
   });
 
   it("ignores a second job with the same dedupe key", async () => {
@@ -68,7 +69,11 @@ describe("email outbox", () => {
     app.mailer.failNext(new Error("smtp down"));
     expect(await dispatchEmails(app, { ids: [id!] })).toEqual({ sent: 0, failed: 1 });
     let row = await getJob(id!);
-    expect(row).toMatchObject({ status: "pending", attempts: 1, lastError: "smtp down" });
+    expect(row).toMatchObject({
+      status: "pending",
+      attempts: 1,
+      lastError: "Email delivery failed",
+    });
 
     // Not due yet.
     expect(await dispatchEmails(app, { ids: [id!] })).toEqual({ sent: 0, failed: 0 });
@@ -79,6 +84,7 @@ describe("email outbox", () => {
       await dispatchEmails(app, { ids: [id!] });
     }
     row = await getJob(id!);
+    expect(row.payload).toEqual({});
     expect(row).toMatchObject({ status: "failed", attempts: MAX_EMAIL_ATTEMPTS });
 
     app.clock.advance(24 * 60 * 60_000);

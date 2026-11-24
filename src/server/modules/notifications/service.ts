@@ -79,10 +79,16 @@ export async function dispatchEmails(
         await deps.mailer.send({ to: email.to, ...renderEmail(email.locale, email) });
         await tx
           .update(outboxJobs)
-          .set({ status: "done", processedAt: now, attempts: job.attempts + 1, lastError: null })
+          .set({
+            status: "done",
+            payload: {},
+            processedAt: now,
+            attempts: job.attempts + 1,
+            lastError: null,
+          })
           .where(eq(outboxJobs.id, job.id));
         result.sent += 1;
-      } catch (error) {
+      } catch {
         const attempts = job.attempts + 1;
         const exhausted = attempts >= MAX_EMAIL_ATTEMPTS;
         await tx
@@ -92,7 +98,8 @@ export async function dispatchEmails(
             status: exhausted ? "failed" : "pending",
             // 1, 2, 4, 8, 16 minutes.
             runAfter: new Date(now.getTime() + 60_000 * 2 ** (attempts - 1)),
-            lastError: error instanceof Error ? error.message : String(error),
+            payload: exhausted ? {} : job.payload,
+            lastError: "Email delivery failed",
           })
           .where(eq(outboxJobs.id, job.id));
         result.failed += 1;

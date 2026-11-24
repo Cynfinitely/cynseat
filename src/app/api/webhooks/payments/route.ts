@@ -20,8 +20,8 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     await handleGatewayEvent(app, event);
-  } catch (error) {
-    console.error("payment webhook failed", event.id, error);
+  } catch {
+    console.error("payment webhook failed", event.id);
     // A 5xx asks the provider to deliver the event again later.
     return new Response("Temporary failure", { status: 500 });
   }

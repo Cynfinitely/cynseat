@@ -105,5 +105,5 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   emptyStringAsUndefined: true,
-  skipValidation: process.env.SKIP_ENV_VALIDATION === "1",
+  skipValidation: !process.env.VERCEL && process.env.SKIP_ENV_VALIDATION === "1",
 });

@@ -10,7 +10,7 @@ up() {
   if ! docker start "$NAME" >/dev/null 2>&1; then
     docker run -d --name "$NAME" \
       -e POSTGRES_USER=cynseat -e POSTGRES_PASSWORD=cynseat -e POSTGRES_DB=cynseat \
-      -p 5433:5432 -v "$VOLUME":/var/lib/postgresql/data \
+      -p 127.0.0.1:5433:5432 -v "$VOLUME":/var/lib/postgresql/data \
       postgres:17-alpine >/dev/null
   fi
   for _ in $(seq 1 60); do
