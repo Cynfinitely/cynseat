@@ -15,6 +15,34 @@ test.describe("signed-out visitors", () => {
     await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
   });
 
+  test("signup checks matching passwords and can request a fresh verification link", async ({
+    page,
+  }) => {
+    await page.goto("/en/sign-up");
+    await page.getByLabel("Your name").fill("Test Organizer");
+    const email = `confirm-${uniqueId()}@example.com`;
+    await page.getByLabel("Email").fill(email);
+    const password = page.getByLabel("Password", { exact: true });
+    const confirmation = page.getByLabel("Confirm password", { exact: true });
+    await password.fill(PASSWORD);
+    await confirmation.fill(PASSWORD + "x");
+    await page.getByRole("button", { name: "Create account" }).click();
+    await expect(page.getByText("The passwords do not match.")).toBeVisible();
+    const toggle = page.getByRole("checkbox", { name: "Show passwords" });
+    await toggle.check();
+    for (const input of [password, confirmation])
+      await expect(input).toHaveAttribute("type", "text");
+    await toggle.uncheck();
+    for (const input of [password, confirmation])
+      await expect(input).toHaveAttribute("type", "password");
+    await confirmation.fill(PASSWORD);
+    await page.getByRole("button", { name: "Create account" }).click();
+    await page.getByRole("button", { name: "Send another verification link" }).click();
+    await expect(page.getByText(/Another link has been requested/)).toBeVisible();
+    await page.goto(await emailLink(email, "verifyEmail"));
+    await expect(page).toHaveURL(/\/en\/dashboard$/);
+  });
+
   test("see a clear error for wrong credentials", async ({ page }) => {
     await page.goto("/en/sign-in");
     await page.getByLabel("Email").fill("nobody@example.com");

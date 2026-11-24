@@ -96,7 +96,8 @@
     "invalid_layout": "Oturma planı kaydedilemedi. Değerleri kontrol edin.",
     "invalid_name": "Bir ad girin.",
     "too_many_requests": "Çok fazla deneme yapıldı. Lütfen bir dakika bekleyip tekrar deneyin.",
-    "same_venue": "İki farklı mekân seçin."
+    "same_venue": "İki farklı mekân seçin.",
+    "password_mismatch": "Şifreler eşleşmiyor."
   },
   "categories": {
     "music": "Müzik",

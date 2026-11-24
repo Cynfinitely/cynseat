@@ -9,11 +9,17 @@ const password = z
   .min(MIN_PASSWORD_LENGTH, "password_too_short")
   .max(MAX_PASSWORD_LENGTH, "too_long");
 
-export const signUpSchema = z.object({
-  name: z.string().trim().min(2, "too_short").max(80, "too_long"),
-  email,
-  password,
-});
+export const signUpSchema = z
+  .object({
+    name: z.string().trim().min(2, "too_short").max(80, "too_long"),
+    email,
+    password,
+    confirmPassword: z.string().min(1, "required"),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    path: ["confirmPassword"],
+    message: "password_mismatch",
+  });
 export type SignUpInput = z.infer<typeof signUpSchema>;
 
 export const signInSchema = z.object({
