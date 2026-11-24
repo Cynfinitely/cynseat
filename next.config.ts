@@ -37,6 +37,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Each preview needs its own origin for sign-in callbacks and ticket links.
+  ...(process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL
+    ? { env: { NEXT_PUBLIC_APP_URL: `https://${process.env.VERCEL_URL}` } }
+    : {}),
   experimental: {
     // Posters (up to 4 MB) are uploaded through a server action.
     serverActions: { bodySizeLimit: "5mb" },
