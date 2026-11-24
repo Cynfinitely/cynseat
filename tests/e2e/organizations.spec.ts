@@ -37,6 +37,11 @@ test.describe("signed-out visitors", () => {
       await expect(input).toHaveAttribute("type", "password");
     await confirmation.fill(PASSWORD);
     await page.getByRole("button", { name: "Create account" }).click();
+    await expect(page.getByText(/If you already verified this address/)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sign in", exact: true }).last()).toHaveAttribute(
+      "href",
+      "/en/sign-in?returnUrl=%2Fdashboard",
+    );
     await page.getByRole("button", { name: "Send another verification link" }).click();
     await expect(page.getByText(/Another link has been requested/)).toBeVisible();
     await page.goto(await emailLink(email, "verifyEmail"));
