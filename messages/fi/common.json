@@ -96,7 +96,8 @@
     "invalid_layout": "Salikarttaa ei voitu tallentaa. Tarkista arvot.",
     "invalid_name": "Anna nimi.",
     "too_many_requests": "Liian monta yritystä. Odota hetki ja yritä uudelleen.",
-    "same_venue": "Valitse kaksi eri paikkaa."
+    "same_venue": "Valitse kaksi eri paikkaa.",
+    "password_mismatch": "Salasanat eivät täsmää."
   },
   "categories": {
     "music": "Musiikki",

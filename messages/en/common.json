@@ -96,7 +96,8 @@
     "invalid_layout": "The seat map could not be saved. Check the highlighted values.",
     "invalid_name": "Enter a name.",
     "too_many_requests": "Too many attempts. Please wait a minute and try again.",
-    "same_venue": "Choose two different venues."
+    "same_venue": "Choose two different venues.",
+    "password_mismatch": "The passwords do not match."
   },
   "categories": {
     "music": "Music",
