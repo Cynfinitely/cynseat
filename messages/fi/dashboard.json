@@ -12,7 +12,7 @@
     "subtitle": "Voit valmistella tapahtumia heti. Julkaiseminen avautuu, kun CynSeat on hyväksynyt organisaation.",
     "name": "Organisaation nimi",
     "slug": "Verkko-osoite",
-    "slugHint": "Julkinen sivusi on osoitteessa cynseat.com/o/{slug}",
+    "slugHint": "Julkinen sivusi on osoitteessa {address}",
     "contactEmail": "Yhteyssähköposti",
     "contactEmailHint": "Näytetään lipunostajille, joiden täytyy tavoittaa teidät.",
     "country": "Maa",

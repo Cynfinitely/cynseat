@@ -63,7 +63,12 @@ export function MembersManager({
       {error ? <Alert tone="danger">{error}</Alert> : null}
       {notice ? <Alert tone="success">{notice}</Alert> : null}
 
-      <div className="border-line overflow-x-auto rounded-xl border">
+      <div
+        tabIndex={0}
+        role="region"
+        aria-label={t("title")}
+        className="border-line overflow-x-auto rounded-xl border"
+      >
         <table className="w-full text-left text-sm">
           <thead className="bg-surface-muted text-muted">
             <tr>

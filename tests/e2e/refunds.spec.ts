@@ -22,8 +22,7 @@ const orderCard = (page: Page, buyerName: string) =>
 
 test("an admin refunds one ticket, then cancelling the event refunds everyone else", async ({
   browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run of the full journey is enough");
+}) => {
   test.setTimeout(150_000);
 
   const owner = await signUp(browser, "Olga Owner");

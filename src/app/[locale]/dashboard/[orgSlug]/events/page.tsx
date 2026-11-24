@@ -42,7 +42,12 @@ export default async function EventsPage({ params }: Props) {
           <p className="text-muted mt-2">{t("emptyBody")}</p>
         </Card>
       ) : (
-        <div className="border-line mt-6 overflow-x-auto rounded-xl border">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={t("title")}
+          className="border-line mt-6 overflow-x-auto rounded-xl border"
+        >
           <table className="w-full text-left text-sm">
             <thead className="bg-surface-muted text-muted">
               <tr>

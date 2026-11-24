@@ -12,7 +12,7 @@
     "subtitle": "Etkinlikleri hemen hazırlayabilirsiniz. Yayınlama, CynSeat kuruluşu onayladığında açılır.",
     "name": "Kuruluş adı",
     "slug": "Web adresi",
-    "slugHint": "Herkese açık sayfanız cynseat.com/o/{slug} adresinde olacak",
+    "slugHint": "Herkese açık sayfanız {address} adresinde olacak",
     "contactEmail": "İletişim e-postası",
     "contactEmailHint": "Size ulaşması gereken bilet alıcılarına gösterilir.",
     "country": "Ülke",

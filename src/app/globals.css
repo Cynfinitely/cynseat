@@ -1,27 +1,71 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: var(--color-purple-50);
-  --color-brand-100: var(--color-purple-100);
-  --color-brand-500: var(--color-purple-500);
-  --color-brand-600: var(--color-purple-600);
-  --color-brand-700: var(--color-purple-700);
-
-  --color-ink: var(--color-gray-900);
-  --color-body: var(--color-gray-800);
-  --color-muted: var(--color-gray-600);
-  --color-line: var(--color-gray-200);
-  --color-surface: var(--color-white);
-  --color-surface-muted: var(--color-gray-50);
-  --color-danger: var(--color-red-700);
+  --font-sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --color-brand-50: #eff2e8;
+  --color-brand-100: #dfe6d6;
+  --color-brand-500: #607452;
+  --color-brand-600: #465c40;
+  --color-brand-700: #31462f;
+  --color-ink: #302e28;
+  --color-body: #433f36;
+  --color-muted: #635f54;
+  --color-line: #d8d2c4;
+  --color-paper: #f6f4ec;
+  --color-surface: #fffdf7;
+  --color-surface-muted: #edeae0;
+  --color-danger: #9d4435;
 }
 
 @layer base {
   body {
-    @apply bg-surface text-body antialiased;
+    @apply bg-paper text-body antialiased;
   }
-
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: pretty;
+  }
+  h1,
+  h2 {
+    letter-spacing: -0.025em;
+  }
+  .home-hero > * {
+    min-width: 0;
+  }
+  main {
+    min-width: 0;
+  }
   :focus-visible {
     @apply outline-brand-500 outline-2 outline-offset-2;
+  }
+  ::selection {
+    @apply bg-brand-100 text-ink;
+  }
+  :target {
+    scroll-margin-top: 7rem;
+  }
+}
+
+@layer components {
+  .home-hero {
+    display: grid;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  .home-hero h1 {
+    font-size: clamp(2.8rem, 5.2vw, 4.75rem);
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.045em;
+  }
+  @media (min-width: 48rem) {
+    .home-hero {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 }

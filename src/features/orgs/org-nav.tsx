@@ -15,9 +15,9 @@ export function OrgNav({
   return (
     <nav
       aria-label={label}
-      className="border-line -mx-4 overflow-x-auto border-b px-4 sm:mx-0 sm:px-0"
+      className="border-line bg-surface overflow-x-auto rounded-lg border px-2 py-1.5"
     >
-      <ul className="flex gap-6 text-sm font-medium">
+      <ul className="flex gap-1 text-sm font-medium">
         {items.map((item) => {
           // The first item is the section's root and matches exactly; the rest also match
           // the pages beneath them.
@@ -29,10 +29,10 @@ export function OrgNav({
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "-mb-px block border-b-2 py-3 whitespace-nowrap",
+                  "block rounded-md px-3 py-2 whitespace-nowrap",
                   active
-                    ? "border-brand-600 text-brand-700"
-                    : "text-muted hover:text-ink border-transparent",
+                    ? "bg-brand-100 text-brand-700"
+                    : "text-muted hover:text-ink hover:bg-surface-muted",
                 )}
               >
                 {item.label}

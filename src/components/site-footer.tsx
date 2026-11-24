@@ -6,8 +6,8 @@ export function SiteFooter() {
   const tAccount = useTranslations("account.find");
 
   return (
-    <footer className="border-line border-t">
-      <div className="text-muted mx-auto w-full max-w-6xl px-4 py-6 text-sm sm:px-6">
+    <footer className="border-line bg-surface-muted border-t">
+      <div className="text-muted mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-5 px-4 py-8 text-sm sm:px-6">
         <ul className="flex flex-wrap gap-x-6 gap-y-2">
           <li>
             <Link href="/tickets/find" className="hover:text-ink underline">
@@ -25,7 +25,7 @@ export function SiteFooter() {
             </Link>
           </li>
         </ul>
-        <p className="mt-2">
+        <p className="text-xs">
           © {new Date().getFullYear()} CynSeat. {t("footer.rights")}
         </p>
       </div>

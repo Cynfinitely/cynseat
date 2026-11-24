@@ -11,10 +11,7 @@ const noViolations = async (page: Page) => {
 const seat = (page: Page, row: string, number: number) =>
   page.getByRole("button", { name: new RegExp(`^Stalls · row ${row} · seat ${number},`) });
 
-test("an organizer draws a seat map and buyers choose their seats", async ({
-  browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run of the full journey is enough");
+test("an organizer draws a seat map and buyers choose their seats", async ({ browser }) => {
   test.setTimeout(180_000);
   const id = uniqueId();
 
@@ -74,6 +71,9 @@ test("an organizer draws a seat map and buyers choose their seats", async ({
     await page.goto(`${eventUrl}/seating`);
     await page.getByRole("button", { name: "Use this map Main hall" }).click();
     await expect(page.getByText("its own copy of a seat map with 11 seats")).toBeVisible();
+    page.once("dialog", (dialog) => dialog.accept());
+    await page.getByRole("button", { name: "Remove reserved seating" }).click();
+    await page.getByRole("button", { name: "Use this map Main hall" }).click();
     await expect(page.getByText("No prices yet.")).toBeVisible();
 
     await page.getByLabel("Name", { exact: true }).fill("Stalls");

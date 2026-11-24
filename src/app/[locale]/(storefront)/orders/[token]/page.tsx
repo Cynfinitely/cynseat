@@ -133,7 +133,7 @@ export default async function OrderPage({ params }: Props) {
             <ul className="mt-4 grid gap-4 sm:grid-cols-2">
               {order.tickets.map((ticket) => (
                 <li key={ticket.id}>
-                  <Card className="flex h-full flex-col items-center gap-3 p-5 text-center">
+                  <Card className="border-t-brand-600 flex h-full flex-col items-center gap-3 border-t-4 p-6 text-center">
                     <p className="text-ink font-semibold">{ticket.description}</p>
                     {ticket.seat ? (
                       <p className="text-ink text-sm font-medium">{tSeat("seat", ticket.seat)}</p>

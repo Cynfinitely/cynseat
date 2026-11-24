@@ -46,7 +46,9 @@ export default async function OrgLayout({ children, params }: Props) {
         </Link>
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <p className="text-ink text-2xl font-semibold tracking-tight">{ctx.organization.name}</p>
+        <p className="text-ink font-display text-3xl tracking-tight sm:text-4xl">
+          {ctx.organization.name}
+        </p>
         <StatusBadge status={approvalStatus} />
       </div>
 

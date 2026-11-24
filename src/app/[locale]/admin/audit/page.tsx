@@ -23,7 +23,12 @@ export default async function AuditLogPage() {
       {entries.length === 0 ? (
         <p className="text-muted mt-6">{t("empty")}</p>
       ) : (
-        <div className="border-line mt-6 overflow-x-auto rounded-xl border">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={t("title")}
+          className="border-line mt-6 overflow-x-auto rounded-xl border"
+        >
           <table className="w-full text-left text-sm">
             <thead className="bg-surface-muted text-muted">
               <tr>

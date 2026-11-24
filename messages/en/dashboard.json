@@ -12,7 +12,7 @@
     "subtitle": "You can prepare events straight away. Publishing opens once CynSeat has approved the organization.",
     "name": "Organization name",
     "slug": "Web address",
-    "slugHint": "Your public page will be at cynseat.com/o/{slug}",
+    "slugHint": "Your public page will be at {address}",
     "contactEmail": "Contact email",
     "contactEmailHint": "Shown to ticket buyers who need to reach you.",
     "country": "Country",

@@ -24,19 +24,12 @@ export function EventCard({
       {event.coverImageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element -- organizer uploads, sized by CSS
         <img src={event.coverImageUrl} alt="" className="aspect-[16/9] w-full object-cover" />
-      ) : (
-        <div
-          aria-hidden
-          className="bg-brand-50 text-brand-700 flex aspect-[16/9] items-center justify-center"
-        >
-          <CalendarDays className="size-10" />
-        </div>
-      )}
-      <div className="flex flex-1 flex-col gap-2 p-5">
+      ) : null}
+      <div className="flex flex-1 flex-col gap-2 p-6">
         <p className="text-brand-700 text-xs font-semibold tracking-wide uppercase">
           {tCategories(event.category)}
         </p>
-        <h3 className="text-ink text-lg font-semibold" lang={contentLang}>
+        <h3 className="text-ink text-2xl font-medium" lang={contentLang}>
           <Link
             href={`/o/${event.organization.slug}/e/${event.slug}`}
             className="hover:text-brand-700 hover:underline"
@@ -60,7 +53,7 @@ export function EventCard({
           {event.venue ? `${event.venue.name}, ${event.venue.city}` : t("online")}
         </p>
         {event.fromPrice !== null ? (
-          <p className="text-ink mt-auto pt-2 font-semibold">
+          <p className="text-ink border-line mt-auto border-t pt-3 font-semibold">
             {event.fromPrice === 0
               ? t("free")
               : t("from", { price: formatMoney(event.fromPrice, event.currency, locale) })}

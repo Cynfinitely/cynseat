@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { approveOrganization, enablePayments } from "./support/db";
-import { registerOrganization, signUp, uniqueId } from "./support/users";
+import { publishEvent, registerOrganization, signUp, uniqueId } from "./support/users";
 
 const ONE_PIXEL_PNG =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
@@ -13,8 +13,7 @@ const noViolations = async (page: Page) => {
 
 test("an organizer builds, publishes and cancels an event that the public can see", async ({
   browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run of the full journey is enough");
+}) => {
   test.setTimeout(120_000);
   const id = uniqueId();
   const titleFi = `Kesäkonsertti ${id}`;
@@ -188,4 +187,57 @@ test("the home page has no accessibility violations with events listed", async (
   await page.goto("/en");
   await expect(page.getByRole("heading", { name: "Upcoming events" })).toBeVisible();
   await noViolations(page);
+});
+
+test("an organizer can revise an unsold event and remove its draft", async ({ browser }) => {
+  const { page } = await signUp(browser, "Aino Editor");
+  const slug = await registerOrganization(page, `Editions ${uniqueId()}`);
+  await approveOrganization(slug);
+  const title = `Community workshop ${uniqueId()}`;
+  const publicPath = await publishEvent(page, slug, { title, price: "0", capacity: 10 });
+  await page.getByRole("button", { name: "Back to draft" }).click();
+  await expect(page.getByRole("button", { name: "Publish event" })).toBeVisible();
+  expect((await page.request.get("/en" + publicPath)).status()).toBe(404);
+
+  await page.getByRole("button", { name: "Edit Standard" }).click();
+  const edit = page
+    .getByRole("listitem")
+    .filter({ has: page.getByRole("button", { name: "Save ticket type" }) });
+  await edit.getByLabel("Number of tickets").fill("12");
+  await edit.getByRole("button", { name: "Save ticket type" }).click();
+  await expect(page.getByText("0 of 12 sold", { exact: false })).toBeVisible();
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.getByRole("button", { name: "Remove Standard" }).click();
+  await expect(page.getByText("No ticket types yet.")).toBeVisible();
+
+  await page.getByRole("link", { name: "Venue", exact: true }).click();
+  await page.getByRole("button", { name: "Remove venue" }).click();
+  await expect(page.getByText("No venue chosen yet.")).toBeVisible();
+  await page.getByRole("link", { name: "Details", exact: true }).click();
+  await page.getByLabel("Most tickets in one order").fill("4");
+  await page.getByRole("button", { name: "Save details" }).click();
+  await expect(page.getByText("Details saved.")).toBeVisible();
+  await page.getByLabel("Text language").selectOption("fi");
+  await page.getByLabel("Event name").fill("Yhteisöpaja");
+  await page.getByRole("button", { name: "Save text" }).click();
+  await page.getByRole("button", { name: "Remove this language" }).click();
+  await expect(page.getByRole("button", { name: "Remove this language" })).toHaveCount(0);
+  await page.getByLabel("Poster image").setInputFiles({
+    name: "poster.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(ONE_PIXEL_PNG, "base64"),
+  });
+  await page.getByRole("button", { name: "Upload poster" }).click();
+  await page.getByRole("button", { name: "Remove poster" }).click();
+  await expect(page.getByRole("img", { name: "Current poster" })).toHaveCount(0);
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.goto(`/en/dashboard/${slug}/events/new`);
+  const disposable = `Unpublished draft ${uniqueId()}`;
+  await page.getByLabel("Event name").fill(disposable);
+  await page.getByLabel("Starts").fill("2030-06-15T19:00");
+  await page.getByRole("button", { name: "Create draft" }).click();
+  await page.getByRole("button", { name: "Delete draft" }).click();
+  await expect(page).toHaveURL(new RegExp(`/dashboard/${slug}/events$`));
+  await expect(page.getByRole("link", { name: title })).toBeVisible();
+  await expect(page.getByText(disposable)).toHaveCount(0);
 });

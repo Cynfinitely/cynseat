@@ -89,7 +89,7 @@ export function VenueModeration({ venues }: { venues: Venue[] }) {
                   </Button>
                   <Select
                     aria-label={`${t("mergeInto")}: ${venue.name}`}
-                    className="w-auto py-1.5"
+                    className="w-auto max-w-full min-w-0 py-1.5"
                     value={keepId}
                     onChange={(event) => setTargets({ ...targets, [venue.id]: event.target.value })}
                   >

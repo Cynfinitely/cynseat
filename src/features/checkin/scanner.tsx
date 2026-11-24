@@ -91,10 +91,11 @@ export function Scanner({ orgSlug, eventId, timezone, canUndo, initialProgress }
         video.current.srcObject = stream;
         await video.current.play();
         const detector = await createDetector();
+        if (stopped) return;
         timer = setInterval(async () => {
           if (!video.current || busy.current) return;
           const [found] = await detector.detect(video.current).catch(() => []);
-          if (!found) return;
+          if (stopped || !found) return;
           const now = Date.now();
           if (found.rawValue === last.current.code && now - last.current.at < REPEAT_GUARD_MS)
             return;
@@ -102,7 +103,7 @@ export function Scanner({ orgSlug, eventId, timezone, canUndo, initialProgress }
           void submit(found.rawValue);
         }, 250);
       } catch {
-        setCamera("error");
+        if (!stopped) setCamera("error");
       }
     })();
 

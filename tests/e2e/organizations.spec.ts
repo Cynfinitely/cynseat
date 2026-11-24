@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { emailLink, grantPlatformAdmin } from "./support/db";
-import { PASSWORD, signUp, uniqueId } from "./support/users";
+import { PASSWORD, registerOrganization, signUp, uniqueId } from "./support/users";
 
 const noViolations = async (page: Page) => {
   const results = await new AxeBuilder({ page }).analyze();
@@ -43,8 +43,7 @@ test.describe("signed-out visitors", () => {
 
 test("an organization goes from registration to approval and gains door staff", async ({
   browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run of the full journey is enough");
+}) => {
   test.setTimeout(120_000);
   const orgName = `Tiyatro Örnek ${uniqueId()}`;
   const slug = `tiyatro-ornek-${orgName.slice(-8)}`;
@@ -58,6 +57,9 @@ test("an organization goes from registration to approval and gains door staff", 
     await page.getByLabel("Organization name").fill(orgName);
     // The address follows the name, with Turkish letters transliterated.
     await expect(page.getByLabel("Web address")).toHaveValue(slug);
+    await expect(
+      page.getByText(`Your public page will be at ${new URL(page.url()).origin}/en/o/${slug}`),
+    ).toBeVisible();
     await expect(page.getByLabel("Contact email")).toHaveValue(owner.email);
     await noViolations(page);
 
@@ -79,6 +81,15 @@ test("an organization goes from registration to approval and gains door staff", 
     await page.getByLabel("Country").selectOption("FI");
     await page.getByRole("button", { name: "Register organization" }).click();
     await expect(page.getByText("This address is already in use.")).toBeVisible();
+  });
+
+  await test.step("the owner updates the public contact details", async () => {
+    await owner.page.goto(`/en/dashboard/${slug}/settings`);
+    await owner.page.getByLabel("Website").fill("https://example.org");
+    await owner.page.getByRole("button", { name: "Save changes" }).click();
+    await expect(owner.page.getByText("Changes saved.")).toBeVisible();
+    await owner.page.reload();
+    await expect(owner.page.getByLabel("Website")).toHaveValue("https://example.org");
   });
 
   const outsider = await signUp(browser, "Oskar Outsider");
@@ -157,6 +168,10 @@ test("an organization goes from registration to approval and gains door staff", 
     await expect(row).toBeVisible();
     await expect(page.getByText("An organization needs at least one admin.")).toBeVisible();
 
+    await row.getByRole("combobox").selectOption("member");
+    await expect(row.getByRole("combobox")).toHaveValue("member");
+    await door.page.goto(`/en/dashboard/${slug}/members`);
+    await expect(door.page.getByRole("heading", { name: "Members" })).toBeVisible();
     page.once("dialog", (dialog) => dialog.accept());
     await row.getByRole("button", { name: /Remove/ }).click();
     await expect(page.getByRole("row").filter({ hasText: door.email })).toHaveCount(0);
@@ -175,4 +190,63 @@ test("an organization goes from registration to approval and gains door staff", 
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page).toHaveURL(new RegExp(`/en/dashboard/${slug}$`));
   });
+});
+
+test("a user recovers their account through the emailed reset link", async ({ browser }) => {
+  const { page, email } = await signUp(browser, "Mika Recovery");
+  await page.getByRole("button", { name: "Sign out" }).click();
+  await expect(page).toHaveURL(/\/en$/);
+  await page.goto("/en/forgot-password");
+  await page.getByLabel("Email").fill(email);
+  await page.getByRole("button", { name: "Send reset link" }).click();
+  await expect(page.getByText("Check your email")).toBeVisible();
+  await page.goto(await emailLink(email, "resetPassword"));
+  const newPassword = "different-correct-horse";
+  await page.getByLabel("New password").fill(newPassword);
+  await page.getByRole("button", { name: "Save password" }).click();
+  await expect(page.getByText("Password changed")).toBeVisible();
+  await page.goto("/en/sign-in");
+  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Password").fill(newPassword);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/en\/dashboard$/);
+});
+
+test("invitations can be cancelled or declined and reviewers can reverse a decision", async ({
+  browser,
+}) => {
+  test.setTimeout(120_000);
+  const owner = await signUp(browser, "Aino Organizer");
+  const name = `Community group ${uniqueId()}`;
+  const slug = await registerOrganization(owner.page, name);
+  const reviewer = await signUp(browser, "Robin Reviewer");
+  await grantPlatformAdmin(reviewer.email);
+  for (const [status, action] of [
+    ["pending", "Reject"],
+    ["rejected", "Approve"],
+    ["approved", "Suspend"],
+    ["suspended", "Reinstate"],
+  ]) {
+    await reviewer.page.goto(`/en/admin/organizations?status=${status}`);
+    const card = reviewer.page.getByRole("listitem").filter({ hasText: name });
+    await card.getByLabel("Note to the organization").fill("Pilot review");
+    await card.getByRole("button", { name: `${action} ${name}`, exact: true }).click();
+    await expect(card).toHaveCount(0);
+  }
+  await owner.page.goto(`/en/dashboard/${slug}/members`);
+  const invitee = await signUp(browser, "Casey Volunteer");
+  const cancelledEmail = `cancel-${uniqueId()}@example.com`;
+  for (const email of [cancelledEmail, invitee.email]) {
+    await owner.page.getByLabel("Email").fill(email);
+    await owner.page.getByRole("button", { name: "Send invitation" }).click();
+    await expect(owner.page.getByText(`Invitation sent to ${email}.`)).toBeVisible();
+  }
+  const cancel = owner.page.getByRole("button", { name: `Cancel invitation ${cancelledEmail}` });
+  await cancel.click();
+  await expect(cancel).toHaveCount(0);
+  await invitee.page.goto(await emailLink(invitee.email, "orgInvitation"));
+  await invitee.page.getByRole("button", { name: "Decline" }).click();
+  await expect(invitee.page.getByText("Invitation declined.")).toBeVisible();
+  await owner.page.reload();
+  await expect(owner.page.getByRole("button", { name: /Cancel invitation/ })).toHaveCount(0);
 });

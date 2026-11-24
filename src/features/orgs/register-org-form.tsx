@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import type { ActionFailure } from "@/app/_lib/action";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { registerOrganizationSchema } from "@/domain/orgs/schemas";
 import { slugify } from "@/domain/slug/slug";
 import { useRouter } from "@/i18n/navigation";
+import { env } from "@/lib/env";
 import { useErrorText } from "@/lib/use-error-text";
 import { registerOrganizationAction } from "./actions";
 import { ProfileFields, type ProfileFormValues } from "./profile-fields";
@@ -61,7 +62,10 @@ export function RegisterOrgForm({ contactEmail }: { contactEmail: string }) {
   const nameError = errorText(errors.name?.message ?? serverErrors.name);
   const slugError = errorText(errors.slug?.message ?? serverErrors.slug);
   const slug = useWatch({ control, name: "slug" });
-  const slugHint = t("slugHint", { slug: slug || "…" });
+  const locale = useLocale();
+  const slugHint = t("slugHint", {
+    address: `${new URL(env.NEXT_PUBLIC_APP_URL).origin}/${locale}/o/${slug || "…"}`,
+  });
   const nameField = register("name");
 
   return (

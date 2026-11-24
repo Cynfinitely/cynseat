@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const tones = {
-  neutral: "bg-gray-100 text-gray-800",
-  success: "bg-green-100 text-green-900",
+  neutral: "bg-surface-muted text-body",
+  success: "bg-brand-100 text-brand-700",
   warning: "bg-amber-100 text-amber-900",
   danger: "bg-red-100 text-red-900",
 } as const;

@@ -7,8 +7,7 @@ import { publishEvent, registerOrganization, signUp, uniqueId } from "./support/
 // The same key the test server signs tickets with (see playwright.config.ts).
 const SIGNING_SECRET = "e2e-only-signing-secret-0123456789abcdef";
 
-test("door staff check tickets in, and each ticket works once", async ({ browser }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run of the full journey is enough");
+test("door staff check tickets in, and each ticket works once", async ({ browser }) => {
   test.setTimeout(120_000);
 
   const owner = await signUp(browser, "Olga Owner");
@@ -58,8 +57,30 @@ test("door staff check tickets in, and each ticket works once", async ({ browser
     await page.getByRole("button", { name: "Check ticket" }).click();
   };
 
-  await check(first!);
-  await expect(page.getByText("Valid. Let them in.")).toBeVisible();
+  // Feed the rendered buyer ticket through a video track and the real QR decoder.
+  const qr = await guest.getByRole("img", { name: "QR code for ticket 1" }).screenshot();
+  await page.evaluate(async (png) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${png}`;
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 320;
+    const context = canvas.getContext("2d")!;
+    context.imageSmoothingEnabled = false;
+    navigator.mediaDevices.getUserMedia = async () => {
+      const stream = canvas.captureStream(12);
+      const paint = () => {
+        if (!stream.active) return;
+        context.drawImage(image, 0, 0, 320, 320);
+        requestAnimationFrame(paint);
+      };
+      paint();
+      return stream;
+    };
+  }, qr.toString("base64"));
+  await page.getByRole("button", { name: "Start camera" }).click();
+  await expect(page.getByText("Valid. Let them in.")).toBeVisible({ timeout: 15000 });
+  await page.getByRole("button", { name: "Stop camera" }).click();
   await expect(page.getByText(/Standard · Gus Guest · order [2-9A-Z]{8}/)).toBeVisible();
   await expect(page.getByText("1 of 2 checked in")).toBeVisible();
   // Door staff cannot reverse a check-in.

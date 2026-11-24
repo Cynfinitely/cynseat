@@ -78,7 +78,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
             name: actor.kind === "user" ? actor.name : "",
           }}
         />
-        <Card className="h-fit p-5">
+        <Card className="bg-surface-muted h-fit p-6 md:sticky md:top-24">
           <h2 className="text-ink font-semibold">{t("summary")}</h2>
           <ul className="divide-line mt-2 divide-y text-sm">
             {cart.seats.map((seat) => (

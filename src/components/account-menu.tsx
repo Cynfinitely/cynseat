@@ -29,7 +29,7 @@ export function AccountMenu() {
   }
 
   return (
-    <nav aria-label={t("account")} className="flex items-center gap-1">
+    <nav aria-label={t("account")} className="flex flex-wrap items-center gap-1">
       <Link href="/account/orders" className={buttonVariants({ variant: "ghost", size: "sm" })}>
         {tAccount("orders.nav")}
       </Link>

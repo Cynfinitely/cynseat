@@ -3,10 +3,7 @@ import { expect, test } from "@playwright/test";
 import { approveOrganization, grantPlatformAdmin } from "./support/db";
 import { registerOrganization, signUp, uniqueId } from "./support/users";
 
-test("a platform admin merges duplicate venues and reads the audit log", async ({
-  browser,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop", "one run is enough");
+test("a platform admin merges duplicate venues and reads the audit log", async ({ browser }) => {
   test.setTimeout(120_000);
   const id = uniqueId();
 
@@ -39,6 +36,10 @@ test("a platform admin merges duplicate venues and reads the audit log", async (
   const duplicate = card(`Kulttuuri-talo ${id}`);
   await expect(duplicate).toContainText("1 event");
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  await duplicate.getByRole("button", { name: /^Hide/ }).click();
+  await duplicate.getByRole("button", { name: /^Show again/ }).click();
+  await expect(duplicate.getByRole("button", { name: /^Hide/ })).toBeVisible();
 
   await duplicate
     .getByRole("combobox")

@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -10,13 +11,15 @@ export function LanguageSwitcher() {
   const active = useLocale();
   const pathname = usePathname();
 
+  const query = useSearchParams().toString();
+
   return (
     <nav aria-label={t("nav.language")}>
       <ul className="border-line flex rounded-md border p-0.5 text-xs font-semibold">
         {routing.locales.map((locale) => (
           <li key={locale}>
             <Link
-              href={pathname}
+              href={query ? `${pathname}?${query}` : pathname}
               locale={locale}
               lang={locale}
               aria-current={locale === active ? "true" : undefined}

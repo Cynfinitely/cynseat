@@ -26,8 +26,7 @@ async function chooseTickets(page: Page, eventPath: string, quantity: number) {
 }
 
 test.describe("buying tickets", () => {
-  test.beforeEach(({}, testInfo) => {
-    test.skip(testInfo.project.name !== "desktop", "one run of each journey is enough");
+  test.beforeEach(() => {
     test.setTimeout(120_000);
   });
 

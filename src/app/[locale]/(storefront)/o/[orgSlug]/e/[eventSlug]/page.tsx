@@ -204,7 +204,7 @@ export default async function EventPage({ params }: Props) {
         </div>
 
         <aside aria-labelledby="tickets-title">
-          <Card className="p-5 lg:sticky lg:top-20">
+          <Card className="border-t-brand-600 border-t-4 p-6 lg:sticky lg:top-24">
             <h2 id="tickets-title" className="text-ink text-lg font-semibold">
               {t("tickets")}
             </h2>

@@ -44,11 +44,31 @@ for (const [path, heading] of [
   });
 }
 
+test("the localized homepages fit a narrow phone", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  for (const locale of Object.keys(titles)) {
+    await page.goto(`/${locale}`);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+  }
+});
+
 test("language switcher keeps the current path", async ({ page }) => {
   await page.goto("/en/does-not-exist");
   await page.getByRole("link", { name: "Suomi" }).click();
   await expect(page).toHaveURL(/\/fi\/does-not-exist$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Sivua ei löytynyt");
+});
+
+test("changing language during organizer sign-in keeps the registration destination", async ({
+  page,
+}) => {
+  await page.goto("/en/dashboard/new");
+  await page.getByRole("link", { name: "Suomi" }).click();
+  await expect(page).toHaveURL(/\/fi\/sign-in\?returnUrl=%2Fdashboard%2Fnew$/);
+  await expect(page.locator('a[href*="/sign-up"]').first()).toHaveAttribute(
+    "href",
+    "/fi/sign-up?returnUrl=%2Fdashboard%2Fnew",
+  );
 });
 
 test("unknown pages answer 404 in the visitor's language", async ({ page }) => {
