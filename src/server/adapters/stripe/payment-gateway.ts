@@ -121,7 +121,7 @@ export function createStripeGateway(options: {
       const session = await stripe().checkout.sessions.create(
         {
           mode: "payment",
-          ...(direct && { payment_method_types: ["card"] }),
+          ...(direct && { allowed_payment_method_types: ["card"] }),
           client_reference_id: request.orderId,
           metadata: {
             order_id: request.orderId,
