@@ -107,7 +107,11 @@
     "removeConfirm": "Poistetaanko lipputyyppi {name}?",
     "sold": "{sold} / {capacity} myyty",
     "free": "Ilmainen",
-    "saved": "Lipputyyppi tallennettu."
+    "saved": "Lipputyyppi tallennettu.",
+    "preview": "Esikatsele lippua",
+    "sampleGuest": "Esimerkkivieras",
+    "previewNotice": "Esikatselu · Ei oikeuta sisäänpääsyyn",
+    "venuePending": "Tapahtumapaikka vahvistetaan myöhemmin"
   },
   "publish": {
     "title": "Julkaisu",

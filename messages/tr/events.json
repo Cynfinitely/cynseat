@@ -107,7 +107,11 @@
     "removeConfirm": "{name} bilet türü kaldırılsın mı?",
     "sold": "{capacity} biletten {sold} satıldı",
     "free": "Ücretsiz",
-    "saved": "Bilet türü kaydedildi."
+    "saved": "Bilet türü kaydedildi.",
+    "preview": "Bileti önizle",
+    "sampleGuest": "Örnek katılımcı",
+    "previewNotice": "Önizleme · Giriş için geçersizdir",
+    "venuePending": "Mekân daha sonra açıklanacaktır"
   },
   "publish": {
     "title": "Yayınlama",
