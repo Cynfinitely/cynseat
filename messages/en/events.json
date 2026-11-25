@@ -107,7 +107,11 @@
     "removeConfirm": "Remove the ticket type {name}?",
     "sold": "{sold} of {capacity} sold",
     "free": "Free",
-    "saved": "Ticket type saved."
+    "saved": "Ticket type saved.",
+    "preview": "Preview ticket",
+    "sampleGuest": "Sample guest",
+    "previewNotice": "Preview only · Invalid for entry",
+    "venuePending": "Venue to be confirmed"
   },
   "publish": {
     "title": "Publishing",

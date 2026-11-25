@@ -47,6 +47,7 @@ const nextConfig: NextConfig = {
   },
   // The ticket PDF embeds font files read from disk; make sure they ship with that route.
   outputFileTracingIncludes: {
+    "/api/dashboard/*/events/*/ticket-preview.pdf": ["./src/server/modules/tickets/fonts/*.ttf"],
     "/api/orders/[token]/tickets.pdf": ["./src/server/modules/tickets/fonts/*.ttf"],
   },
   async headers() {

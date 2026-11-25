@@ -69,6 +69,19 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await page.getByLabel("Price (EUR)").fill("12,50");
     await page.getByRole("button", { name: "Add ticket type" }).click();
     await expect(page.getByText("€12.50 · 0 of 100 sold")).toBeVisible();
+    const preview = page.getByRole("link", { name: "Preview ticket Aikuinen" });
+    await expect(preview).toBeVisible();
+    const href = (await preview.getAttribute("href"))!;
+    const pdf = await page.request.get(href);
+    expect(pdf.ok()).toBeTruthy();
+    expect(pdf.headers()["content-disposition"]).toContain("inline");
+    expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+    const visitor = await browser.newContext();
+    try {
+      expect((await visitor.request.get(new URL(href, page.url()).href)).status()).toBe(404);
+    } finally {
+      await visitor.close();
+    }
     await noViolations(page);
   });
 

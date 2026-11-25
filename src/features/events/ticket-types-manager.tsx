@@ -1,12 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { ActionFailure } from "@/app/_lib/action";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { controlProps, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,7 @@ type Props = {
   currency: string;
   ticketTypes: TicketTypeView[];
   disabled: boolean;
+  canPreview: boolean;
 };
 
 const blank: TicketTypeValues = {
@@ -51,9 +52,17 @@ const blank: TicketTypeValues = {
   maxPerOrder: "",
 };
 
-export function TicketTypesManager({ orgSlug, eventId, currency, ticketTypes, disabled }: Props) {
+export function TicketTypesManager({
+  orgSlug,
+  eventId,
+  currency,
+  ticketTypes,
+  disabled,
+  canPreview,
+}: Props) {
   const t = useTranslations("events.tickets");
   const router = useRouter();
+  const locale = useLocale();
   const removal = useActionForm();
   const [editing, setEditing] = useState<string>();
 
@@ -92,7 +101,18 @@ export function TicketTypesManager({ orgSlug, eventId, currency, ticketTypes, di
                         {t("sold", { sold: type.sold, capacity: type.values.capacity })}
                       </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
+                      {canPreview && (
+                        <a
+                          className={buttonVariants({ variant: "secondary", size: "sm" })}
+                          href={`/api/dashboard/${orgSlug}/events/${eventId}/ticket-preview.pdf?type=${type.id}&locale=${locale}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {t("preview")}
+                          <span className="sr-only"> {type.values.name}</span>
+                        </a>
+                      )}
                       <Button
                         size="sm"
                         variant="secondary"

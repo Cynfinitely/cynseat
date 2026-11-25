@@ -28,6 +28,7 @@ export default async function EventTicketsPage({ params }: Props) {
         orgSlug={orgSlug}
         eventId={event.id}
         currency={event.currency}
+        canPreview={can(ctx.role, "event.manage")}
         disabled={!can(ctx.role, "event.manage") || event.status === "cancelled"}
         ticketTypes={detail.ticketTypes.map((type) => ({
           id: type.id,
