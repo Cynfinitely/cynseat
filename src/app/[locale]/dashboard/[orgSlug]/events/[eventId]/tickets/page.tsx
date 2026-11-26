@@ -39,6 +39,7 @@ export default async function EventTicketsPage({ params }: Props) {
               : formatMoney(type.priceAmount, event.currency, locale),
           values: {
             name: type.name,
+            ageGroup: type.ageGroup ?? "",
             description: type.description ?? "",
             price: toMoneyInput(type.priceAmount, event.currency),
             capacity: String(type.capacity ?? ""),

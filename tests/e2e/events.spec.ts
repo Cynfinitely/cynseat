@@ -35,6 +35,10 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await page.getByRole("button", { name: "Create draft" }).click();
 
     await expect(page.getByRole("heading", { level: 1, name: titleFi })).toBeVisible();
+    await page.getByLabel("Minimum admission age").fill("16");
+    await page.getByLabel("Doors open").fill("2030-06-15T18:30");
+    await page.getByRole("button", { name: "Save details" }).click();
+    await expect(page.getByText("Details saved.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Publish event" })).toBeDisabled();
     await expect(page.getByText("Your organization is approved by CynSeat (to do)")).toBeVisible();
     await expect(page.getByText("There is at least one ticket type (to do)")).toBeVisible();
@@ -63,6 +67,7 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await page.getByLabel("Name", { exact: true }).fill("Aikuinen");
     await page.getByLabel("Price (EUR)").fill("12.345");
     await page.getByLabel("Number of tickets").fill("100");
+    await page.getByLabel("Discount age group").fill("65+");
     await page.getByRole("button", { name: "Add ticket type" }).click();
     await expect(page.getByText("Enter a price such as 12 or 12.50.")).toBeVisible();
 
@@ -146,6 +151,8 @@ test("an organizer builds, publishes and cancels an event that the public can se
     await expect(poster).toBeVisible();
     const served = await visitor.request.get((await poster.getAttribute("src"))!);
     expect(served.headers()["content-type"]).toBe("image/png");
+    await expect(visitor.getByText("Ages 16+")).toBeVisible();
+    await expect(visitor.getByLabel("Aikuinen (65+)")).toBeVisible();
     await expect(visitor.getByText("Second paragraph.")).toBeVisible();
     await expect(visitor.getByText("Saturday, June 15, 2030")).toBeVisible();
     await expect(visitor.getByText("7:00 PM")).toBeVisible();

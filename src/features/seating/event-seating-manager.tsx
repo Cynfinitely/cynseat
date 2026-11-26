@@ -54,7 +54,7 @@ export function EventSeatingManager({
   // Seated ticket types, gathered from the sections they price.
   const types = new Map<
     string,
-    { id: string; name: string; priceAmount: number; sectionIds: string[] }
+    { id: string; name: string; ageGroup: string | null; priceAmount: number; sectionIds: string[] }
   >();
   for (const section of seating.sections) {
     for (const type of section.ticketTypes) {
@@ -142,6 +142,7 @@ export function EventSeatingManager({
                   initial={{
                     id: type.id,
                     name: type.name,
+                    ageGroup: type.ageGroup ?? "",
                     price: toMoneyInput(type.priceAmount, currency),
                     sectionIds: type.sectionIds,
                   }}
@@ -164,7 +165,7 @@ export function EventSeatingManager({
               currency={currency}
               sections={seating.sections}
               disabled={pending}
-              initial={{ id: null, name: "", price: "", sectionIds: [] }}
+              initial={{ id: null, name: "", ageGroup: "", price: "", sectionIds: [] }}
               onSave={(values) =>
                 run(
                   () => saveSeatedTicketTypeAction(orgSlug, eventId, values),
@@ -232,7 +233,13 @@ export function EventSeatingManager({
   );
 }
 
-type TypeValues = { id: string | null; name: string; price: string; sectionIds: string[] };
+type TypeValues = {
+  id: string | null;
+  name: string;
+  ageGroup: string;
+  price: string;
+  sectionIds: string[];
+};
 
 function SeatedTypeForm({
   currency,
@@ -250,6 +257,7 @@ function SeatedTypeForm({
   onSave(values: TypeValues): Promise<boolean>;
 }) {
   const t = useTranslations("seating.event");
+  const fares = useTranslations("events.tickets");
   const [values, setValues] = useState(initial);
   const prefix = `seated-${initial.id ?? "new"}`;
 
@@ -286,6 +294,14 @@ function SeatedTypeForm({
             />
           </Field>
         </div>
+        <Field id={`${prefix}-ageGroup`} label={fares("ageGroup")} hint={fares("ageGroupHint")}>
+          <Input
+            maxLength={40}
+            {...controlProps(`${prefix}-ageGroup`, { hint: fares("ageGroupHint") })}
+            value={values.ageGroup}
+            onChange={(event) => setValues({ ...values, ageGroup: event.target.value })}
+          />
+        </Field>
         <fieldset>
           <legend className="text-ink text-sm font-medium">{t("sections")}</legend>
           <div className="mt-1.5 flex flex-wrap gap-x-5 gap-y-2">

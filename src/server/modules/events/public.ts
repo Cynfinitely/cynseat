@@ -1,4 +1,5 @@
 // What anyone on the internet may see: published events of approved organizations.
+import { ticketLabel } from "@/domain/events/ticket-label";
 import {
   pickTranslation,
   remainingOf,
@@ -52,6 +53,7 @@ export type PublicEvent = PublicEventCard & {
   cancellationReason: string | null;
   endsAt: Date | null;
   doorsAt: Date | null;
+  minimumAge: number | null;
   contactEmail: string | null;
   maxTicketsPerOrder: number;
   ticketTypes: PublicTicketType[];
@@ -170,6 +172,7 @@ export async function getPublicEvent(
     cancellationReason: event.cancellationReason,
     endsAt: event.endsAt,
     doorsAt: event.doorsAt,
+    minimumAge: event.minimumAge,
     contactEmail: row.contactEmail,
     maxTicketsPerOrder: event.maxTicketsPerOrder,
     ticketTypes: details.ticketTypes.map((type) => {
@@ -177,7 +180,7 @@ export async function getPublicEvent(
       return {
         id: type.id,
         kind: type.kind,
-        name: type.name,
+        name: ticketLabel(type.name, type.ageGroup),
         description: type.description,
         priceAmount: type.priceAmount,
         state:

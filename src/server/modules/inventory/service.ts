@@ -1,3 +1,4 @@
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { CART_HOLD_SECONDS } from "../../../domain/orders/types";
 import type { Db } from "../../db/client";
 import { transactionWithRetry } from "../../db/retry";
@@ -77,7 +78,7 @@ async function cartOf(tx: DbOrTx, hold: repo.HoldRow, currency: string): Promise
     const type = types.find((candidate) => candidate.id === item.ticketTypeId)!;
     return {
       ticketTypeId: item.ticketTypeId,
-      name: type.name,
+      name: ticketLabel(type.name, type.ageGroup),
       quantity: item.quantity,
       unitPriceAmount: type.priceAmount,
     };

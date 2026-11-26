@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getApp } from "@/server";
 import { getOrderByToken } from "@/server/modules/checkout/service";
+import { ticketAdmission } from "@/app/_lib/ticket-admission";
 import { renderTicketsPdf } from "@/server/modules/tickets/pdf";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +28,7 @@ export async function GET(
 
   const bytes = await renderTicketsPdf({
     eventTitle: event.title,
+    admission: await ticketAdmission(locale, event),
     when: new Intl.DateTimeFormat(locale, {
       dateStyle: "full",
       timeStyle: "short",

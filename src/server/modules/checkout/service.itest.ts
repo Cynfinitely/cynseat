@@ -196,6 +196,26 @@ describe("checkout", () => {
       expect(view!.tickets).toHaveLength(2);
     });
 
+    it("charges the age-group fare and preserves eligibility on the issued ticket", async () => {
+      const { app, event } = await setup();
+      await app.db
+        .update(ticketTypes)
+        .set({ name: "Youth", priceAmount: 500, ageGroup: "Ages 7–15" })
+        .where(eq(ticketTypes.id, event.ticketTypeId));
+      const { started } = await checkout(app, event, { quantity: 1 });
+      const session = app.gateway.sessionOf(started.orderId)!;
+      expect(session.request.lines).toEqual([
+        { name: "Youth (Ages 7–15)", unitAmount: 500, quantity: 1 },
+      ]);
+      app.gateway.pay(session.id);
+      await app.db
+        .update(ticketTypes)
+        .set({ ageGroup: "Ages 8–15" })
+        .where(eq(ticketTypes.id, event.ticketTypeId));
+      const order = await getOrderByToken(app, started.accessToken, "en");
+      expect(order?.tickets[0]?.description).toBe("Youth (Ages 7–15)");
+    });
+
     it("charge the price in the database, not anything the buyer saw earlier", async () => {
       const { app, event } = await setup();
       const who = buyer();

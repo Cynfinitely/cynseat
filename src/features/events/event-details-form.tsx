@@ -21,6 +21,7 @@ export type EventDetailsValues = {
   startsAt: string;
   endsAt: string;
   doorsAt: string;
+  minimumAge: string;
   currency: string;
   maxTicketsPerOrder: string;
 };
@@ -88,6 +89,20 @@ export function EventDetailsForm({
                 hint: t("create.timezoneHint"),
               })}
               {...register("timezone")}
+            />
+          </Field>
+          <Field
+            id="minimumAge"
+            label={t("details.minimumAge")}
+            optional={tCommon("optional")}
+            error={error("minimumAge")}
+          >
+            <Input
+              type="number"
+              min={1}
+              max={120}
+              {...controlProps("minimumAge", { error: error("minimumAge") })}
+              {...register("minimumAge")}
             />
           </Field>
           <Field id="category" label={t("create.category")}>

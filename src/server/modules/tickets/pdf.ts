@@ -9,6 +9,7 @@ export type TicketPdfInput = {
   eventTitle: string;
   /** Date and time, formatted in the event's time zone. */
   when: string;
+  admission?: string[];
   /** Venue name and address, or "Online event". */
   where: string;
   organizer: string;
@@ -175,7 +176,7 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
       size: 13,
       maxWidth: width,
       color: BRAND,
-      maxLines: 2,
+      maxLines: 5,
     });
     if (ticket.seat) {
       y = paragraph(page, ticket.seat, {
@@ -206,9 +207,28 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
     field(input.labels.holder, input.buyerName);
     field(input.labels.organizer, input.organizer);
 
-    const qrSize = 190;
+    const admission = input.admission ?? [];
+    const qrSize = admission.length ? 150 : 190;
     const qrY = MARGIN + 34;
-    drawQr(page, ticket.code, (PAGE.width - qrSize) / 2, qrY, qrSize);
+    // Leave space below long wrapped event details before drawing the admission block.
+    const detailScale = Math.min(1, (PAGE.height - qrY - qrSize - 10) / (PAGE.height - y));
+    if (detailScale < 1) {
+      page.scaleContent(detailScale, detailScale);
+      page.translateContent((PAGE.width * (1 - detailScale)) / 2, PAGE.height * (1 - detailScale));
+      page.resetPosition();
+    }
+    drawQr(page, ticket.code, admission.length ? MARGIN : (PAGE.width - qrSize) / 2, qrY, qrSize);
+    let admissionY = qrY + qrSize - 24;
+    for (const line of admission) {
+      admissionY =
+        paragraph(page, line, {
+          x: MARGIN + qrSize + 14,
+          y: admissionY,
+          font: strong,
+          size: 11,
+          maxWidth: width - qrSize - 14,
+        }) - 10;
+    }
     const hint = input.labels.show;
     page.drawText(hint, {
       x: (PAGE.width - font.widthOfTextAtSize(hint, 9)) / 2,
