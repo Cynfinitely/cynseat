@@ -60,6 +60,7 @@ export async function detachSeatMapAction(orgSlug: string, eventId: string) {
 const seatedTypeSchema = z.object({
   id: z.uuid().nullable(),
   name: nameSchema,
+  ageGroup: z.string().trim().max(40, "too_long").optional(),
   price: z.string().trim().min(1, "required").max(12, "invalid_price"),
   sectionIds: z.array(z.uuid()).min(1, "invalid_sections").max(60),
 });

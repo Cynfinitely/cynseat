@@ -328,6 +328,7 @@ async function requireEvent(
 }
 
 export type SeatedTicketTypeInput = {
+  ageGroup?: string;
   name: string;
   description?: string;
   /** As typed, e.g. "25" or "12,50". */
@@ -379,6 +380,7 @@ export async function saveSeatedTicketType(
             .set({
               name,
               description: input.description?.trim() || null,
+              ageGroup: input.ageGroup?.trim() || null,
               priceAmount,
               updatedAt: now,
             })
@@ -408,6 +410,7 @@ export async function saveSeatedTicketType(
           kind: "seated",
           name,
           description: input.description?.trim() || null,
+          ageGroup: input.ageGroup?.trim() || null,
           priceAmount,
           capacity: null,
           sortOrder: count?.n ?? 0,
@@ -465,7 +468,7 @@ export type EventSeating = {
     key: string;
     name: string;
     /** Seated ticket types on offer in this section, cheapest first. */
-    ticketTypes: { id: string; name: string; priceAmount: number }[];
+    ticketTypes: { id: string; name: string; ageGroup: string | null; priceAmount: number }[];
   }[];
   seats: {
     id: string;
@@ -528,7 +531,8 @@ async function loadSeating(db: DbOrTx, eventId: string): Promise<EventSeating | 
         .filter((price) => price.sectionId === section.id)
         .map(({ id, name, priceAmount, ageGroup }) => ({
           id,
-          name: ticketLabel(name, ageGroup),
+          name,
+          ageGroup,
           priceAmount,
         })),
     })),
@@ -580,6 +584,13 @@ export async function getPublicSeating(
   if (!seating) return null;
   return {
     ...seating,
+    sections: seating.sections.map((section) => ({
+      ...section,
+      ticketTypes: section.ticketTypes.map((type) => ({
+        ...type,
+        name: ticketLabel(type.name, type.ageGroup),
+      })),
+    })),
     seats: seating.seats.map(({ status, ...seat }) => ({
       ...seat,
       available: status === "available",
