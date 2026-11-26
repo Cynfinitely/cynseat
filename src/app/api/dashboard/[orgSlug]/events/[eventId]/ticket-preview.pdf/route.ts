@@ -9,7 +9,7 @@ import { authorizeOrg } from "@/server/authz/authorize";
 import { AppError } from "@/server/errors";
 import { getOrgEvent } from "@/server/modules/events/service";
 import { getOrgContext } from "@/server/modules/orgs/service";
-import { ticketAdmission } from "@/server/modules/tickets/admission";
+import { ticketAdmission } from "@/app/_lib/ticket-admission";
 import { renderTicketsPdf } from "@/server/modules/tickets/pdf";
 
 export const dynamic = "force-dynamic";
