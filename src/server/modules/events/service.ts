@@ -150,6 +150,7 @@ export async function updateEvent(
       startsAt,
       endsAt,
       doorsAt,
+      minimumAge: input.minimumAge ?? null,
       currency: input.currency,
       maxTicketsPerOrder: input.maxTicketsPerOrder,
       updatedAt: deps.clock.now(),
@@ -279,6 +280,7 @@ function ticketTypeValues(event: repo.EventRow, input: TicketTypeInput) {
   return {
     name: input.name,
     description: input.description ?? null,
+    ageGroup: input.ageGroup ?? null,
     priceAmount,
     capacity: input.capacity,
     salesStartAt,

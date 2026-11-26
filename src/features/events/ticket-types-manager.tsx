@@ -1,5 +1,6 @@
 "use client";
 
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -17,6 +18,7 @@ import { useActionForm } from "./use-action-form";
 
 export type TicketTypeValues = {
   name: string;
+  ageGroup: string;
   description: string;
   price: string;
   capacity: string;
@@ -44,6 +46,7 @@ type Props = {
 
 const blank: TicketTypeValues = {
   name: "",
+  ageGroup: "",
   description: "",
   price: "",
   capacity: "",
@@ -94,7 +97,9 @@ export function TicketTypesManager({
                 ) : (
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-ink font-semibold">{type.values.name}</p>
+                      <p className="text-ink font-semibold">
+                        {ticketLabel(type.values.name, type.values.ageGroup)}
+                      </p>
                       <p className="text-muted text-sm">
                         {type.priceLabel}
                         {" · "}
@@ -224,6 +229,22 @@ function TicketTypeForm({
           <Input
             {...controlProps(`${prefix}-description`, { error: error("description") })}
             {...register("description")}
+          />
+        </Field>
+        <Field
+          id={`${prefix}-ageGroup`}
+          label={t("ageGroup")}
+          hint={t("ageGroupHint")}
+          optional={optional}
+          error={error("ageGroup")}
+        >
+          <Input
+            maxLength={40}
+            {...controlProps(`${prefix}-ageGroup`, {
+              hint: t("ageGroupHint"),
+              error: error("ageGroup"),
+            })}
+            {...register("ageGroup")}
           />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">

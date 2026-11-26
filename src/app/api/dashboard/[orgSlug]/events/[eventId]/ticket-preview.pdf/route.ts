@@ -1,3 +1,4 @@
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
@@ -8,6 +9,7 @@ import { authorizeOrg } from "@/server/authz/authorize";
 import { AppError } from "@/server/errors";
 import { getOrgEvent } from "@/server/modules/events/service";
 import { getOrgContext } from "@/server/modules/orgs/service";
+import { ticketAdmission } from "@/server/modules/tickets/admission";
 import { renderTicketsPdf } from "@/server/modules/tickets/pdf";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +47,7 @@ export async function GET(
     const bytes = await renderTicketsPdf({
       eventTitle:
         pickTranslation(translations, locale, event.defaultLocale)?.title ?? t("list.untitled"),
+      admission: await ticketAdmission(locale, event),
       when: new Intl.DateTimeFormat(locale, {
         dateStyle: "full",
         timeStyle: "short",
@@ -60,7 +63,7 @@ export async function GET(
       buyerName: t("tickets.sampleGuest"),
       tickets: [
         {
-          description: type.name,
+          description: ticketLabel(type.name, type.ageGroup),
           seat: type.kind === "seated" ? seat("seat", { section: "A", row: "1", seat: "1" }) : null,
           position: order("ticket", { number: 1, total: 1 }),
           code: "CynSeat preview only",

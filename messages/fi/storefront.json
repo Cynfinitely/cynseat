@@ -32,7 +32,8 @@
     "cancelledTitle": "Tämä tapahtuma on peruttu",
     "contact": "Kysyttävää? Ota yhteyttä järjestäjään: {email}.",
     "about": "Tietoa tapahtumasta",
-    "otherLanguage": "Tätä tekstiä ei ole saatavilla kielelläsi."
+    "otherLanguage": "Tätä tekstiä ei ole saatavilla kielelläsi.",
+    "ageLimit": "Ikäraja {age} vuotta"
   },
   "org": {
     "events": "Tulevat tapahtumat",

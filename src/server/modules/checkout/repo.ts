@@ -25,6 +25,7 @@ export async function findHoldLines(db: DbOrTx, holdId: string) {
     .select({
       ticketTypeId: ticketTypes.id,
       name: ticketTypes.name,
+      ageGroup: ticketTypes.ageGroup,
       unitPriceAmount: ticketTypes.priceAmount,
       quantity: holdItems.quantity,
     })

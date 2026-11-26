@@ -1,3 +1,4 @@
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { parseMoneyInput } from "../../../domain/money/money";
 import {
@@ -503,6 +504,7 @@ async function loadSeating(db: DbOrTx, eventId: string): Promise<EventSeating | 
         sectionId: ticketTypeSections.eventSectionId,
         id: ticketTypes.id,
         name: ticketTypes.name,
+        ageGroup: ticketTypes.ageGroup,
         priceAmount: ticketTypes.priceAmount,
       })
       .from(ticketTypeSections)
@@ -524,7 +526,11 @@ async function loadSeating(db: DbOrTx, eventId: string): Promise<EventSeating | 
       name: section.name,
       ticketTypes: prices
         .filter((price) => price.sectionId === section.id)
-        .map(({ id, name, priceAmount }) => ({ id, name, priceAmount })),
+        .map(({ id, name, priceAmount, ageGroup }) => ({
+          id,
+          name: ticketLabel(name, ageGroup),
+          priceAmount,
+        })),
     })),
     seats,
   };

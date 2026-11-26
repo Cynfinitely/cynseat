@@ -86,6 +86,7 @@ export const events = pgTable(
     timezone: text("timezone").notNull(),
     startsAt: timestamptz("starts_at").notNull(),
     endsAt: timestamptz("ends_at"),
+    minimumAge: integer("minimum_age"),
     doorsAt: timestamptz("doors_at"),
     venueId: uuid("venue_id").references(() => venues.id, { onDelete: "restrict" }),
     venueSnapshot: jsonb("venue_snapshot").$type<VenueSnapshot>(),
@@ -107,6 +108,7 @@ export const events = pgTable(
     check("events_status_check", sql`${table.status} in ${inList(eventStatuses)}`),
     check("events_visibility_check", sql`${table.visibility} in ${inList(eventVisibilities)}`),
     check("events_category_check", sql`${table.category} in ${inList(eventCategories)}`),
+    check("events_minimum_age_check", sql`${table.minimumAge} between 1 and 120`),
     check("events_currency_check", sql`${table.currency} ~ '^[a-z]{3}$'`),
     check("events_ends_check", sql`${table.endsAt} is null or ${table.endsAt} > ${table.startsAt}`),
     check(
@@ -158,6 +160,7 @@ export const ticketTypes = pgTable(
     kind: text("kind", { enum: ticketKinds }).notNull().default("ga"),
     name: text("name").notNull(),
     description: text("description"),
+    ageGroup: text("age_group"),
     /** Minor units of the event's currency. */
     priceAmount: integer("price_amount").notNull(),
     /** General admission only; seated types are limited by their seats. */

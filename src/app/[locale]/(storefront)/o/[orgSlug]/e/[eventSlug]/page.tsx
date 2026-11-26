@@ -159,6 +159,9 @@ export default async function EventPage({ params }: Props) {
                   {time(event.startsAt)}
                   {event.endsAt ? ` (${t("until", { time: time(event.endsAt) })})` : ""}
                 </p>
+                {event.minimumAge && (
+                  <p className="text-sm font-medium">{t("ageLimit", { age: event.minimumAge })}</p>
+                )}
                 {event.doorsAt ? (
                   <p className="text-muted text-sm">{t("doors", { time: time(event.doorsAt) })}</p>
                 ) : null}

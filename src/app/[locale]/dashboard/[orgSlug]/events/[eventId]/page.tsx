@@ -74,6 +74,7 @@ export default async function EventDetailsPage({ params }: Props) {
             startsAt: local(event.startsAt),
             endsAt: local(event.endsAt),
             doorsAt: local(event.doorsAt),
+            minimumAge: String(event.minimumAge ?? ""),
             currency: event.currency,
             maxTicketsPerOrder: String(event.maxTicketsPerOrder),
           }}

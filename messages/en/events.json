@@ -42,7 +42,8 @@
     "currency": "Currency",
     "maxPerOrder": "Most tickets in one order",
     "save": "Save details",
-    "saved": "Details saved."
+    "saved": "Details saved.",
+    "minimumAge": "Minimum admission age"
   },
   "content": {
     "title": "Text",
@@ -111,7 +112,9 @@
     "preview": "Preview ticket",
     "sampleGuest": "Sample guest",
     "previewNotice": "Preview only · Invalid for entry",
-    "venuePending": "Venue to be confirmed"
+    "venuePending": "Venue to be confirmed",
+    "ageGroup": "Discount age group",
+    "ageGroupHint": "For an age discount, add a ticket type at the reduced price and enter who qualifies, for example “Ages 7–15” or “65+”."
   },
   "publish": {
     "title": "Publishing",

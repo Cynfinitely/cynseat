@@ -42,7 +42,8 @@
     "currency": "Valuutta",
     "maxPerOrder": "Lippuja enintään yhdessä tilauksessa",
     "save": "Tallenna tiedot",
-    "saved": "Tiedot tallennettu."
+    "saved": "Tiedot tallennettu.",
+    "minimumAge": "Alaikäraja"
   },
   "content": {
     "title": "Teksti",
@@ -111,7 +112,9 @@
     "preview": "Esikatsele lippua",
     "sampleGuest": "Esimerkkivieras",
     "previewNotice": "Esikatselu · Ei oikeuta sisäänpääsyyn",
-    "venuePending": "Tapahtumapaikka vahvistetaan myöhemmin"
+    "venuePending": "Tapahtumapaikka vahvistetaan myöhemmin",
+    "ageGroup": "Alennuksen ikäryhmä",
+    "ageGroupHint": "Lisää ikäalennukselle oma lipputyyppi alennetulla hinnalla ja ilmoita ikäryhmä, esimerkiksi ”7–15-vuotiaat” tai ”65+”."
   },
   "publish": {
     "title": "Julkaisu",

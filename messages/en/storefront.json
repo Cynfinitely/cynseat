@@ -32,7 +32,8 @@
     "cancelledTitle": "This event has been cancelled",
     "contact": "Questions? Contact the organizer at {email}.",
     "about": "About this event",
-    "otherLanguage": "This text is not available in your language."
+    "otherLanguage": "This text is not available in your language.",
+    "ageLimit": "Ages {age}+"
   },
   "org": {
     "events": "Upcoming events",

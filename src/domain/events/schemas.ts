@@ -42,6 +42,17 @@ export const updateEventSchema = z.object({
   startsAt: localDateTime,
   endsAt: optionalLocalDateTime,
   doorsAt: optionalLocalDateTime,
+  minimumAge: z
+    .union([
+      z.literal(""),
+      z.coerce
+        .number("invalid_number")
+        .int("invalid_number")
+        .min(1, "too_small")
+        .max(120, "too_large"),
+    ])
+    .transform((age) => (age === "" ? undefined : age))
+    .optional(),
   currency: z.enum(currencies),
   maxTicketsPerOrder: z.coerce
     .number("invalid_number")
@@ -70,6 +81,7 @@ export type EventVenueInput = z.infer<typeof eventVenueSchema>;
 export const ticketTypeSchema = z.object({
   name: z.string().trim().min(1, "required").max(80, "too_long"),
   description: optionalText(300),
+  ageGroup: optionalText(40),
   price: z.string().trim().min(1, "required").max(12, "invalid_price"),
   capacity: z.coerce
     .number("invalid_number")

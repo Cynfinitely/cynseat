@@ -42,7 +42,8 @@
     "currency": "Para birimi",
     "maxPerOrder": "Bir siparişte en fazla bilet",
     "save": "Ayrıntıları kaydet",
-    "saved": "Ayrıntılar kaydedildi."
+    "saved": "Ayrıntılar kaydedildi.",
+    "minimumAge": "Etkinliğe giriş için alt yaş sınırı"
   },
   "content": {
     "title": "Metin",
@@ -111,7 +112,9 @@
     "preview": "Bileti önizle",
     "sampleGuest": "Örnek katılımcı",
     "previewNotice": "Önizleme · Giriş için geçersizdir",
-    "venuePending": "Mekân daha sonra açıklanacaktır"
+    "venuePending": "Mekân daha sonra açıklanacaktır",
+    "ageGroup": "İndirimli yaş grubu",
+    "ageGroupHint": "Yaş indirimi için indirimli fiyattan bir bilet türü ekleyin ve kimlerin yararlanabileceğini belirtin. Örneğin: “7–15 yaş” veya “65+”."
   },
   "publish": {
     "title": "Yayınlama",

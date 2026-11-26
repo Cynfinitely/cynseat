@@ -1,3 +1,4 @@
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { randomUUID } from "node:crypto";
 import { pickTranslation } from "../../../domain/events/rules";
 import { isContentLocale } from "../../../domain/events/types";
@@ -264,7 +265,7 @@ export async function startCheckout(
         orderId,
         eventId: event.id,
         ticketTypeId: line.ticketTypeId,
-        description: line.name,
+        description: ticketLabel(line.name, line.ageGroup),
         quantity: line.quantity,
         unitPriceAmount: line.unitPriceAmount,
         lineTotalAmount: line.unitPriceAmount * line.quantity,
@@ -475,6 +476,7 @@ export type OrderView = {
     contentLocale: string;
     startsAt: Date;
     doorsAt: Date | null;
+    minimumAge: number | null;
     timezone: string;
     status: "draft" | "published" | "cancelled";
     venue: VenueSnapshot | null;
@@ -536,6 +538,7 @@ async function viewOf(
       contentLocale: translation?.locale ?? event.event.defaultLocale,
       startsAt: event.event.startsAt,
       doorsAt: event.event.doorsAt,
+      minimumAge: event.event.minimumAge,
       timezone: event.event.timezone,
       status: event.event.status,
       venue: event.event.venueSnapshot,

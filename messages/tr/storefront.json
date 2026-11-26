@@ -32,7 +32,8 @@
     "cancelledTitle": "Bu etkinlik iptal edildi",
     "contact": "Sorularınız mı var? Düzenleyiciyle iletişime geçin: {email}.",
     "about": "Etkinlik hakkında",
-    "otherLanguage": "Bu metin sizin dilinizde mevcut değil."
+    "otherLanguage": "Bu metin sizin dilinizde mevcut değil.",
+    "ageLimit": "Yaş sınırı: {age}+"
   },
   "org": {
     "events": "Yaklaşan etkinlikler",

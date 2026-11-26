@@ -105,6 +105,11 @@ export default async function OrderPage({ params }: Props) {
                   : ""}
               </span>
             </p>
+            {event.minimumAge && (
+              <p className="mt-1.5 text-sm font-medium">
+                {tStore("ageLimit", { age: event.minimumAge })}
+              </p>
+            )}
             <p className="mt-1.5 flex items-start gap-2 text-sm">
               <MapPin aria-hidden className="text-brand-600 mt-0.5 size-4 shrink-0" />
               <span>

@@ -1,3 +1,4 @@
+import { ticketLabel } from "@/domain/events/ticket-label";
 import { and, asc, eq, inArray, isNull, lte, sql } from "drizzle-orm";
 import {
   events,
@@ -246,6 +247,7 @@ export async function findCartTypes(db: DbOrTx, eventId: string, ticketTypeIds: 
     .select({
       id: ticketTypes.id,
       name: ticketTypes.name,
+      ageGroup: ticketTypes.ageGroup,
       priceAmount: ticketTypes.priceAmount,
       maxPerOrder: ticketTypes.maxPerOrder,
     })
@@ -375,6 +377,7 @@ export async function findHeldSeats(db: DbOrTx, holdId: string) {
         seatLabel: eventSeats.seatLabel,
         ticketTypeId: ticketTypes.id,
         ticketTypeName: ticketTypes.name,
+        ageGroup: ticketTypes.ageGroup,
         unitPriceAmount: ticketTypes.priceAmount,
       })
       .from(eventSeats)
@@ -387,6 +390,12 @@ export async function findHeldSeats(db: DbOrTx, holdId: string) {
         asc(eventSections.sortOrder),
         sql`split_part(split_part(${eventSeats.seatKey}, ':', 2), '-', 1)::int`,
         sql`split_part(split_part(${eventSeats.seatKey}, ':', 2), '-', 2)::int`,
+      )
+      .then((rows) =>
+        rows.map((row) => ({
+          ...row,
+          ticketTypeName: ticketLabel(row.ticketTypeName, row.ageGroup),
+        })),
       )
   );
 }
