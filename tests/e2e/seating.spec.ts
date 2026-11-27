@@ -80,11 +80,21 @@ test("an organizer draws a seat map and buyers choose their seats", async ({ bro
     await page.getByLabel("Price (EUR)").fill("20");
     await page.getByRole("checkbox", { name: "Stalls" }).check();
     await page.getByRole("button", { name: "Add ticket type" }).click();
-    await expect(page.getByText("€20.00")).toBeVisible();
+    await expect(page.getByText("€20.00", { exact: true })).toBeVisible();
 
     // A seat kept back for the sound desk.
     await page.getByRole("button", { name: "Stalls, row C, seat 1, On sale" }).click();
     await expect(page.getByText("1 seat(s) updated.")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Stalls, row C, seat 1, Off sale" }),
+    ).toBeVisible();
+    const chooser = page.getByLabel("Choose a seat", { exact: true });
+    await chooser.selectOption({ label: "C · 1 · Off sale" });
+    await page.getByRole("button", { name: "Put seat back on sale" }).click();
+    await expect(
+      page.getByRole("button", { name: "Stalls, row C, seat 1, On sale" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Take seat off sale" }).click();
     await expect(
       page.getByRole("button", { name: "Stalls, row C, seat 1, Off sale" }),
     ).toBeVisible();

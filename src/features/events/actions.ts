@@ -1,5 +1,7 @@
 "use server";
 
+import { ticketLayouts } from "@/domain/events/ticket-design";
+import { saveTicketDesign } from "@/server/modules/tickets/design";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { runAction, type ActionResult } from "@/app/_lib/action";
@@ -185,5 +187,24 @@ export async function removeEventCoverAction(orgSlug: string, eventId: string) {
   return orgAction(orgSlug, nothing, undefined, async (app, ctx) => {
     await events.removeEventCover(app, ctx, eventId);
     revalidatePath("/[locale]", "layout");
+  });
+}
+
+export async function saveTicketDesignAction(orgSlug: string, eventId: string, data: FormData) {
+  const schema = z.object({
+    layout: z.enum(ticketLayouts),
+    accent: z.string().regex(/^#[a-fA-F0-9]{6}$/),
+    note: z.string().trim().max(140, "too_long"),
+  });
+  return orgAction(orgSlug, schema, Object.fromEntries(data), async (app, ctx, settings) => {
+    const file = data.get("image");
+    await saveTicketDesign(
+      app,
+      ctx,
+      eventId,
+      settings,
+      file instanceof File ? file : null,
+      data.get("remove") === "on",
+    );
   });
 }

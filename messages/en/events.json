@@ -200,5 +200,22 @@
     "selectFirst": "Select at least one ticket.",
     "export": "Download attendee list (CSV)",
     "exportHint": "Contains buyers' names and email addresses. Each download is recorded."
+  },
+  "design": {
+    "title": "Ticket design",
+    "layout": "Layout",
+    "logo": "Compact logo",
+    "artwork": "Event banner",
+    "front": "Full artwork front + ticket on reverse",
+    "image": "Logo or artwork",
+    "imageHint": "PNG, JPEG or WebP, up to 4 MB. For a full front, upload portrait A5 artwork.",
+    "remove": "Remove saved artwork",
+    "accent": "Accent colour",
+    "note": "Message for attendees",
+    "save": "Save ticket design",
+    "saved": "Ticket design saved.",
+    "failed": "Could not save the design. Please try again.",
+    "preview": "Design preview",
+    "pdfHint": "After saving, open Preview ticket beside a ticket type to see the complete PDF."
   }
 }

@@ -75,7 +75,7 @@
     "detachConfirm": "Poistetaanko numeroidut paikat tästä tapahtumasta? Myös paikkakohtaiset lipputyypit poistetaan.",
     "locked": "Salikarttaa voi muuttaa vain, kun tapahtuma on luonnos eikä mitään ole myyty.",
     "pricesTitle": "Hinnat lohkoittain",
-    "pricesIntro": "Paikkakohtainen lipputyyppi koskee yhtä tai useampaa lohkoa. Lohkolla voi olla useita, esimerkiksi Aikuinen ja Opiskelija.",
+    "pricesIntro": "Anna lipputyypille nimi ja hinta, valitse katsomon osat ja lisää lipputyyppi. Luo toinen lipputyyppi eri hintaa varten.",
     "typeName": "Nimi",
     "typePrice": "Hinta ({currency})",
     "sections": "Lohkot",
@@ -84,12 +84,16 @@
     "noTypes": "Ei vielä hintoja. Paikkoja ei voi ostaa ennen kuin niiden lohkolla on hinta.",
     "unpriced": "Ei vielä hintaa",
     "blockTitle": "Myynnistä poistetut paikat",
-    "blockIntro": "Napsauta paikkoja poistaaksesi ne myynnistä tai palauttaaksesi ne, esimerkiksi äänipöydän tai rikkinäisen istuimen vuoksi. Myytyjä ja varattuja paikkoja ei voi muuttaa.",
+    "blockIntro": "Valitse katsomon osa ja paikka alta tai vaihda paikan myyntitilaa napsauttamalla sitä kartalla. Ostajalle varattua tai myytyä paikkaa ei voi muuttaa.",
     "legendAvailable": "Myynnissä",
     "legendBlocked": "Pois myynnistä",
     "legendSold": "Myyty",
     "legendHeld": "Varattu",
-    "blocked": "{count} paikkaa päivitetty."
+    "blocked": "{count} paikkaa päivitetty.",
+    "chooseSection": "Valitse katsomon osa",
+    "chooseSeat": "Valitse paikka",
+    "blockSeat": "Poista paikka myynnistä",
+    "releaseSeat": "Palauta paikka myyntiin"
   },
   "picker": {
     "title": "Valitse paikkasi",
@@ -120,7 +124,8 @@
     "listAdd": "Lisää paikka",
     "listNone": "Tässä lohkossa ei ole vapaita paikkoja.",
     "back": "Takaisin tapahtumaan",
-    "unpricedSection": "Tämän lohkon paikat eivät ole myynnissä."
+    "unpricedSection": "Tämän lohkon paikat eivät ole myynnissä.",
+    "holdHint": "Kun jatkat kassalle, valitsemasi paikat varataan sinulle 10 minuutiksi."
   },
   "ticket": {
     "seat": "{section} · rivi {row} · paikka {seat}"

@@ -206,3 +206,14 @@ export const ticketTypes = pgTable(
     index("ticket_types_event_idx").on(table.eventId, table.sortOrder),
   ],
 );
+
+// Kept off the event row so storefront lists and inventory locks never load artwork.
+export const eventTicketDesigns = pgTable("event_ticket_designs", {
+  eventId: uuid("event_id")
+    .primaryKey()
+    .references(() => events.id, { onDelete: "cascade" }),
+  layout: text("layout", { enum: ["logo", "artwork", "front"] }).notNull(),
+  accent: text("accent").notNull(),
+  note: text("note").notNull(),
+  artwork: text("artwork"),
+});

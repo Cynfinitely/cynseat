@@ -200,5 +200,22 @@
     "selectFirst": "Valitse vähintään yksi lippu.",
     "export": "Lataa osallistujaluettelo (CSV)",
     "exportHint": "Sisältää ostajien nimet ja sähköpostiosoitteet. Jokainen lataus kirjataan."
+  },
+  "design": {
+    "title": "Lipun ulkoasu",
+    "layout": "Asettelu",
+    "logo": "Pieni logo",
+    "artwork": "Tapahtumakuva",
+    "front": "Koko etusivun kuva ja lippu kääntöpuolella",
+    "image": "Logo tai kuva",
+    "imageHint": "PNG, JPEG tai WebP, enintään 4 Mt. Koko etusivun kuvaksi sopii pystysuuntainen A5.",
+    "remove": "Poista tallennettu kuva",
+    "accent": "Korostusväri",
+    "note": "Viesti osallistujille",
+    "save": "Tallenna lipun ulkoasu",
+    "saved": "Lipun ulkoasu tallennettu.",
+    "failed": "Tallennus epäonnistui. Yritä uudelleen.",
+    "preview": "Ulkoasun esikatselu",
+    "pdfHint": "Näet koko PDF-lipun tallennuksen jälkeen valitsemalla lipputyypin vierestä Esikatsele lippua."
   }
 }

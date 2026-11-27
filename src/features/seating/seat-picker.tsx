@@ -391,6 +391,7 @@ export function SeatPicker({
             <span>{t("total")}</span>
             <span>{money(total)}</span>
           </p>
+          <p className="text-muted text-sm">{t("holdHint")}</p>
           <Button className="w-full" disabled={pending} onClick={submit}>
             {t("continue")}
           </Button>

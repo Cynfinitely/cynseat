@@ -1,3 +1,4 @@
+import type { TicketDesign } from "../../../domain/events/ticket-design";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from "@cantoo/pdf-lib";
@@ -6,6 +7,7 @@ import QRCode from "qrcode";
 
 /** Everything printed on one ticket, already in the reader's language. */
 export type TicketPdfInput = {
+  design?: TicketDesign;
   eventTitle: string;
   /** Date and time, formatted in the event's time zone. */
   when: string;
@@ -141,16 +143,49 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
   pdf.setCreator("CynSeat");
 
   const width = PAGE.width - MARGIN * 2;
+  const design = input.design;
+  const art = design?.artwork ? await pdf.embedJpg(Buffer.from(design.artwork, "base64")) : null;
+  const accent = design
+    ? rgb(
+        parseInt(design.accent.slice(1, 3), 16) / 255,
+        parseInt(design.accent.slice(3, 5), 16) / 255,
+        parseInt(design.accent.slice(5, 7), 16) / 255,
+      )
+    : BRAND;
   for (const ticket of input.tickets) {
+    if (art && design?.layout === "front") {
+      const front = pdf.addPage([PAGE.width, PAGE.height]);
+      const size = art.scaleToFit(PAGE.width, PAGE.height);
+      front.drawImage(art, {
+        x: (PAGE.width - size.width) / 2,
+        y: (PAGE.height - size.height) / 2,
+        ...size,
+      });
+    }
     const page = pdf.addPage([PAGE.width, PAGE.height]);
-    page.drawRectangle({ x: 0, y: PAGE.height - 8, width: PAGE.width, height: 8, color: BRAND });
-    page.drawText("CynSeat", {
-      x: MARGIN,
-      y: PAGE.height - 40,
-      size: 13,
-      font: strong,
-      color: BRAND,
-    });
+    page.drawRectangle({ x: 0, y: PAGE.height - 8, width: PAGE.width, height: 8, color: accent });
+    let titleY = PAGE.height - 78;
+    if (art && design?.layout === "artwork") {
+      const size = art.scaleToFit(width, 175);
+      page.drawImage(art, {
+        x: (PAGE.width - size.width) / 2,
+        y: PAGE.height - 51 - size.height,
+        ...size,
+      });
+      titleY -= size.height + 8;
+    }
+    if (art && design?.layout === "logo") {
+      const size = art.scaleToFit(130, 42);
+      page.drawImage(art, { x: MARGIN, y: PAGE.height - 60, ...size });
+      titleY -= 8;
+    } else
+      page.drawText("CynSeat", {
+        x: MARGIN,
+        y: PAGE.height - 40,
+        size: 13,
+        font: strong,
+        color: design && design.accent !== "#7e22ce" ? INK : BRAND,
+      });
     page.drawText(ticket.position, {
       x: PAGE.width - MARGIN - font.widthOfTextAtSize(ticket.position, 10),
       y: PAGE.height - 38,
@@ -159,7 +194,7 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
       color: MUTED,
     });
 
-    let y = PAGE.height - 78;
+    let y = titleY;
     y = paragraph(page, input.eventTitle, {
       x: MARGIN,
       y,
@@ -175,7 +210,7 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
       font: strong,
       size: 13,
       maxWidth: width,
-      color: BRAND,
+      color: design && design.accent !== "#7e22ce" ? INK : BRAND,
       maxLines: 5,
     });
     if (ticket.seat) {
@@ -207,6 +242,16 @@ export async function renderTicketsPdf(input: TicketPdfInput): Promise<Uint8Arra
     field(input.labels.holder, input.buyerName);
     field(input.labels.organizer, input.organizer);
 
+    if (design?.note)
+      y =
+        paragraph(page, design.note, {
+          x: MARGIN,
+          y,
+          font,
+          size: 10,
+          maxWidth: width,
+          color: MUTED,
+        }) - 5;
     const admission = input.admission ?? [];
     const qrSize = admission.length ? 150 : 190;
     const qrY = MARGIN + 34;

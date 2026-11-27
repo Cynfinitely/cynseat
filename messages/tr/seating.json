@@ -75,7 +75,7 @@
     "detachConfirm": "Bu etkinlikten numaralı koltuklar kaldırılsın mı? Koltuğa bağlı bilet türleri de silinir.",
     "locked": "Oturma planı yalnızca etkinlik taslakken ve hiçbir şey satılmamışken değiştirilebilir.",
     "pricesTitle": "Bölümlere göre fiyatlar",
-    "pricesIntro": "Koltukla satılan bir bilet türü bir veya daha fazla bölüm için geçerlidir. Bir bölümün birden fazla türü olabilir; örneğin Yetişkin ve Öğrenci.",
+    "pricesIntro": "Bilet adını ve fiyatını girin, geçerli olduğu bölümleri işaretleyip bilet türünü ekleyin. Farklı fiyat için ayrı bir bilet türü oluşturun.",
     "typeName": "Ad",
     "typePrice": "Fiyat ({currency})",
     "sections": "Bölümler",
@@ -84,12 +84,16 @@
     "noTypes": "Henüz fiyat yok. Bölümünün fiyatı olmayan koltuklar satın alınamaz.",
     "unpriced": "Henüz fiyat yok",
     "blockTitle": "Satış dışı koltuklar",
-    "blockIntro": "Ses masası veya bozuk koltuk gibi durumlar için koltukları satıştan kaldırmak ya da geri koymak üzere tıklayın. Satılmış ve ayrılmış koltuklar değiştirilemez.",
+    "blockIntro": "Aşağıdan bölüm ve koltuk seçin veya durumunu değiştirmek için plandaki koltuğa tıklayın. Satılmış veya alıcıya geçici olarak ayrılmış koltuklar kilitlidir.",
     "legendAvailable": "Satışta",
     "legendBlocked": "Satış dışı",
     "legendSold": "Satıldı",
     "legendHeld": "Ayrıldı",
-    "blocked": "{count} koltuk güncellendi."
+    "blocked": "{count} koltuk güncellendi.",
+    "chooseSection": "Bölüm seç",
+    "chooseSeat": "Koltuk seç",
+    "blockSeat": "Koltuğu satışa kapat",
+    "releaseSeat": "Koltuğu satışa aç"
   },
   "picker": {
     "title": "Koltuklarınızı seçin",
@@ -120,7 +124,8 @@
     "listAdd": "Koltuk ekle",
     "listNone": "Bu bölümde boş koltuk yok.",
     "back": "Etkinliğe dön",
-    "unpricedSection": "Bu bölümdeki koltuklar satışta değil."
+    "unpricedSection": "Bu bölümdeki koltuklar satışta değil.",
+    "holdHint": "Devam et’e bastığınızda seçtiğiniz koltuklar ödeme için 10 dakika ayrılır."
   },
   "ticket": {
     "seat": "{section} · sıra {row} · koltuk {seat}"
