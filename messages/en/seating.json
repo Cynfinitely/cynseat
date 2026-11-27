@@ -75,7 +75,7 @@
     "detachConfirm": "Remove reserved seating from this event? Its seat-based ticket types are deleted too.",
     "locked": "The seat map can only be changed while the event is a draft with nothing sold.",
     "pricesTitle": "Prices by section",
-    "pricesIntro": "A ticket type sold by seat applies to one or more sections. A section can have several, for example Adult and Student.",
+    "pricesIntro": "Enter a ticket name and price, tick the sections where it applies, then add the ticket type. Use another type for a different section price.",
     "typeName": "Name",
     "typePrice": "Price ({currency})",
     "sections": "Sections",
@@ -84,12 +84,16 @@
     "noTypes": "No prices yet. Seats cannot be bought until their section has one.",
     "unpriced": "No price yet",
     "blockTitle": "Seats off sale",
-    "blockIntro": "Click seats to take them off sale or put them back, for a sound desk or a broken seat. Sold and reserved seats cannot be changed.",
+    "blockIntro": "Choose a section and seat below, or click a seat on the map to switch its sale status. A buyer’s temporary hold and a sold seat are locked.",
     "legendAvailable": "On sale",
     "legendBlocked": "Off sale",
     "legendSold": "Sold",
     "legendHeld": "Reserved",
-    "blocked": "{count} seat(s) updated."
+    "blocked": "{count} seat(s) updated.",
+    "chooseSection": "Choose a section",
+    "chooseSeat": "Choose a seat",
+    "blockSeat": "Take seat off sale",
+    "releaseSeat": "Put seat back on sale"
   },
   "picker": {
     "title": "Choose your seats",
@@ -120,7 +124,8 @@
     "listAdd": "Add seat",
     "listNone": "No seats available in this section.",
     "back": "Back to the event",
-    "unpricedSection": "Seats in this section are not on sale."
+    "unpricedSection": "Seats in this section are not on sale.",
+    "holdHint": "Continue to reserve your selection for 10 minutes while you check out."
   },
   "ticket": {
     "seat": "{section} · row {row} · seat {seat}"

@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+import { getTicketDesign } from "@/server/modules/tickets/design";
 import { CalendarDays, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -36,6 +38,7 @@ export default async function OrderPage({ params }: Props) {
 
   const format = await getFormatter();
   const { event } = order;
+  const design = order.tickets.length ? await getTicketDesign(getApp().db, event.id) : null;
   const eventPath = `/o/${event.organization.slug}/e/${event.slug}`;
   const contentLang = event.contentLocale === locale ? undefined : event.contentLocale;
   const money = (amount: number) => formatMoney(amount, order.currency, locale);
@@ -135,10 +138,30 @@ export default async function OrderPage({ params }: Props) {
                 </a>
               </p>
             ) : null}
-            <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+            <ul
+              className="mt-4 grid gap-4 sm:grid-cols-2"
+              style={
+                {
+                  "--ticket-accent": design?.accent,
+                  "--ticket-image": design?.artwork
+                    ? `url(data:image/jpeg;base64,${design.artwork})`
+                    : undefined,
+                } as CSSProperties
+              }
+            >
               {order.tickets.map((ticket) => (
                 <li key={ticket.id}>
-                  <Card className="border-t-brand-600 flex h-full flex-col items-center gap-3 border-t-4 p-6 text-center">
+                  <Card
+                    style={{ borderTopColor: "var(--ticket-accent)" }}
+                    className="border-t-brand-600 flex h-full flex-col items-center gap-3 border-t-4 p-6 text-center"
+                  >
+                    {design?.artwork && (
+                      <div
+                        aria-hidden
+                        className={`w-full bg-contain bg-center bg-no-repeat ${design.layout === "logo" ? "h-12" : design.layout === "front" ? "aspect-[420/595]" : "h-32"}`}
+                        style={{ backgroundImage: "var(--ticket-image)" }}
+                      />
+                    )}
                     <p className="text-ink font-semibold">{ticket.description}</p>
                     {ticket.seat ? (
                       <p className="text-ink text-sm font-medium">{tSeat("seat", ticket.seat)}</p>
@@ -146,6 +169,7 @@ export default async function OrderPage({ params }: Props) {
                     <p className="text-muted text-sm">
                       {t("ticket", { number: ticket.number, total: order.tickets.length })}
                     </p>
+                    {design?.note && <p className="text-muted text-sm">{design.note}</p>}
                     {ticket.code ? (
                       <>
                         <QrCode value={ticket.code} label={t("qrAlt", { number: ticket.number })} />

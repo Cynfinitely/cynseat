@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import { getApp } from "@/server";
 import { getOrderByToken } from "@/server/modules/checkout/service";
 import { ticketAdmission } from "@/app/_lib/ticket-admission";
+import { getTicketDesign } from "@/server/modules/tickets/design";
 import { renderTicketsPdf } from "@/server/modules/tickets/pdf";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +28,7 @@ export async function GET(
   const { event } = order;
 
   const bytes = await renderTicketsPdf({
+    design: await getTicketDesign(getApp().db, event.id),
     eventTitle: event.title,
     admission: await ticketAdmission(locale, event),
     when: new Intl.DateTimeFormat(locale, {

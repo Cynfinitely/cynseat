@@ -200,5 +200,22 @@
     "selectFirst": "En az bir bilet seçin.",
     "export": "Katılımcı listesini indir (CSV)",
     "exportHint": "Alıcıların adlarını ve e-posta adreslerini içerir. Her indirme kaydedilir."
+  },
+  "design": {
+    "title": "Bilet tasarımı",
+    "layout": "Düzen",
+    "logo": "Küçük logo",
+    "artwork": "Etkinlik görseli",
+    "front": "Tam sayfa ön yüz + arkada bilet",
+    "image": "Logo veya tasarım görseli",
+    "imageHint": "En fazla 4 MB, PNG, JPEG veya WebP. Tam sayfa ön yüz için dikey A5 görsel yükleyin.",
+    "remove": "Kayıtlı görseli kaldır",
+    "accent": "Vurgu rengi",
+    "note": "Katılımcılara mesaj",
+    "save": "Bilet tasarımını kaydet",
+    "saved": "Bilet tasarımı kaydedildi.",
+    "failed": "Tasarım kaydedilemedi. Lütfen tekrar deneyin.",
+    "preview": "Tasarım önizlemesi",
+    "pdfHint": "Kaydettikten sonra PDF’yi görmek için bilet türünün yanındaki Bileti önizle seçeneğine tıklayın."
   }
 }

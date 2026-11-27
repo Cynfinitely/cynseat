@@ -10,6 +10,7 @@ import { AppError } from "@/server/errors";
 import { getOrgEvent } from "@/server/modules/events/service";
 import { getOrgContext } from "@/server/modules/orgs/service";
 import { ticketAdmission } from "@/app/_lib/ticket-admission";
+import { getTicketDesign } from "@/server/modules/tickets/design";
 import { renderTicketsPdf } from "@/server/modules/tickets/pdf";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +46,7 @@ export async function GET(
     const seat = await getTranslations({ locale, namespace: "seating.ticket" });
     const venue = event.venueSnapshot ?? draftVenue;
     const bytes = await renderTicketsPdf({
+      design: await getTicketDesign(getApp().db, event.id),
       eventTitle:
         pickTranslation(translations, locale, event.defaultLocale)?.title ?? t("list.untitled"),
       admission: await ticketAdmission(locale, event),

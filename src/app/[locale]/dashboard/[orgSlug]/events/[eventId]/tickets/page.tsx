@@ -1,3 +1,6 @@
+import { TicketDesignEditor } from "@/features/events/ticket-design-editor";
+import { getTicketDesign } from "@/server/modules/tickets/design";
+import { getApp } from "@/server";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { requireOrgEvent } from "@/app/_lib/event";
@@ -24,6 +27,17 @@ export default async function EventTicketsPage({ params }: Props) {
   return (
     <>
       <h2 className="text-ink mb-3 text-lg font-semibold">{t("title")}</h2>
+      {can(ctx.role, "event.manage") && (
+        <TicketDesignEditor
+          orgSlug={orgSlug}
+          eventId={event.id}
+          initial={await getTicketDesign(getApp().db, event.id)}
+          title={
+            detail.translations.find((row) => row.locale === event.defaultLocale)?.title ??
+            event.slug
+          }
+        />
+      )}
       <TicketTypesManager
         orgSlug={orgSlug}
         eventId={event.id}

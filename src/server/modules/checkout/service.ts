@@ -472,6 +472,7 @@ export type OrderView = {
     code: string | null;
   }[];
   event: {
+    id: string;
     title: string;
     contentLocale: string;
     startsAt: Date;
@@ -534,6 +535,7 @@ async function viewOf(
           : null,
     })),
     event: {
+      id: event.event.id,
       title: translation?.title ?? "",
       contentLocale: translation?.locale ?? event.event.defaultLocale,
       startsAt: event.event.startsAt,

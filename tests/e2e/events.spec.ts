@@ -1,3 +1,5 @@
+import { PDFDocument } from "@cantoo/pdf-lib";
+import sharp from "sharp";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { approveOrganization, enablePayments } from "./support/db";
@@ -77,7 +79,22 @@ test("an organizer builds, publishes and cancels an event that the public can se
     const preview = page.getByRole("link", { name: "Preview ticket Aikuinen" });
     await expect(preview).toBeVisible();
     const href = (await preview.getAttribute("href"))!;
+    await page.getByText("Ticket design", { exact: true }).click();
+    await page.getByLabel("Layout", { exact: true }).selectOption("front");
+    await page.getByLabel("Logo or artwork").setInputFiles({
+      name: "test-logo.jpg",
+      mimeType: "image/jpeg",
+      buffer: await sharp({
+        create: { width: 160, height: 100, channels: 3, background: "#385044" },
+      })
+        .jpeg()
+        .toBuffer(),
+    });
+    await page.getByLabel("Message for attendees").fill("Welcome to the concert");
+    await page.getByRole("button", { name: "Save ticket design" }).click();
+    await expect(page.getByText("Ticket design saved.")).toBeVisible();
     const pdf = await page.request.get(href);
+    expect((await PDFDocument.load(await pdf.body())).getPageCount()).toBe(2);
     expect(pdf.ok()).toBeTruthy();
     expect(pdf.headers()["content-disposition"]).toContain("inline");
     expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");

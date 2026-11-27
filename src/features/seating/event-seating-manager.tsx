@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { controlProps, Field } from "@/components/ui/field";
+import { controlProps, Field, Select } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { formatMoney, toMoneyInput } from "@/domain/money/money";
 import { SEAT_RADIUS, type Layout } from "@/domain/seatmap/layout";
@@ -48,6 +48,11 @@ export function EventSeatingManager({
   const router = useRouter();
   const [message, setMessage] = useState<{ tone: "success" | "danger"; text: string }>();
   const [pending, setPending] = useState(false);
+  const [sectionId, setSectionId] = useState(seating.sections[0]?.id ?? "");
+  const [seatId, setSeatId] = useState("");
+  const selectedSeat = seating.seats.find(
+    (seat) => seat.id === seatId && seat.sectionId === sectionId,
+  );
   const seatByKey = new Map(seating.seats.map((seat) => [seat.key, seat]));
   const sectionName = new Map(seating.sections.map((section) => [section.id, section.name]));
 
@@ -85,7 +90,13 @@ export function EventSeatingManager({
 
   async function toggleBlocked(seatKey: string) {
     const seat = seatByKey.get(seatKey);
-    if (!seat || !canManage || (seat.status !== "available" && seat.status !== "blocked")) return;
+    if (
+      pending ||
+      !seat ||
+      !canManage ||
+      (seat.status !== "available" && seat.status !== "blocked")
+    )
+      return;
     await run(
       () =>
         setSeatsBlockedAction(orgSlug, eventId, {
@@ -124,12 +135,36 @@ export function EventSeatingManager({
         )}
       </Card>
 
+      <nav className="flex flex-wrap gap-3 text-sm font-medium underline" aria-label={t("title")}>
+        <a href="#prices-title">{t("pricesTitle")}</a>
+        <a href="#block-title">{t("blockTitle")}</a>
+      </nav>
       <section aria-labelledby="prices-title">
         <h2 id="prices-title" className="text-ink text-lg font-semibold">
           {t("pricesTitle")}
         </h2>
         <p className="text-muted mt-1 text-sm">{t("pricesIntro")}</p>
         {types.size === 0 ? <p className="mt-3 text-sm font-medium">{t("noTypes")}</p> : null}
+        <dl className="border-line mt-4 divide-y rounded-lg border px-4">
+          {seating.sections.map((section) => (
+            <div
+              key={section.id}
+              className="flex flex-wrap items-baseline justify-between gap-2 py-2 text-sm"
+            >
+              <dt className="font-semibold">{section.name}</dt>
+              <dd>
+                {section.ticketTypes.length
+                  ? section.ticketTypes
+                      .map(
+                        (type) =>
+                          `${type.name} · ${formatMoney(type.priceAmount, currency, locale)}`,
+                      )
+                      .join(" / ")
+                  : t("unpriced")}
+              </dd>
+            </div>
+          ))}
+        </dl>
         <ul className="mt-3 space-y-3">
           {[...types.values()].map((type) => (
             <li key={type.id}>
@@ -182,6 +217,53 @@ export function EventSeatingManager({
           {t("blockTitle")}
         </h2>
         <p className="text-muted mt-1 text-sm">{t("blockIntro")}</p>
+        {canManage && (
+          <div className="border-line my-4 grid gap-3 rounded-xl border p-4 sm:grid-cols-2">
+            <Field id="manage-seat-section" label={t("chooseSection")}>
+              <Select
+                id="manage-seat-section"
+                value={sectionId}
+                onChange={(e) => {
+                  setSectionId(e.target.value);
+                  setSeatId("");
+                }}
+              >
+                {seating.sections.map((section) => (
+                  <option key={section.id} value={section.id}>
+                    {section.name}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field id="manage-seat" label={t("chooseSeat")}>
+              <Select id="manage-seat" value={seatId} onChange={(e) => setSeatId(e.target.value)}>
+                <option value="">{t("chooseSeat")}</option>
+                {seating.seats
+                  .filter(
+                    (s) =>
+                      s.sectionId === sectionId &&
+                      (s.status === "blocked" || s.status === "available"),
+                  )
+                  .map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.rowLabel} · {s.seatLabel} ·{" "}
+                      {s.status === "blocked" ? t("legendBlocked") : t("legendAvailable")}
+                    </option>
+                  ))}
+              </Select>
+            </Field>
+            <Button
+              className="justify-self-start"
+              variant="secondary"
+              disabled={
+                pending || !selectedSeat || !["blocked", "available"].includes(selectedSeat.status)
+              }
+              onClick={() => selectedSeat && void toggleBlocked(selectedSeat.key)}
+            >
+              {selectedSeat?.status === "blocked" ? t("releaseSeat") : t("blockSeat")}
+            </Button>
+          </div>
+        )}
         <ul className="mt-3 flex flex-wrap gap-4 text-sm">
           {(["available", "blocked", "held", "sold"] as const).map((status) => (
             <li key={status} className="flex items-center gap-2">
